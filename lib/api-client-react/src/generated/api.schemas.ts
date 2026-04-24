@@ -8,3 +8,47 @@
 export interface HealthStatus {
   status: string;
 }
+
+/**
+ * Tone of the roast
+ */
+export type RoastStyle = (typeof RoastStyle)[keyof typeof RoastStyle];
+
+export const RoastStyle = {
+  friendly: "friendly",
+  savage: "savage",
+  dark: "dark",
+  desi: "desi",
+} as const;
+
+export interface Roast {
+  id: string;
+  text: string;
+  style: RoastStyle;
+  target: string;
+  createdAt: string;
+}
+
+export interface TrendingRoast {
+  id: string;
+  text: string;
+  style: RoastStyle;
+  target: string;
+  createdAt: string;
+}
+
+export interface RoastStats {
+  totalRoasts: number;
+  usersToday: number;
+  roastsPerMinute: number;
+}
+
+export type GenerateRoastBody = {
+  /**
+   * The name or phrase to roast
+   * @minLength 1
+   * @maxLength 100
+   */
+  target: string;
+  style: RoastStyle;
+};

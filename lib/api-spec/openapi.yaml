@@ -10,6 +10,8 @@ servers:
 tags:
   - name: health
     description: Health operations
+  - name: roasts
+    description: AI roast generation
 paths:
   /healthz:
     get:
@@ -24,6 +26,64 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+  /roasts/generate:
+    post:
+      operationId: generateRoast
+      tags: [roasts]
+      summary: Generate an AI roast
+      description: Send user input and a style; receive a short, savage, shareable roast.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                target:
+                  type: string
+                  minLength: 1
+                  maxLength: 100
+                  description: The name or phrase to roast
+                style:
+                  $ref: "#/components/schemas/RoastStyle"
+              required:
+                - target
+                - style
+      responses:
+        "200":
+          description: Roast generated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Roast"
+  /roasts/trending:
+    get:
+      operationId: listTrendingRoasts
+      tags: [roasts]
+      summary: Trending roasts
+      description: Returns a rotating list of recent shareable roasts for social proof.
+      responses:
+        "200":
+          description: List of trending roasts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TrendingRoast"
+  /roasts/stats:
+    get:
+      operationId: getRoastStats
+      tags: [roasts]
+      summary: Roast counters
+      description: Returns global counters used as social proof on the landing page.
+      responses:
+        "200":
+          description: Stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RoastStats"
 components:
   schemas:
     HealthStatus:
@@ -33,4 +93,60 @@ components:
           type: string
       required:
         - status
-
+    RoastStyle:
+      type: string
+      enum: [friendly, savage, dark, desi]
+      description: Tone of the roast
+    Roast:
+      type: object
+      properties:
+        id:
+          type: string
+        text:
+          type: string
+        style:
+          $ref: "#/components/schemas/RoastStyle"
+        target:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - text
+        - style
+        - target
+        - createdAt
+    TrendingRoast:
+      type: object
+      properties:
+        id:
+          type: string
+        text:
+          type: string
+        style:
+          $ref: "#/components/schemas/RoastStyle"
+        target:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - text
+        - style
+        - target
+        - createdAt
+    RoastStats:
+      type: object
+      properties:
+        totalRoasts:
+          type: integer
+        usersToday:
+          type: integer
+        roastsPerMinute:
+          type: integer
+      required:
+        - totalRoasts
+        - usersToday
+        - roastsPerMinute

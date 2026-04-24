@@ -5,18 +5,27 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import type {
+  MutationFunction,
   QueryFunction,
   QueryKey,
+  UseMutationOptions,
+  UseMutationResult,
   UseQueryOptions,
   UseQueryResult,
 } from "@tanstack/react-query";
 
-import type { HealthStatus } from "./api.schemas";
+import type {
+  GenerateRoastBody,
+  HealthStatus,
+  Roast,
+  RoastStats,
+  TrendingRoast,
+} from "./api.schemas";
 
 import { customFetch } from "../custom-fetch";
-import type { ErrorType } from "../custom-fetch";
+import type { ErrorType, BodyType } from "../custom-fetch";
 
 type AwaitedInput<T> = PromiseLike<T> | T;
 
@@ -92,6 +101,245 @@ export function useHealthCheck<
   request?: SecondParameter<typeof customFetch>;
 }): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
   const queryOptions = getHealthCheckQueryOptions(options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * Send user input and a style; receive a short, savage, shareable roast.
+ * @summary Generate an AI roast
+ */
+export const getGenerateRoastUrl = () => {
+  return `/api/roasts/generate`;
+};
+
+export const generateRoast = async (
+  generateRoastBody: GenerateRoastBody,
+  options?: RequestInit,
+): Promise<Roast> => {
+  return customFetch<Roast>(getGenerateRoastUrl(), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(generateRoastBody),
+  });
+};
+
+export const getGenerateRoastMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof generateRoast>>,
+    TError,
+    { data: BodyType<GenerateRoastBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof generateRoast>>,
+  TError,
+  { data: BodyType<GenerateRoastBody> },
+  TContext
+> => {
+  const mutationKey = ["generateRoast"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof generateRoast>>,
+    { data: BodyType<GenerateRoastBody> }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return generateRoast(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type GenerateRoastMutationResult = NonNullable<
+  Awaited<ReturnType<typeof generateRoast>>
+>;
+export type GenerateRoastMutationBody = BodyType<GenerateRoastBody>;
+export type GenerateRoastMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Generate an AI roast
+ */
+export const useGenerateRoast = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof generateRoast>>,
+    TError,
+    { data: BodyType<GenerateRoastBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof generateRoast>>,
+  TError,
+  { data: BodyType<GenerateRoastBody> },
+  TContext
+> => {
+  return useMutation(getGenerateRoastMutationOptions(options));
+};
+
+/**
+ * Returns a rotating list of recent shareable roasts for social proof.
+ * @summary Trending roasts
+ */
+export const getListTrendingRoastsUrl = () => {
+  return `/api/roasts/trending`;
+};
+
+export const listTrendingRoasts = async (
+  options?: RequestInit,
+): Promise<TrendingRoast[]> => {
+  return customFetch<TrendingRoast[]>(getListTrendingRoastsUrl(), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getListTrendingRoastsQueryKey = () => {
+  return [`/api/roasts/trending`] as const;
+};
+
+export const getListTrendingRoastsQueryOptions = <
+  TData = Awaited<ReturnType<typeof listTrendingRoasts>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof listTrendingRoasts>>,
+    TError,
+    TData
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getListTrendingRoastsQueryKey();
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof listTrendingRoasts>>
+  > = ({ signal }) => listTrendingRoasts({ signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof listTrendingRoasts>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type ListTrendingRoastsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof listTrendingRoasts>>
+>;
+export type ListTrendingRoastsQueryError = ErrorType<unknown>;
+
+/**
+ * @summary Trending roasts
+ */
+
+export function useListTrendingRoasts<
+  TData = Awaited<ReturnType<typeof listTrendingRoasts>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof listTrendingRoasts>>,
+    TError,
+    TData
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getListTrendingRoastsQueryOptions(options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * Returns global counters used as social proof on the landing page.
+ * @summary Roast counters
+ */
+export const getGetRoastStatsUrl = () => {
+  return `/api/roasts/stats`;
+};
+
+export const getRoastStats = async (
+  options?: RequestInit,
+): Promise<RoastStats> => {
+  return customFetch<RoastStats>(getGetRoastStatsUrl(), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getGetRoastStatsQueryKey = () => {
+  return [`/api/roasts/stats`] as const;
+};
+
+export const getGetRoastStatsQueryOptions = <
+  TData = Awaited<ReturnType<typeof getRoastStats>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof getRoastStats>>,
+    TError,
+    TData
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetRoastStatsQueryKey();
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getRoastStats>>> = ({
+    signal,
+  }) => getRoastStats({ signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getRoastStats>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetRoastStatsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getRoastStats>>
+>;
+export type GetRoastStatsQueryError = ErrorType<unknown>;
+
+/**
+ * @summary Roast counters
+ */
+
+export function useGetRoastStats<
+  TData = Awaited<ReturnType<typeof getRoastStats>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof getRoastStats>>,
+    TError,
+    TData
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetRoastStatsQueryOptions(options);
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
     queryKey: QueryKey;

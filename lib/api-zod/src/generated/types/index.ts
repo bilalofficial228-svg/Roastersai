@@ -6,4 +6,9 @@
  * OpenAPI spec version: 0.1.0
  */
 
+export * from "./generateRoastBody";
 export * from "./healthStatus";
+export * from "./roast";
+export * from "./roastStats";
+export * from "./roastStyle";
+export * from "./trendingRoast";

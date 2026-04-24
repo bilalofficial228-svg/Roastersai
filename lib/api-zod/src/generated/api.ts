@@ -14,3 +14,57 @@ import * as zod from "zod";
 export const HealthCheckResponse = zod.object({
   status: zod.string(),
 });
+
+/**
+ * Send user input and a style; receive a short, savage, shareable roast.
+ * @summary Generate an AI roast
+ */
+export const generateRoastBodyTargetMax = 100;
+
+export const GenerateRoastBody = zod.object({
+  target: zod
+    .string()
+    .min(1)
+    .max(generateRoastBodyTargetMax)
+    .describe("The name or phrase to roast"),
+  style: zod
+    .enum(["friendly", "savage", "dark", "desi"])
+    .describe("Tone of the roast"),
+});
+
+export const GenerateRoastResponse = zod.object({
+  id: zod.string(),
+  text: zod.string(),
+  style: zod
+    .enum(["friendly", "savage", "dark", "desi"])
+    .describe("Tone of the roast"),
+  target: zod.string(),
+  createdAt: zod.coerce.date(),
+});
+
+/**
+ * Returns a rotating list of recent shareable roasts for social proof.
+ * @summary Trending roasts
+ */
+export const ListTrendingRoastsResponseItem = zod.object({
+  id: zod.string(),
+  text: zod.string(),
+  style: zod
+    .enum(["friendly", "savage", "dark", "desi"])
+    .describe("Tone of the roast"),
+  target: zod.string(),
+  createdAt: zod.coerce.date(),
+});
+export const ListTrendingRoastsResponse = zod.array(
+  ListTrendingRoastsResponseItem,
+);
+
+/**
+ * Returns global counters used as social proof on the landing page.
+ * @summary Roast counters
+ */
+export const GetRoastStatsResponse = zod.object({
+  totalRoasts: zod.number(),
+  usersToday: zod.number(),
+  roastsPerMinute: zod.number(),
+});
