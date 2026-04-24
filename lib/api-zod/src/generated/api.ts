@@ -16,17 +16,41 @@ export const HealthCheckResponse = zod.object({
 });
 
 /**
- * Send user input and a style; receive a short, savage, shareable roast.
- * @summary Generate an AI roast
+ * Send personalized fields and tone preferences; receive a savage AI roast.
+ * @summary Generate a personalized AI roast
  */
-export const generateRoastBodyTargetMax = 100;
+export const generateRoastBodyNameMax = 60;
+
+export const generateRoastBodyCityMax = 60;
+
+export const generateRoastBodyWeaknessMax = 120;
+
+export const generateRoastBodyIntensityMax = 5;
 
 export const GenerateRoastBody = zod.object({
-  target: zod
+  name: zod
     .string()
     .min(1)
-    .max(generateRoastBodyTargetMax)
-    .describe("The name or phrase to roast"),
+    .max(generateRoastBodyNameMax)
+    .describe("Person being roasted"),
+  job: zod.enum([
+    "student",
+    "engineer",
+    "doctor",
+    "designer",
+    "unemployed",
+    "influencer",
+    "other",
+  ]),
+  city: zod.string().min(1).max(generateRoastBodyCityMax),
+  weakness: zod.string().max(generateRoastBodyWeaknessMax).nullish(),
+  status: zod.enum(["single", "in_relationship", "married", "complicated"]),
+  language: zod.enum(["english", "hinglish", "hindi", "spanish", "french"]),
+  intensity: zod
+    .number()
+    .min(1)
+    .max(generateRoastBodyIntensityMax)
+    .describe("Burn intensity from 1 (Baby Roast) to 5 (Nuclear)"),
   style: zod
     .enum(["friendly", "savage", "dark", "desi"])
     .describe("Tone of the roast"),
@@ -38,7 +62,27 @@ export const GenerateRoastResponse = zod.object({
   style: zod
     .enum(["friendly", "savage", "dark", "desi"])
     .describe("Tone of the roast"),
-  target: zod.string(),
+  name: zod.string(),
+  job: zod.enum([
+    "student",
+    "engineer",
+    "doctor",
+    "designer",
+    "unemployed",
+    "influencer",
+    "other",
+  ]),
+  city: zod.string(),
+  weakness: zod.string().nullish(),
+  status: zod.enum(["single", "in_relationship", "married", "complicated"]),
+  language: zod.enum(["english", "hinglish", "hindi", "spanish", "french"]),
+  intensity: zod.number(),
+  reactions: zod.object({
+    hilarious: zod.number(),
+    savage: zod.number(),
+    dead: zod.number(),
+    too_real: zod.number(),
+  }),
   createdAt: zod.coerce.date(),
 });
 
@@ -52,12 +96,53 @@ export const ListTrendingRoastsResponseItem = zod.object({
   style: zod
     .enum(["friendly", "savage", "dark", "desi"])
     .describe("Tone of the roast"),
-  target: zod.string(),
+  name: zod.string(),
+  job: zod.enum([
+    "student",
+    "engineer",
+    "doctor",
+    "designer",
+    "unemployed",
+    "influencer",
+    "other",
+  ]),
+  city: zod.string(),
+  weakness: zod.string().nullish(),
+  status: zod.enum(["single", "in_relationship", "married", "complicated"]),
+  language: zod.enum(["english", "hinglish", "hindi", "spanish", "french"]),
+  intensity: zod.number(),
+  reactions: zod.object({
+    hilarious: zod.number(),
+    savage: zod.number(),
+    dead: zod.number(),
+    too_real: zod.number(),
+  }),
   createdAt: zod.coerce.date(),
 });
 export const ListTrendingRoastsResponse = zod.array(
   ListTrendingRoastsResponseItem,
 );
+
+/**
+ * Returns the top roasts by burn score for today.
+ * @summary Hall of Shame leaderboard
+ */
+export const GetLeaderboardResponseItem = zod.object({
+  rank: zod.number(),
+  name: zod.string(),
+  job: zod.enum([
+    "student",
+    "engineer",
+    "doctor",
+    "designer",
+    "unemployed",
+    "influencer",
+    "other",
+  ]),
+  text: zod.string(),
+  burnScore: zod.number(),
+});
+export const GetLeaderboardResponse = zod.array(GetLeaderboardResponseItem);
 
 /**
  * Returns global counters used as social proof on the landing page.
@@ -67,4 +152,61 @@ export const GetRoastStatsResponse = zod.object({
   totalRoasts: zod.number(),
   usersToday: zod.number(),
   roastsPerMinute: zod.number(),
+  worldwideToday: zod.number(),
+});
+
+/**
+ * @summary Get a roast by id
+ */
+export const GetRoastParams = zod.object({
+  id: zod.coerce.string(),
+});
+
+export const GetRoastResponse = zod.object({
+  id: zod.string(),
+  text: zod.string(),
+  style: zod
+    .enum(["friendly", "savage", "dark", "desi"])
+    .describe("Tone of the roast"),
+  name: zod.string(),
+  job: zod.enum([
+    "student",
+    "engineer",
+    "doctor",
+    "designer",
+    "unemployed",
+    "influencer",
+    "other",
+  ]),
+  city: zod.string(),
+  weakness: zod.string().nullish(),
+  status: zod.enum(["single", "in_relationship", "married", "complicated"]),
+  language: zod.enum(["english", "hinglish", "hindi", "spanish", "french"]),
+  intensity: zod.number(),
+  reactions: zod.object({
+    hilarious: zod.number(),
+    savage: zod.number(),
+    dead: zod.number(),
+    too_real: zod.number(),
+  }),
+  createdAt: zod.coerce.date(),
+});
+
+/**
+ * Increment a reaction counter on a roast.
+ * @summary React to a roast
+ */
+export const ReactToRoastParams = zod.object({
+  id: zod.coerce.string(),
+});
+
+export const ReactToRoastBody = zod.object({
+  type: zod.enum(["hilarious", "savage", "dead", "too_real"]),
+});
+
+export const ReactToRoastResponse = zod.object({
+  hilarious: zod.number(),
+  savage: zod.number(),
+  dead: zod.number(),
+  too_real: zod.number(),
 });

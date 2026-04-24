@@ -30,8 +30,8 @@ paths:
     post:
       operationId: generateRoast
       tags: [roasts]
-      summary: Generate an AI roast
-      description: Send user input and a style; receive a short, savage, shareable roast.
+      summary: Generate a personalized AI roast
+      description: Send personalized fields and tone preferences; receive a savage AI roast.
       requestBody:
         required: true
         content:
@@ -39,15 +39,39 @@ paths:
             schema:
               type: object
               properties:
-                target:
+                name:
                   type: string
                   minLength: 1
-                  maxLength: 100
-                  description: The name or phrase to roast
+                  maxLength: 60
+                  description: Person being roasted
+                job:
+                  $ref: "#/components/schemas/Job"
+                city:
+                  type: string
+                  minLength: 1
+                  maxLength: 60
+                weakness:
+                  type: string
+                  maxLength: 120
+                  nullable: true
+                status:
+                  $ref: "#/components/schemas/RelationshipStatus"
+                language:
+                  $ref: "#/components/schemas/Language"
+                intensity:
+                  type: integer
+                  minimum: 1
+                  maximum: 5
+                  description: Burn intensity from 1 (Baby Roast) to 5 (Nuclear)
                 style:
                   $ref: "#/components/schemas/RoastStyle"
               required:
-                - target
+                - name
+                - job
+                - city
+                - status
+                - language
+                - intensity
                 - style
       responses:
         "200":
@@ -70,7 +94,22 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/TrendingRoast"
+                  $ref: "#/components/schemas/Roast"
+  /roasts/leaderboard:
+    get:
+      operationId: getLeaderboard
+      tags: [roasts]
+      summary: Hall of Shame leaderboard
+      description: Returns the top roasts by burn score for today.
+      responses:
+        "200":
+          description: Leaderboard entries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/LeaderboardEntry"
   /roasts/stats:
     get:
       operationId: getRoastStats
@@ -84,6 +123,58 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/RoastStats"
+  /roasts/{id}:
+    get:
+      operationId: getRoast
+      tags: [roasts]
+      summary: Get a roast by id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Roast
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Roast"
+        "404":
+          description: Not found
+  /roasts/{id}/reactions:
+    post:
+      operationId: reactToRoast
+      tags: [roasts]
+      summary: React to a roast
+      description: Increment a reaction counter on a roast.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                type:
+                  $ref: "#/components/schemas/ReactionType"
+              required:
+                - type
+      responses:
+        "200":
+          description: Updated reaction counts
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReactionCounts"
+        "404":
+          description: Not found
 components:
   schemas:
     HealthStatus:
@@ -97,6 +188,34 @@ components:
       type: string
       enum: [friendly, savage, dark, desi]
       description: Tone of the roast
+    Job:
+      type: string
+      enum: [student, engineer, doctor, designer, unemployed, influencer, other]
+    RelationshipStatus:
+      type: string
+      enum: [single, in_relationship, married, complicated]
+    Language:
+      type: string
+      enum: [english, hinglish, hindi, spanish, french]
+    ReactionType:
+      type: string
+      enum: [hilarious, savage, dead, too_real]
+    ReactionCounts:
+      type: object
+      properties:
+        hilarious:
+          type: integer
+        savage:
+          type: integer
+        dead:
+          type: integer
+        too_real:
+          type: integer
+      required:
+        - hilarious
+        - savage
+        - dead
+        - too_real
     Roast:
       type: object
       properties:
@@ -106,8 +225,23 @@ components:
           type: string
         style:
           $ref: "#/components/schemas/RoastStyle"
-        target:
+        name:
           type: string
+        job:
+          $ref: "#/components/schemas/Job"
+        city:
+          type: string
+        weakness:
+          type: string
+          nullable: true
+        status:
+          $ref: "#/components/schemas/RelationshipStatus"
+        language:
+          $ref: "#/components/schemas/Language"
+        intensity:
+          type: integer
+        reactions:
+          $ref: "#/components/schemas/ReactionCounts"
         createdAt:
           type: string
           format: date-time
@@ -115,28 +249,33 @@ components:
         - id
         - text
         - style
-        - target
+        - name
+        - job
+        - city
+        - status
+        - language
+        - intensity
+        - reactions
         - createdAt
-    TrendingRoast:
+    LeaderboardEntry:
       type: object
       properties:
-        id:
+        rank:
+          type: integer
+        name:
           type: string
+        job:
+          $ref: "#/components/schemas/Job"
         text:
           type: string
-        style:
-          $ref: "#/components/schemas/RoastStyle"
-        target:
-          type: string
-        createdAt:
-          type: string
-          format: date-time
+        burnScore:
+          type: integer
       required:
-        - id
+        - rank
+        - name
+        - job
         - text
-        - style
-        - target
-        - createdAt
+        - burnScore
     RoastStats:
       type: object
       properties:
@@ -146,7 +285,10 @@ components:
           type: integer
         roastsPerMinute:
           type: integer
+        worldwideToday:
+          type: integer
       required:
         - totalRoasts
         - usersToday
         - roastsPerMinute
+        - worldwideToday

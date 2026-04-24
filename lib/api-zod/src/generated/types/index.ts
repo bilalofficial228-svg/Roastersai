@@ -8,7 +8,13 @@
 
 export * from "./generateRoastBody";
 export * from "./healthStatus";
+export * from "./job";
+export * from "./language";
+export * from "./leaderboardEntry";
+export * from "./reactionCounts";
+export * from "./reactionType";
+export * from "./reactToRoastBody";
+export * from "./relationshipStatus";
 export * from "./roast";
 export * from "./roastStats";
 export * from "./roastStyle";
-export * from "./trendingRoast";

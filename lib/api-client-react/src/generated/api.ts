@@ -19,9 +19,11 @@ import type {
 import type {
   GenerateRoastBody,
   HealthStatus,
+  LeaderboardEntry,
+  ReactToRoastBody,
+  ReactionCounts,
   Roast,
   RoastStats,
-  TrendingRoast,
 } from "./api.schemas";
 
 import { customFetch } from "../custom-fetch";
@@ -110,8 +112,8 @@ export function useHealthCheck<
 }
 
 /**
- * Send user input and a style; receive a short, savage, shareable roast.
- * @summary Generate an AI roast
+ * Send personalized fields and tone preferences; receive a savage AI roast.
+ * @summary Generate a personalized AI roast
  */
 export const getGenerateRoastUrl = () => {
   return `/api/roasts/generate`;
@@ -174,7 +176,7 @@ export type GenerateRoastMutationBody = BodyType<GenerateRoastBody>;
 export type GenerateRoastMutationError = ErrorType<unknown>;
 
 /**
- * @summary Generate an AI roast
+ * @summary Generate a personalized AI roast
  */
 export const useGenerateRoast = <
   TError = ErrorType<unknown>,
@@ -206,8 +208,8 @@ export const getListTrendingRoastsUrl = () => {
 
 export const listTrendingRoasts = async (
   options?: RequestInit,
-): Promise<TrendingRoast[]> => {
-  return customFetch<TrendingRoast[]>(getListTrendingRoastsUrl(), {
+): Promise<Roast[]> => {
+  return customFetch<Roast[]>(getListTrendingRoastsUrl(), {
     ...options,
     method: "GET",
   });
@@ -264,6 +266,82 @@ export function useListTrendingRoasts<
   request?: SecondParameter<typeof customFetch>;
 }): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
   const queryOptions = getListTrendingRoastsQueryOptions(options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * Returns the top roasts by burn score for today.
+ * @summary Hall of Shame leaderboard
+ */
+export const getGetLeaderboardUrl = () => {
+  return `/api/roasts/leaderboard`;
+};
+
+export const getLeaderboard = async (
+  options?: RequestInit,
+): Promise<LeaderboardEntry[]> => {
+  return customFetch<LeaderboardEntry[]>(getGetLeaderboardUrl(), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getGetLeaderboardQueryKey = () => {
+  return [`/api/roasts/leaderboard`] as const;
+};
+
+export const getGetLeaderboardQueryOptions = <
+  TData = Awaited<ReturnType<typeof getLeaderboard>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof getLeaderboard>>,
+    TError,
+    TData
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetLeaderboardQueryKey();
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getLeaderboard>>> = ({
+    signal,
+  }) => getLeaderboard({ signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getLeaderboard>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetLeaderboardQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getLeaderboard>>
+>;
+export type GetLeaderboardQueryError = ErrorType<unknown>;
+
+/**
+ * @summary Hall of Shame leaderboard
+ */
+
+export function useGetLeaderboard<
+  TData = Awaited<ReturnType<typeof getLeaderboard>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof getLeaderboard>>,
+    TError,
+    TData
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetLeaderboardQueryOptions(options);
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
     queryKey: QueryKey;
@@ -347,3 +425,176 @@ export function useGetRoastStats<
 
   return { ...query, queryKey: queryOptions.queryKey };
 }
+
+/**
+ * @summary Get a roast by id
+ */
+export const getGetRoastUrl = (id: string) => {
+  return `/api/roasts/${id}`;
+};
+
+export const getRoast = async (
+  id: string,
+  options?: RequestInit,
+): Promise<Roast> => {
+  return customFetch<Roast>(getGetRoastUrl(id), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getGetRoastQueryKey = (id: string) => {
+  return [`/api/roasts/${id}`] as const;
+};
+
+export const getGetRoastQueryOptions = <
+  TData = Awaited<ReturnType<typeof getRoast>>,
+  TError = ErrorType<void>,
+>(
+  id: string,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getRoast>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetRoastQueryKey(id);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getRoast>>> = ({
+    signal,
+  }) => getRoast(id, { signal, ...requestOptions });
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!id,
+    ...queryOptions,
+  } as UseQueryOptions<Awaited<ReturnType<typeof getRoast>>, TError, TData> & {
+    queryKey: QueryKey;
+  };
+};
+
+export type GetRoastQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getRoast>>
+>;
+export type GetRoastQueryError = ErrorType<void>;
+
+/**
+ * @summary Get a roast by id
+ */
+
+export function useGetRoast<
+  TData = Awaited<ReturnType<typeof getRoast>>,
+  TError = ErrorType<void>,
+>(
+  id: string,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getRoast>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetRoastQueryOptions(id, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * Increment a reaction counter on a roast.
+ * @summary React to a roast
+ */
+export const getReactToRoastUrl = (id: string) => {
+  return `/api/roasts/${id}/reactions`;
+};
+
+export const reactToRoast = async (
+  id: string,
+  reactToRoastBody: ReactToRoastBody,
+  options?: RequestInit,
+): Promise<ReactionCounts> => {
+  return customFetch<ReactionCounts>(getReactToRoastUrl(id), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(reactToRoastBody),
+  });
+};
+
+export const getReactToRoastMutationOptions = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof reactToRoast>>,
+    TError,
+    { id: string; data: BodyType<ReactToRoastBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof reactToRoast>>,
+  TError,
+  { id: string; data: BodyType<ReactToRoastBody> },
+  TContext
+> => {
+  const mutationKey = ["reactToRoast"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof reactToRoast>>,
+    { id: string; data: BodyType<ReactToRoastBody> }
+  > = (props) => {
+    const { id, data } = props ?? {};
+
+    return reactToRoast(id, data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type ReactToRoastMutationResult = NonNullable<
+  Awaited<ReturnType<typeof reactToRoast>>
+>;
+export type ReactToRoastMutationBody = BodyType<ReactToRoastBody>;
+export type ReactToRoastMutationError = ErrorType<void>;
+
+/**
+ * @summary React to a roast
+ */
+export const useReactToRoast = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof reactToRoast>>,
+    TError,
+    { id: string; data: BodyType<ReactToRoastBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof reactToRoast>>,
+  TError,
+  { id: string; data: BodyType<ReactToRoastBody> },
+  TContext
+> => {
+  return useMutation(getReactToRoastMutationOptions(options));
+};

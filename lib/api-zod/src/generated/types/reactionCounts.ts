@@ -6,9 +6,9 @@
  * OpenAPI spec version: 0.1.0
  */
 
-export interface RoastStats {
-  totalRoasts: number;
-  usersToday: number;
-  roastsPerMinute: number;
-  worldwideToday: number;
+export interface ReactionCounts {
+  hilarious: number;
+  savage: number;
+  dead: number;
+  too_real: number;
 }

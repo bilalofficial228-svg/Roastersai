@@ -21,34 +21,110 @@ export const RoastStyle = {
   desi: "desi",
 } as const;
 
+export type Job = (typeof Job)[keyof typeof Job];
+
+export const Job = {
+  student: "student",
+  engineer: "engineer",
+  doctor: "doctor",
+  designer: "designer",
+  unemployed: "unemployed",
+  influencer: "influencer",
+  other: "other",
+} as const;
+
+export type RelationshipStatus =
+  (typeof RelationshipStatus)[keyof typeof RelationshipStatus];
+
+export const RelationshipStatus = {
+  single: "single",
+  in_relationship: "in_relationship",
+  married: "married",
+  complicated: "complicated",
+} as const;
+
+export type Language = (typeof Language)[keyof typeof Language];
+
+export const Language = {
+  english: "english",
+  hinglish: "hinglish",
+  hindi: "hindi",
+  spanish: "spanish",
+  french: "french",
+} as const;
+
+export type ReactionType = (typeof ReactionType)[keyof typeof ReactionType];
+
+export const ReactionType = {
+  hilarious: "hilarious",
+  savage: "savage",
+  dead: "dead",
+  too_real: "too_real",
+} as const;
+
+export interface ReactionCounts {
+  hilarious: number;
+  savage: number;
+  dead: number;
+  too_real: number;
+}
+
 export interface Roast {
   id: string;
   text: string;
   style: RoastStyle;
-  target: string;
+  name: string;
+  job: Job;
+  city: string;
+  weakness?: string | null;
+  status: RelationshipStatus;
+  language: Language;
+  intensity: number;
+  reactions: ReactionCounts;
   createdAt: string;
 }
 
-export interface TrendingRoast {
-  id: string;
+export interface LeaderboardEntry {
+  rank: number;
+  name: string;
+  job: Job;
   text: string;
-  style: RoastStyle;
-  target: string;
-  createdAt: string;
+  burnScore: number;
 }
 
 export interface RoastStats {
   totalRoasts: number;
   usersToday: number;
   roastsPerMinute: number;
+  worldwideToday: number;
 }
 
 export type GenerateRoastBody = {
   /**
-   * The name or phrase to roast
+   * Person being roasted
    * @minLength 1
-   * @maxLength 100
+   * @maxLength 60
    */
-  target: string;
+  name: string;
+  job: Job;
+  /**
+   * @minLength 1
+   * @maxLength 60
+   */
+  city: string;
+  /** @maxLength 120 */
+  weakness?: string | null;
+  status: RelationshipStatus;
+  language: Language;
+  /**
+   * Burn intensity from 1 (Baby Roast) to 5 (Nuclear)
+   * @minimum 1
+   * @maximum 5
+   */
+  intensity: number;
   style: RoastStyle;
+};
+
+export type ReactToRoastBody = {
+  type: ReactionType;
 };

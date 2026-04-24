@@ -5,14 +5,33 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
+import type { Job } from "./job";
+import type { Language } from "./language";
+import type { RelationshipStatus } from "./relationshipStatus";
 import type { RoastStyle } from "./roastStyle";
 
 export type GenerateRoastBody = {
   /**
-   * The name or phrase to roast
+   * Person being roasted
    * @minLength 1
-   * @maxLength 100
+   * @maxLength 60
    */
-  target: string;
+  name: string;
+  job: Job;
+  /**
+   * @minLength 1
+   * @maxLength 60
+   */
+  city: string;
+  /** @maxLength 120 */
+  weakness?: string | null;
+  status: RelationshipStatus;
+  language: Language;
+  /**
+   * Burn intensity from 1 (Baby Roast) to 5 (Nuclear)
+   * @minimum 1
+   * @maximum 5
+   */
+  intensity: number;
   style: RoastStyle;
 };

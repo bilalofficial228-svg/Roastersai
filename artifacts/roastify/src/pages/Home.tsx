@@ -1,16 +1,20 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Flame, Ghost, Zap, HeartPulse, Share2, Copy, RotateCw, Volume2, VolumeX, Sparkles } from "lucide-react";
+import { Flame, Ghost, Zap, HeartPulse, Sparkles, Volume2, VolumeX, Target, Copy, Share2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useToast } from "@/hooks/use-toast";
 import { useGenerateRoast, useListTrendingRoasts, useGetRoastStats, getListTrendingRoastsQueryKey, getGetRoastStatsQueryKey } from "@workspace/api-client-react";
-import type { Roast, RoastStyle } from "@workspace/api-client-react";
+import type { Roast, RoastStyle, Job, RelationshipStatus, Language } from "@workspace/api-client-react";
 import { useQueryClient } from "@tanstack/react-query";
+import { WorldwideCounter } from "@/components/WorldwideCounter";
+import { Leaderboard } from "@/components/Leaderboard";
+import { RoastCard } from "@/components/RoastCard";
+import { Slider } from "@/components/ui/slider";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
-// --- Components ---
-
+// --- Audio / Haptics ---
 const playWhoosh = () => {
   try {
     const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
@@ -32,36 +36,73 @@ const playWhoosh = () => {
 
 const triggerHaptic = () => {
   if (navigator.vibrate) {
-    navigator.vibrate(50);
+    navigator.vibrate(40);
   }
 };
 
+// --- Form Schema ---
 const formSchema = z.object({
-  target: z.string().min(1, "Type something, coward.").max(100, "Too long, didn't read."),
-  style: z.enum(["friendly", "savage", "dark", "desi"]),
+  name: z.string().min(1, "Name is required").max(60, "Name is too long"),
+  job: z.enum(["student", "engineer", "doctor", "designer", "unemployed", "influencer", "other"] as const),
+  city: z.string().min(1, "City is required").max(60, "City is too long"),
+  weakness: z.string().max(120, "Keep it short!").optional().nullable(),
+  status: z.enum(["single", "in_relationship", "married", "complicated"] as const),
+  style: z.enum(["friendly", "savage", "dark", "desi"] as const),
+  language: z.enum(["english", "hinglish", "hindi", "spanish", "french"] as const),
+  intensity: z.number().min(1).max(5),
 });
 
 type FormValues = z.infer<typeof formSchema>;
 
+const intensityLabels: Record<number, { label: string, color: string }> = {
+  1: { label: "1 Baby Roast", color: "text-green-400" },
+  2: { label: "2 Mild Burns", color: "text-yellow-400" },
+  3: { label: "3 Medium Savage", color: "text-orange-500" },
+  4: { label: "4 Full Savage", color: "text-pink-500" },
+  5: { label: "5 NUCLEAR ☢️", color: "text-red-500 font-bold glitch-effect" },
+};
+
 export default function Home() {
   const [currentRoast, setCurrentRoast] = useState<Roast | null>(null);
-  const [soundEnabled, setSoundEnabled] = useState(true);
-  
+  const [soundEnabled, setSoundEnabled] = useState(() => localStorage.getItem("roastify:muted") !== "true");
+  const [friendDialogOpen, setFriendDialogOpen] = useState(false);
+  const [friendRoast, setFriendRoast] = useState<Roast | null>(null);
+
   const queryClient = useQueryClient();
   const { toast } = useToast();
 
   const generateRoast = useGenerateRoast();
   const { data: trendingRoasts } = useListTrendingRoasts({ query: { refetchInterval: 15000, queryKey: getListTrendingRoastsQueryKey() } });
-  const { data: stats } = useGetRoastStats({ query: { queryKey: getGetRoastStatsQueryKey() } });
+  const { data: stats } = useGetRoastStats({ query: { refetchInterval: 5000, queryKey: getGetRoastStatsQueryKey() } });
+
+  const defaultFormValues: FormValues = {
+    name: "",
+    job: "student",
+    city: "",
+    weakness: "",
+    status: "single",
+    style: "savage",
+    language: "english",
+    intensity: 3,
+  };
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: { target: "", style: "savage" }
+    defaultValues: defaultFormValues
   });
+
+  const friendForm = useForm<FormValues>({
+    resolver: zodResolver(formSchema),
+    defaultValues: defaultFormValues
+  });
+
+  useEffect(() => {
+    localStorage.setItem("roastify:muted", String(!soundEnabled));
+  }, [soundEnabled]);
 
   const onSubmit = (values: FormValues) => {
     setCurrentRoast(null);
-    generateRoast.mutate({ data: { target: values.target, style: values.style } }, {
+    generateRoast.mutate({ data: { ...values } }, {
       onSuccess: (roast) => {
         setCurrentRoast(roast);
         if (soundEnabled) playWhoosh();
@@ -75,55 +116,213 @@ export default function Home() {
     });
   };
 
-  const handleCopy = () => {
-    if (currentRoast) {
-      navigator.clipboard.writeText(currentRoast.text);
-      toast({ title: "Copied!", description: "Roast copied to clipboard.", duration: 2000 });
-    }
+  const onFriendSubmit = (values: FormValues) => {
+    setFriendRoast(null);
+    generateRoast.mutate({ data: { ...values } }, {
+      onSuccess: (roast) => {
+        setFriendRoast(roast);
+        if (soundEnabled) playWhoosh();
+        triggerHaptic();
+        queryClient.invalidateQueries({ queryKey: getListTrendingRoastsQueryKey() });
+        queryClient.invalidateQueries({ queryKey: getGetRoastStatsQueryKey() });
+      },
+      onError: () => {
+        toast({ title: "Error", description: "Generation failed.", variant: "destructive" });
+      }
+    });
   };
 
-  const handleShare = async () => {
-    if (!currentRoast) return;
-    const text = `"${currentRoast.text}" - roasted by AI @ Roastify`;
-    if (navigator.share) {
-      try {
-        await navigator.share({ title: "AI Roast", text, url: window.location.href });
-      } catch (e) {
-        // user cancelled
-      }
-    } else {
-      window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(window.location.href)}`, "_blank");
-    }
+  const handleRetry = () => {
+    onSubmit(form.getValues());
+  };
+
+  const handleRoastHarder = () => {
+    const current = form.getValues();
+    const newIntensity = Math.min(5, current.intensity + 1);
+    // Submit with new intensity without updating form state
+    onSubmit({ ...current, intensity: newIntensity });
+  };
+
+  const renderFormFields = (f: ReturnType<typeof useForm<FormValues>>, isFriend: boolean = false) => {
+    const intensity = f.watch("intensity");
+    return (
+      <div className="flex flex-col gap-6 w-full text-left">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="flex flex-col gap-2">
+            <label className="text-sm font-bold text-white/80">{isFriend ? "Their Name" : "Your Name"}</label>
+            <input 
+              data-testid="input-name"
+              {...f.register("name")}
+              placeholder="e.g. John Doe"
+              className="w-full bg-black/50 border border-white/10 focus:border-primary focus:ring-1 focus:ring-primary rounded-xl px-4 py-3 text-lg outline-none transition-all placeholder:text-muted-foreground/50"
+            />
+            {f.formState.errors.name && <span className="text-destructive text-xs font-medium">{f.formState.errors.name.message}</span>}
+          </div>
+          <div className="flex flex-col gap-2">
+            <label className="text-sm font-bold text-white/80">City</label>
+            <input 
+              data-testid="input-city"
+              {...f.register("city")}
+              placeholder="e.g. New York"
+              className="w-full bg-black/50 border border-white/10 focus:border-primary focus:ring-1 focus:ring-primary rounded-xl px-4 py-3 text-lg outline-none transition-all placeholder:text-muted-foreground/50"
+            />
+            {f.formState.errors.city && <span className="text-destructive text-xs font-medium">{f.formState.errors.city.message}</span>}
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="flex flex-col gap-2">
+            <label className="text-sm font-bold text-white/80">Job</label>
+            <select
+              data-testid="select-job"
+              {...f.register("job")}
+              className="w-full bg-black/50 border border-white/10 focus:border-primary focus:ring-1 focus:ring-primary rounded-xl px-4 py-3 text-lg outline-none transition-all text-white appearance-none"
+            >
+              <option value="student">Student</option>
+              <option value="engineer">Engineer</option>
+              <option value="doctor">Doctor</option>
+              <option value="designer">Designer</option>
+              <option value="unemployed">Unemployed</option>
+              <option value="influencer">Influencer</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div className="flex flex-col gap-2">
+            <label className="text-sm font-bold text-white/80">Relationship Status</label>
+            <select
+              data-testid="select-status"
+              {...f.register("status")}
+              className="w-full bg-black/50 border border-white/10 focus:border-primary focus:ring-1 focus:ring-primary rounded-xl px-4 py-3 text-lg outline-none transition-all text-white appearance-none"
+            >
+              <option value="single">Single</option>
+              <option value="in_relationship">In a Relationship</option>
+              <option value="married">Married</option>
+              <option value="complicated">It's Complicated</option>
+            </select>
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <label className="text-sm font-bold text-white/80">Biggest Weakness (Optional)</label>
+          <input 
+            data-testid="input-weakness"
+            {...f.register("weakness")}
+            placeholder="e.g. always late, can't say no, addicted to memes"
+            className="w-full bg-black/50 border border-white/10 focus:border-primary focus:ring-1 focus:ring-primary rounded-xl px-4 py-3 text-lg outline-none transition-all placeholder:text-muted-foreground/50"
+          />
+        </div>
+
+        {/* Styles */}
+        <div className="flex flex-col gap-2">
+          <label className="text-sm font-bold text-white/80">Roast Style</label>
+          <div className="flex flex-wrap gap-2">
+            {[
+              { id: "friendly", icon: HeartPulse, label: "Friendly" },
+              { id: "savage", icon: Zap, label: "Savage" },
+              { id: "dark", icon: Ghost, label: "Dark" },
+              { id: "desi", icon: Flame, label: "Desi" },
+            ].map((style) => {
+              const isSelected = f.watch("style") === style.id;
+              const Icon = style.icon;
+              return (
+                <button
+                  key={style.id}
+                  type="button"
+                  data-testid={`button-style-${style.id}`}
+                  onClick={() => f.setValue("style", style.id as RoastStyle)}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-200 border ${
+                    isSelected 
+                      ? "bg-primary text-primary-foreground border-primary neon-glow-primary" 
+                      : "bg-muted/50 text-muted-foreground border-white/5 hover:bg-muted"
+                  }`}
+                >
+                  <Icon size={16} className={isSelected ? "animate-pulse" : ""} />
+                  <span className="capitalize">{style.label}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Languages */}
+        <div className="flex flex-col gap-2">
+          <label className="text-sm font-bold text-white/80">Language</label>
+          <div className="flex flex-wrap gap-2">
+            {["english", "hinglish", "hindi", "spanish", "french"].map((lang) => {
+              const isSelected = f.watch("language") === lang;
+              return (
+                <button
+                  key={lang}
+                  type="button"
+                  data-testid={`pill-language-${lang}`}
+                  onClick={() => f.setValue("language", lang as Language)}
+                  className={`px-3 py-1.5 rounded-full text-sm font-bold transition-all border ${
+                    isSelected 
+                      ? "bg-white text-black border-white" 
+                      : "bg-white/5 text-white/60 border-white/10 hover:bg-white/10 hover:text-white"
+                  }`}
+                >
+                  {lang.charAt(0).toUpperCase() + lang.slice(1)}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Intensity */}
+        <div className="flex flex-col gap-4 mt-2">
+          <div className="flex items-center justify-between">
+            <label className="text-sm font-bold text-white/80">Burn Intensity</label>
+            <span className={`text-sm font-black uppercase tracking-wider ${intensityLabels[intensity].color}`}>
+              {intensityLabels[intensity].label}
+            </span>
+          </div>
+          <Slider
+            data-testid="slider-intensity"
+            min={1}
+            max={5}
+            step={1}
+            value={[intensity]}
+            onValueChange={(vals) => f.setValue("intensity", vals[0])}
+            className="w-full"
+          />
+        </div>
+
+      </div>
+    );
   };
 
   return (
-    <div className="min-h-[100dvh] w-full flex flex-col bg-background text-foreground overflow-x-hidden selection:bg-primary/30">
+    <div className="min-h-[100dvh] w-full flex flex-col bg-background text-foreground overflow-x-hidden selection:bg-primary/30 pb-20">
       
+      <WorldwideCounter />
+
       {/* Background ambient glow */}
       <div className="fixed inset-0 pointer-events-none z-0">
         <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-primary/20 blur-[120px] rounded-full mix-blend-screen" />
         <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-secondary/20 blur-[120px] rounded-full mix-blend-screen" />
       </div>
 
-      <main className="flex-1 w-full max-w-4xl mx-auto px-4 py-12 md:py-24 z-10 flex flex-col gap-16">
+      <main className="flex-1 w-full max-w-5xl mx-auto px-4 py-8 md:py-16 z-10 flex flex-col gap-12 items-center">
         
         {/* Header / Sound Toggle */}
-        <div className="flex justify-end w-full">
+        <div className="flex justify-end w-full max-w-3xl">
           <button 
             data-testid="button-sound-toggle"
             onClick={() => setSoundEnabled(!soundEnabled)}
             className="p-3 rounded-full bg-muted/50 hover:bg-muted text-muted-foreground hover:text-primary transition-colors border border-white/5"
+            title={soundEnabled ? "Mute sound 🔇" : "Enable sound 🔊"}
           >
             {soundEnabled ? <Volume2 size={20} /> : <VolumeX size={20} />}
           </button>
         </div>
 
         {/* Hero Section */}
-        <section className="flex flex-col items-center text-center gap-6">
+        <section className="flex flex-col items-center text-center gap-6 w-full">
           <motion.div 
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-medium mb-4"
+            className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-medium mb-2"
           >
             <Sparkles size={16} /> <span>100% Brutal AI</span>
           </motion.div>
@@ -139,126 +338,127 @@ export default function Home() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.1 }}
-            className="text-lg md:text-xl text-muted-foreground max-w-lg"
+            className="text-lg md:text-xl text-muted-foreground max-w-lg mb-4"
           >
-            Type anything and get a savage, funny roast instantly. Don't take it personally.
+            Tell us about yourself and get a savage, funny roast instantly. Don't take it personally. 😂
           </motion.p>
 
-          <motion.form 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            onSubmit={form.handleSubmit(onSubmit)} 
-            className="w-full max-w-xl mt-8 flex flex-col gap-6"
-          >
-            <div className="flex flex-col gap-2 relative">
-              <input 
-                data-testid="input-target"
-                {...form.register("target")}
-                placeholder="Type your name or anything..."
-                className="w-full bg-black/50 border border-white/10 focus:border-primary focus:ring-1 focus:ring-primary rounded-xl px-6 py-5 text-xl outline-none transition-all placeholder:text-muted-foreground/50 shadow-2xl"
-                autoComplete="off"
-              />
-              {form.formState.errors.target && (
-                <span className="text-destructive text-sm text-left absolute -bottom-6 left-2 font-medium" data-testid="text-error">
-                  {form.formState.errors.target.message}
-                </span>
-              )}
-            </div>
-
-            <div className="flex flex-wrap justify-center gap-3 mt-4">
-              {[
-                { id: "friendly", icon: HeartPulse, label: "Friendly" },
-                { id: "savage", icon: Zap, label: "Savage" },
-                { id: "dark", icon: Ghost, label: "Dark" },
-                { id: "desi", icon: Flame, label: "Desi" },
-              ].map((style) => {
-                const isSelected = form.watch("style") === style.id;
-                const Icon = style.icon;
-                return (
-                  <button
-                    key={style.id}
-                    type="button"
-                    data-testid={`button-style-${style.id}`}
-                    onClick={() => form.setValue("style", style.id as RoastStyle)}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-200 border ${
-                      isSelected 
-                        ? "bg-primary text-primary-foreground border-primary neon-glow-primary" 
-                        : "bg-muted/50 text-muted-foreground border-white/5 hover:bg-muted"
-                    }`}
+          <Dialog open={friendDialogOpen} onOpenChange={setFriendDialogOpen}>
+            <DialogTrigger asChild>
+              <button 
+                data-testid="button-roast-friend"
+                className="flex items-center gap-2 px-6 py-3 rounded-full bg-secondary/20 border border-secondary/50 text-secondary hover:bg-secondary/30 transition-all font-bold"
+              >
+                <Target size={18} /> 🎯 Roast My Friend
+              </button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[500px] bg-[#09090b] border-white/10 text-white max-h-[90vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle className="text-2xl font-display font-bold neon-text-primary">Roast Your Friend</DialogTitle>
+                <p className="text-sm text-muted-foreground mt-2">
+                  Filling for a friend? Add their details below — we'll generate a private link to share. 😈
+                </p>
+              </DialogHeader>
+              
+              {!friendRoast ? (
+                <form onSubmit={friendForm.handleSubmit(onFriendSubmit)} className="flex flex-col gap-6 mt-4">
+                  {renderFormFields(friendForm, true)}
+                  <button 
+                    type="submit"
+                    disabled={generateRoast.isPending}
+                    className="w-full bg-gradient-to-r from-primary to-secondary text-white font-bold text-xl py-4 rounded-xl hover:opacity-90 active:scale-[0.98] transition-all disabled:opacity-50 neon-glow-primary flex justify-center items-center gap-2"
                   >
-                    <Icon size={16} className={isSelected ? "animate-pulse" : ""} />
-                    <span className="capitalize">{style.label}</span>
+                    {generateRoast.isPending ? <><Flame className="animate-bounce" /> Cooking...</> : "Generate Share Link"}
                   </button>
-                );
-              })}
-            </div>
+                </form>
+              ) : (
+                <div className="flex flex-col gap-6 mt-4 items-center text-center">
+                  <div className="p-4 bg-white/5 border border-white/10 rounded-xl w-full">
+                    <p className="text-lg font-bold text-white mb-2">"{friendRoast.text}"</p>
+                  </div>
+                  
+                  <div className="w-full flex flex-col gap-3">
+                    <button 
+                      data-testid="button-copy-friend-link"
+                      onClick={() => {
+                        navigator.clipboard.writeText(`${window.location.origin}${import.meta.env.BASE_URL.replace(/\/$/, "")}/roast/${friendRoast.id}`);
+                        toast({ title: "Link Copied!", description: "Share it with your friend." });
+                      }}
+                      className="w-full flex items-center justify-center gap-2 py-3 bg-primary/20 text-primary border border-primary/30 rounded-lg font-bold transition-colors"
+                    >
+                      <Copy size={18} /> Copy Private Link
+                    </button>
+                    <button 
+                      onClick={() => {
+                        const url = `${window.location.origin}${import.meta.env.BASE_URL.replace(/\/$/, "")}/roast/${friendRoast.id}`;
+                        window.open(`https://wa.me/?text=${encodeURIComponent("I made an AI roast you. Check this out: " + url)}`, "_blank");
+                      }}
+                      className="w-full flex items-center justify-center gap-2 py-3 bg-[#25D366]/10 text-[#25D366] border border-[#25D366]/30 rounded-lg font-bold transition-colors"
+                    >
+                      <Share2 size={18} /> Share to WhatsApp
+                    </button>
+                    <button onClick={() => setFriendRoast(null)} className="text-muted-foreground hover:text-white mt-2 text-sm underline">
+                      Roast another friend
+                    </button>
+                  </div>
+                </div>
+              )}
+            </DialogContent>
+          </Dialog>
 
-            <button 
-              type="submit"
-              data-testid="button-submit-roast"
-              disabled={generateRoast.isPending}
-              className="mt-4 w-full bg-gradient-to-r from-primary to-secondary text-white font-bold text-xl py-5 rounded-xl hover:opacity-90 active:scale-[0.98] transition-all disabled:opacity-50 disabled:pointer-events-none neon-glow-primary"
+          {!currentRoast && (
+            <motion.form 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              onSubmit={form.handleSubmit(onSubmit)} 
+              className="w-full max-w-3xl mt-6 p-6 md:p-8 bg-black/40 border border-white/5 rounded-2xl shadow-2xl backdrop-blur-sm flex flex-col gap-6"
             >
-              {generateRoast.isPending ? "Cooking..." : "Roast Me"}
-            </button>
-          </motion.form>
+              {renderFormFields(form, false)}
+
+              <button 
+                type="submit"
+                data-testid="button-roast-me"
+                disabled={generateRoast.isPending}
+                className="mt-6 w-full bg-gradient-to-r from-primary to-secondary text-white font-bold text-2xl py-5 rounded-xl hover:opacity-90 active:scale-[0.98] transition-all disabled:opacity-50 disabled:pointer-events-none neon-glow-primary flex justify-center items-center gap-3"
+              >
+                {generateRoast.isPending ? (
+                  <>
+                    <Flame className="animate-bounce" size={28} /> 
+                    <span className="animate-pulse">AI is cooking...</span>
+                  </>
+                ) : (
+                  "Roast Me 🔥"
+                )}
+              </button>
+            </motion.form>
+          )}
         </section>
 
         {/* Result Area */}
         <AnimatePresence mode="wait">
-          {(generateRoast.isPending || currentRoast) && (
+          {currentRoast && (
             <motion.section
-              initial={{ opacity: 0, height: 0, scale: 0.9 }}
-              animate={{ opacity: 1, height: "auto", scale: 1 }}
-              exit={{ opacity: 0, height: 0, scale: 0.9 }}
-              className="w-full max-w-xl mx-auto"
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              className="w-full max-w-3xl mt-4"
             >
-              <div className="bg-black/60 border border-primary/30 rounded-2xl p-8 backdrop-blur-md relative overflow-hidden">
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary via-secondary to-accent" />
-                
-                {generateRoast.isPending ? (
-                  <div className="flex flex-col items-center justify-center py-12 gap-4">
-                    <Flame className="text-primary animate-bounce" size={48} />
-                    <p className="text-lg font-medium text-muted-foreground animate-pulse">AI is cooking...</p>
-                  </div>
-                ) : currentRoast ? (
-                  <div className="flex flex-col gap-6">
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs uppercase tracking-wider font-bold text-primary px-2 py-1 bg-primary/10 rounded">
-                        Target: {currentRoast.target}
-                      </span>
-                      <span className="text-xs font-mono text-muted-foreground bg-white/5 px-2 py-1 rounded">
-                        {currentRoast.style}
-                      </span>
-                    </div>
-                    
-                    <p data-testid="text-roast-result" className="text-2xl md:text-3xl font-bold leading-tight font-display text-white">
-                      "{currentRoast.text}"
-                    </p>
-                    
-                    <div className="flex flex-wrap gap-3 mt-4 pt-4 border-t border-white/10">
-                      <button onClick={handleCopy} data-testid="button-copy" className="flex-1 flex items-center justify-center gap-2 py-3 bg-white/5 hover:bg-white/10 rounded-lg font-medium transition-colors">
-                        <Copy size={18} /> Copy
-                      </button>
-                      <button onClick={handleShare} data-testid="button-share" className="flex-1 flex items-center justify-center gap-2 py-3 bg-white/5 hover:bg-white/10 rounded-lg font-medium transition-colors text-primary hover:text-primary-foreground hover:bg-primary">
-                        <Share2 size={18} /> Share
-                      </button>
-                      <button onClick={() => setCurrentRoast(null)} data-testid="button-try-again" className="flex items-center justify-center p-3 bg-white/5 hover:bg-white/10 rounded-lg transition-colors">
-                        <RotateCw size={18} />
-                      </button>
-                    </div>
-                  </div>
-                ) : null}
-              </div>
+              <RoastCard 
+                roast={currentRoast} 
+                onRetry={handleRetry} 
+                onRoastHarder={form.getValues("intensity") < 5 ? handleRoastHarder : undefined} 
+              />
             </motion.section>
           )}
         </AnimatePresence>
 
+        <Leaderboard />
+
         {/* Trending Grid */}
         <section className="mt-12 flex flex-col gap-8 w-full max-w-5xl mx-auto">
           <div className="flex items-center justify-between border-b border-white/10 pb-4">
-            <h2 className="text-2xl font-bold font-display flex items-center gap-2">
+            <h2 className="text-2xl font-bold font-display flex items-center gap-2 text-white">
               <Flame className="text-secondary" /> Live Feed
             </h2>
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -282,17 +482,25 @@ export default function Home() {
               >
                 <div>
                   <div className="flex justify-between items-start mb-3">
-                    <span className="text-sm font-bold text-white/70 truncate pr-2">@{roast.target}</span>
+                    <span className="text-sm font-bold text-white/90 truncate pr-2">
+                      {roast.name ? `${roast.name}, ${roast.job}` : `@${(roast as any).target || 'Anonymous'}`}
+                    </span>
                     <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-white/5 text-muted-foreground">
                       {roast.style}
                     </span>
                   </div>
-                  <p className="text-sm font-medium leading-relaxed">
-                    {roast.text}
+                  <p className="text-sm font-medium leading-relaxed text-white/80">
+                    "{roast.text}"
                   </p>
                 </div>
-                <div className="text-[10px] text-muted-foreground/50 font-mono">
-                  {new Date(roast.createdAt).toLocaleTimeString()}
+                <div className="flex items-center justify-between mt-2">
+                  <div className="text-[10px] text-muted-foreground/50 font-mono">
+                    {new Date(roast.createdAt).toLocaleTimeString()}
+                  </div>
+                  <div className="flex items-center gap-1 text-xs text-white/40">
+                    <span>🔥</span>
+                    <span>{roast.intensity}/5</span>
+                  </div>
                 </div>
               </motion.div>
             ))}
@@ -300,21 +508,22 @@ export default function Home() {
         </section>
 
         {/* Stats */}
-        <section className="w-full bg-primary/5 border border-primary/20 rounded-2xl p-8 md:p-12 mt-12 grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-          <div className="flex flex-col items-center gap-2">
-            <h3 className="text-muted-foreground text-sm font-bold uppercase tracking-widest">Victims Today</h3>
+        <section className="w-full bg-primary/5 border border-primary/20 rounded-2xl p-8 md:p-12 mt-8 grid grid-cols-1 md:grid-cols-3 gap-8 text-center shadow-lg relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-b from-primary/10 to-transparent pointer-events-none" />
+          <div className="flex flex-col items-center gap-2 relative z-10">
+            <h3 className="text-muted-foreground text-sm font-bold uppercase tracking-widest">Victims Today 💀</h3>
             <p className="text-4xl md:text-5xl font-display font-bold text-white" data-testid="text-stats-users">
               {stats?.usersToday.toLocaleString() ?? "—"}
             </p>
           </div>
-          <div className="flex flex-col items-center gap-2">
-            <h3 className="text-muted-foreground text-sm font-bold uppercase tracking-widest">Total Roasts</h3>
+          <div className="flex flex-col items-center gap-2 relative z-10">
+            <h3 className="text-muted-foreground text-sm font-bold uppercase tracking-widest">Total Roasts 🏆</h3>
             <p className="text-4xl md:text-5xl font-display font-bold text-primary neon-text-primary" data-testid="text-stats-total">
               {stats?.totalRoasts.toLocaleString() ?? "—"}
             </p>
           </div>
-          <div className="flex flex-col items-center gap-2">
-            <h3 className="text-muted-foreground text-sm font-bold uppercase tracking-widest">Roasts / Min</h3>
+          <div className="flex flex-col items-center gap-2 relative z-10">
+            <h3 className="text-muted-foreground text-sm font-bold uppercase tracking-widest">Roasts / Min ⚡</h3>
             <p className="text-4xl md:text-5xl font-display font-bold text-secondary" data-testid="text-stats-rpm">
               {stats?.roastsPerMinute.toLocaleString() ?? "—"}
             </p>
@@ -326,7 +535,7 @@ export default function Home() {
       <footer className="w-full py-8 border-t border-white/5 bg-black/50 z-10 mt-auto">
         <div className="max-w-4xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-muted-foreground font-medium">
           <div className="flex items-center gap-2">
-            <Zap size={16} className="text-primary" />
+            <Flame size={16} className="text-primary" />
             <span>Roastify © {new Date().getFullYear()}</span>
           </div>
           <div className="flex gap-6">

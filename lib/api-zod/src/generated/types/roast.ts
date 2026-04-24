@@ -5,12 +5,23 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
+import type { Job } from "./job";
+import type { Language } from "./language";
+import type { ReactionCounts } from "./reactionCounts";
+import type { RelationshipStatus } from "./relationshipStatus";
 import type { RoastStyle } from "./roastStyle";
 
 export interface Roast {
   id: string;
   text: string;
   style: RoastStyle;
-  target: string;
+  name: string;
+  job: Job;
+  city: string;
+  weakness?: string | null;
+  status: RelationshipStatus;
+  language: Language;
+  intensity: number;
+  reactions: ReactionCounts;
   createdAt: Date;
 }
