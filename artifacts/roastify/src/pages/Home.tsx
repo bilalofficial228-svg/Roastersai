@@ -149,22 +149,22 @@ export default function Home() {
       <div className="flex flex-col gap-6 w-full text-left">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="flex flex-col gap-2">
-            <label className="text-sm font-bold text-white/80">{isFriend ? "Their Name" : "Your Name"}</label>
+            <label className="text-sm font-bold text-foreground/80">{isFriend ? "Their Name" : "Your Name"}</label>
             <input 
               data-testid="input-name"
               {...f.register("name")}
               placeholder="e.g. John Doe"
-              className="w-full bg-black/50 border border-white/10 focus:border-primary focus:ring-1 focus:ring-primary rounded-xl px-4 py-3 text-lg outline-none transition-all placeholder:text-muted-foreground/50"
+              className="w-full bg-card border border-border focus:border-primary focus:ring-1 focus:ring-primary rounded-xl px-4 py-3 text-lg outline-none transition-all placeholder:text-muted-foreground/50"
             />
             {f.formState.errors.name && <span className="text-destructive text-xs font-medium">{f.formState.errors.name.message}</span>}
           </div>
           <div className="flex flex-col gap-2">
-            <label className="text-sm font-bold text-white/80">City</label>
+            <label className="text-sm font-bold text-foreground/80">City</label>
             <input 
               data-testid="input-city"
               {...f.register("city")}
               placeholder="e.g. New York"
-              className="w-full bg-black/50 border border-white/10 focus:border-primary focus:ring-1 focus:ring-primary rounded-xl px-4 py-3 text-lg outline-none transition-all placeholder:text-muted-foreground/50"
+              className="w-full bg-card border border-border focus:border-primary focus:ring-1 focus:ring-primary rounded-xl px-4 py-3 text-lg outline-none transition-all placeholder:text-muted-foreground/50"
             />
             {f.formState.errors.city && <span className="text-destructive text-xs font-medium">{f.formState.errors.city.message}</span>}
           </div>
@@ -172,11 +172,11 @@ export default function Home() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="flex flex-col gap-2">
-            <label className="text-sm font-bold text-white/80">Job</label>
+            <label className="text-sm font-bold text-foreground/80">Job</label>
             <select
               data-testid="select-job"
               {...f.register("job")}
-              className="w-full bg-black/50 border border-white/10 focus:border-primary focus:ring-1 focus:ring-primary rounded-xl px-4 py-3 text-lg outline-none transition-all text-white appearance-none"
+              className="w-full bg-card border border-border focus:border-primary focus:ring-1 focus:ring-primary rounded-xl px-4 py-3 text-lg outline-none transition-all text-foreground appearance-none"
             >
               <option value="student">Student</option>
               <option value="engineer">Engineer</option>
@@ -188,11 +188,11 @@ export default function Home() {
             </select>
           </div>
           <div className="flex flex-col gap-2">
-            <label className="text-sm font-bold text-white/80">Relationship Status</label>
+            <label className="text-sm font-bold text-foreground/80">Relationship Status</label>
             <select
               data-testid="select-status"
               {...f.register("status")}
-              className="w-full bg-black/50 border border-white/10 focus:border-primary focus:ring-1 focus:ring-primary rounded-xl px-4 py-3 text-lg outline-none transition-all text-white appearance-none"
+              className="w-full bg-card border border-border focus:border-primary focus:ring-1 focus:ring-primary rounded-xl px-4 py-3 text-lg outline-none transition-all text-foreground appearance-none"
             >
               <option value="single">Single</option>
               <option value="in_relationship">In a Relationship</option>
@@ -203,18 +203,18 @@ export default function Home() {
         </div>
 
         <div className="flex flex-col gap-2">
-          <label className="text-sm font-bold text-white/80">Biggest Weakness (Optional)</label>
+          <label className="text-sm font-bold text-foreground/80">Biggest Weakness (Optional)</label>
           <input 
             data-testid="input-weakness"
             {...f.register("weakness")}
             placeholder="e.g. always late, can't say no, addicted to memes"
-            className="w-full bg-black/50 border border-white/10 focus:border-primary focus:ring-1 focus:ring-primary rounded-xl px-4 py-3 text-lg outline-none transition-all placeholder:text-muted-foreground/50"
+            className="w-full bg-card border border-border focus:border-primary focus:ring-1 focus:ring-primary rounded-xl px-4 py-3 text-lg outline-none transition-all placeholder:text-muted-foreground/50"
           />
         </div>
 
         {/* Styles */}
         <div className="flex flex-col gap-2">
-          <label className="text-sm font-bold text-white/80">Roast Style</label>
+          <label className="text-sm font-bold text-foreground/80">Roast Style</label>
           <div className="flex flex-wrap gap-2">
             {[
               { id: "friendly", icon: HeartPulse, label: "Friendly" },
@@ -233,7 +233,7 @@ export default function Home() {
                   className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-200 border ${
                     isSelected 
                       ? "bg-primary text-primary-foreground border-primary neon-glow-primary" 
-                      : "bg-muted/50 text-muted-foreground border-white/5 hover:bg-muted"
+                      : "bg-muted/50 text-muted-foreground border-border hover:bg-muted"
                   }`}
                 >
                   <Icon size={16} className={isSelected ? "animate-pulse" : ""} />
@@ -246,7 +246,7 @@ export default function Home() {
 
         {/* Languages */}
         <div className="flex flex-col gap-2">
-          <label className="text-sm font-bold text-white/80">Language</label>
+          <label className="text-sm font-bold text-foreground/80">Language</label>
           <div className="flex flex-wrap gap-2">
             {["english", "hinglish", "hindi", "spanish", "french"].map((lang) => {
               const isSelected = f.watch("language") === lang;
@@ -258,8 +258,8 @@ export default function Home() {
                   onClick={() => f.setValue("language", lang as Language)}
                   className={`px-3 py-1.5 rounded-full text-sm font-bold transition-all border ${
                     isSelected 
-                      ? "bg-white text-black border-white" 
-                      : "bg-white/5 text-white/60 border-white/10 hover:bg-white/10 hover:text-white"
+                      ? "bg-foreground text-background border-foreground" 
+                      : "bg-muted text-foreground/60 border-border hover:bg-muted hover:text-foreground"
                   }`}
                 >
                   {lang.charAt(0).toUpperCase() + lang.slice(1)}
@@ -272,7 +272,7 @@ export default function Home() {
         {/* Intensity */}
         <div className="flex flex-col gap-4 mt-2">
           <div className="flex items-center justify-between">
-            <label className="text-sm font-bold text-white/80">Burn Intensity</label>
+            <label className="text-sm font-bold text-foreground/80">Burn Intensity</label>
             <span className={`text-sm font-black uppercase tracking-wider ${intensityLabels[intensity].color}`}>
               {intensityLabels[intensity].label}
             </span>
@@ -299,8 +299,7 @@ export default function Home() {
 
       {/* Background ambient glow */}
       <div className="fixed inset-0 pointer-events-none z-0">
-        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-primary/20 blur-[120px] rounded-full mix-blend-screen" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-secondary/20 blur-[120px] rounded-full mix-blend-screen" />
+        {/* Background is intentionally pure — neon is reserved for borders, glows, and accents only. */}
       </div>
 
       <main className="flex-1 w-full max-w-5xl mx-auto px-4 py-8 md:py-16 z-10 flex flex-col gap-12 items-center">
@@ -310,7 +309,7 @@ export default function Home() {
           <button 
             data-testid="button-sound-toggle"
             onClick={() => setSoundEnabled(!soundEnabled)}
-            className="p-3 rounded-full bg-muted/50 hover:bg-muted text-muted-foreground hover:text-primary transition-colors border border-white/5"
+            className="p-3 rounded-full bg-muted/50 hover:bg-muted text-muted-foreground hover:text-primary transition-colors border border-border"
             title={soundEnabled ? "Mute sound 🔇" : "Enable sound 🔊"}
           >
             {soundEnabled ? <Volume2 size={20} /> : <VolumeX size={20} />}
@@ -352,7 +351,7 @@ export default function Home() {
                 <Target size={18} /> 🎯 Roast My Friend
               </button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[500px] bg-[#09090b] border-white/10 text-white max-h-[90vh] overflow-y-auto">
+            <DialogContent className="sm:max-w-[500px] bg-card border-border text-foreground max-h-[90vh] overflow-y-auto">
               <DialogHeader>
                 <DialogTitle className="text-2xl font-display font-bold neon-text-primary">Roast Your Friend</DialogTitle>
                 <p className="text-sm text-muted-foreground mt-2">
@@ -366,15 +365,15 @@ export default function Home() {
                   <button 
                     type="submit"
                     disabled={generateRoast.isPending}
-                    className="w-full bg-gradient-to-r from-primary to-secondary text-white font-bold text-xl py-4 rounded-xl hover:opacity-90 active:scale-[0.98] transition-all disabled:opacity-50 neon-glow-primary flex justify-center items-center gap-2"
+                    className="w-full bg-gradient-to-r from-primary to-secondary text-foreground font-bold text-xl py-4 rounded-xl hover:opacity-90 active:scale-[0.98] transition-all disabled:opacity-50 neon-glow-primary flex justify-center items-center gap-2"
                   >
                     {generateRoast.isPending ? <><Flame className="animate-bounce" /> Cooking...</> : "Generate Share Link"}
                   </button>
                 </form>
               ) : (
                 <div className="flex flex-col gap-6 mt-4 items-center text-center">
-                  <div className="p-4 bg-white/5 border border-white/10 rounded-xl w-full">
-                    <p className="text-lg font-bold text-white mb-2">"{friendRoast.text}"</p>
+                  <div className="p-4 bg-muted border border-border rounded-xl w-full">
+                    <p className="text-lg font-bold text-foreground mb-2">"{friendRoast.text}"</p>
                   </div>
                   
                   <div className="w-full flex flex-col gap-3">
@@ -397,7 +396,7 @@ export default function Home() {
                     >
                       <Share2 size={18} /> Share to WhatsApp
                     </button>
-                    <button onClick={() => setFriendRoast(null)} className="text-muted-foreground hover:text-white mt-2 text-sm underline">
+                    <button onClick={() => setFriendRoast(null)} className="text-muted-foreground hover:text-foreground mt-2 text-sm underline">
                       Roast another friend
                     </button>
                   </div>
@@ -412,7 +411,7 @@ export default function Home() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
               onSubmit={form.handleSubmit(onSubmit)} 
-              className="w-full max-w-3xl mt-6 p-6 md:p-8 bg-black/40 border border-white/5 rounded-2xl shadow-2xl backdrop-blur-sm flex flex-col gap-6"
+              className="w-full max-w-3xl mt-6 p-6 md:p-8 bg-card border border-border rounded-2xl shadow-2xl backdrop-blur-sm flex flex-col gap-6"
             >
               {renderFormFields(form, false)}
 
@@ -420,7 +419,7 @@ export default function Home() {
                 type="submit"
                 data-testid="button-roast-me"
                 disabled={generateRoast.isPending}
-                className="mt-6 w-full bg-gradient-to-r from-primary to-secondary text-white font-bold text-2xl py-5 rounded-xl hover:opacity-90 active:scale-[0.98] transition-all disabled:opacity-50 disabled:pointer-events-none neon-glow-primary flex justify-center items-center gap-3"
+                className="mt-6 w-full bg-gradient-to-r from-primary to-secondary text-foreground font-bold text-2xl py-5 rounded-xl hover:opacity-90 active:scale-[0.98] transition-all disabled:opacity-50 disabled:pointer-events-none neon-glow-primary flex justify-center items-center gap-3"
               >
                 {generateRoast.isPending ? (
                   <>
@@ -457,8 +456,8 @@ export default function Home() {
 
         {/* Trending Grid */}
         <section className="mt-12 flex flex-col gap-8 w-full max-w-5xl mx-auto">
-          <div className="flex items-center justify-between border-b border-white/10 pb-4">
-            <h2 className="text-2xl font-bold font-display flex items-center gap-2 text-white">
+          <div className="flex items-center justify-between border-b border-border pb-4">
+            <h2 className="text-2xl font-bold font-display flex items-center gap-2 text-foreground">
               <Flame className="text-secondary" /> Live Feed
             </h2>
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -478,18 +477,18 @@ export default function Home() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.1 }}
                 data-testid={`card-trending-${roast.id}`}
-                className="bg-black/40 border border-white/5 rounded-xl p-5 hover:border-primary/50 transition-colors flex flex-col justify-between gap-4"
+                className="bg-card border border-border rounded-xl p-5 hover:border-primary/50 transition-colors flex flex-col justify-between gap-4"
               >
                 <div>
                   <div className="flex justify-between items-start mb-3">
-                    <span className="text-sm font-bold text-white/90 truncate pr-2">
+                    <span className="text-sm font-bold text-foreground/90 truncate pr-2">
                       {roast.name ? `${roast.name}, ${roast.job}` : `@${(roast as any).target || 'Anonymous'}`}
                     </span>
-                    <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-white/5 text-muted-foreground">
+                    <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-muted text-muted-foreground">
                       {roast.style}
                     </span>
                   </div>
-                  <p className="text-sm font-medium leading-relaxed text-white/80">
+                  <p className="text-sm font-medium leading-relaxed text-foreground/80">
                     "{roast.text}"
                   </p>
                 </div>
@@ -497,7 +496,7 @@ export default function Home() {
                   <div className="text-[10px] text-muted-foreground/50 font-mono">
                     {new Date(roast.createdAt).toLocaleTimeString()}
                   </div>
-                  <div className="flex items-center gap-1 text-xs text-white/40">
+                  <div className="flex items-center gap-1 text-xs text-muted-foreground">
                     <span>🔥</span>
                     <span>{roast.intensity}/5</span>
                   </div>
@@ -512,7 +511,7 @@ export default function Home() {
           <div className="absolute inset-0 bg-gradient-to-b from-primary/10 to-transparent pointer-events-none" />
           <div className="flex flex-col items-center gap-2 relative z-10">
             <h3 className="text-muted-foreground text-sm font-bold uppercase tracking-widest">Victims Today 💀</h3>
-            <p className="text-4xl md:text-5xl font-display font-bold text-white" data-testid="text-stats-users">
+            <p className="text-4xl md:text-5xl font-display font-bold text-foreground" data-testid="text-stats-users">
               {stats?.usersToday.toLocaleString() ?? "—"}
             </p>
           </div>
@@ -532,7 +531,7 @@ export default function Home() {
 
       </main>
 
-      <footer className="w-full py-8 border-t border-white/5 bg-black/50 z-10 mt-auto">
+      <footer className="w-full py-8 border-t border-border bg-card z-10 mt-auto">
         <div className="max-w-4xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-muted-foreground font-medium">
           <div className="flex items-center gap-2">
             <Flame size={16} className="text-primary" />

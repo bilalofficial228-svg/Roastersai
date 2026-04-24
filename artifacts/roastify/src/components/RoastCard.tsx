@@ -90,7 +90,7 @@ export function RoastCard({ roast, onRetry, onRoastHarder, isShared }: RoastCard
       {/* The Shareable Card */}
       <div 
         ref={cardRef}
-        className="bg-[#09090b] border border-primary/30 rounded-2xl p-8 relative overflow-hidden flex flex-col gap-6 items-center text-center shadow-[0_0_40px_rgba(0,0,0,0.8)]"
+        className="bg-card border border-primary/30 rounded-2xl p-8 relative overflow-hidden flex flex-col gap-6 items-center text-center shadow-[0_0_40px_rgba(0,0,0,0.8)]"
       >
         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary via-secondary to-accent" />
         
@@ -98,7 +98,7 @@ export function RoastCard({ roast, onRetry, onRoastHarder, isShared }: RoastCard
           RoastMe.ai
         </div>
 
-        <p data-testid="text-roast-result" className="text-3xl md:text-4xl font-bold leading-tight font-display text-white">
+        <p data-testid="text-roast-result" className="text-3xl md:text-4xl font-bold leading-tight font-display text-foreground">
           "{roast.text}"
         </p>
         
@@ -110,13 +110,13 @@ export function RoastCard({ roast, onRetry, onRoastHarder, isShared }: RoastCard
             <span className="text-xs uppercase tracking-wider font-bold text-primary px-2 py-1 bg-primary/10 rounded border border-primary/20">
               Intensity: {roast.intensity}/5
             </span>
-            <span className="text-xs font-mono text-muted-foreground bg-white/5 px-2 py-1 rounded">
+            <span className="text-xs font-mono text-muted-foreground bg-muted px-2 py-1 rounded">
               {roast.style}
             </span>
           </div>
         </div>
 
-        <div className="absolute bottom-4 right-4 text-[10px] text-white/20 font-mono tracking-widest">
+        <div className="absolute bottom-4 right-4 text-[10px] text-muted-foreground/40 font-mono tracking-widest">
           roastify.app
         </div>
       </div>
@@ -134,7 +134,7 @@ export function RoastCard({ roast, onRetry, onRoastHarder, isShared }: RoastCard
               className={`flex items-center gap-2 px-4 py-2 rounded-full font-bold transition-all ${
                 hasReacted(type) 
                   ? 'bg-primary/20 text-primary border border-primary/50' 
-                  : 'bg-white/5 text-white/70 hover:bg-white/10 hover:text-white border border-white/10'
+                  : 'bg-muted text-foreground/70 hover:bg-muted hover:text-foreground border border-border'
               }`}
             >
               <span>{emojis[type]}</span>
@@ -147,7 +147,7 @@ export function RoastCard({ roast, onRetry, onRoastHarder, isShared }: RoastCard
       {/* Actions */}
       {!isShared && (
         <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mt-4">
-          <button onClick={handleCopy} data-testid="button-copy" className="flex items-center justify-center gap-2 py-3 bg-white/5 hover:bg-white/10 rounded-lg font-medium transition-colors text-sm">
+          <button onClick={handleCopy} data-testid="button-copy" className="flex items-center justify-center gap-2 py-3 bg-muted hover:bg-muted rounded-lg font-medium transition-colors text-sm">
             <Copy size={16} /> Copy Text
           </button>
           <button onClick={handleShareImage} data-testid="button-share-image" className="flex items-center justify-center gap-2 py-3 bg-primary/20 hover:bg-primary/30 text-primary border border-primary/30 rounded-lg font-medium transition-colors text-sm">
@@ -160,7 +160,7 @@ export function RoastCard({ roast, onRetry, onRoastHarder, isShared }: RoastCard
             <Twitter size={16} /> Twitter
           </button>
           {onRetry && (
-            <button onClick={onRetry} data-testid="button-try-again" className="flex items-center justify-center gap-2 py-3 bg-white/5 hover:bg-white/10 rounded-lg font-medium transition-colors text-sm">
+            <button onClick={onRetry} data-testid="button-try-again" className="flex items-center justify-center gap-2 py-3 bg-muted hover:bg-muted rounded-lg font-medium transition-colors text-sm">
               <RotateCw size={16} /> Try Again
             </button>
           )}
@@ -175,7 +175,7 @@ export function RoastCard({ roast, onRetry, onRoastHarder, isShared }: RoastCard
       {isShared && (
         <div className="flex flex-col gap-4 mt-6 items-center">
           <p className="text-muted-foreground text-sm">Sent to you via roastify.app</p>
-          <Link href="/" className="w-full max-w-sm flex items-center justify-center gap-2 bg-gradient-to-r from-primary to-secondary text-white font-bold text-xl py-4 rounded-xl hover:opacity-90 active:scale-[0.98] transition-all neon-glow-primary">
+          <Link href="/" className="w-full max-w-sm flex items-center justify-center gap-2 bg-gradient-to-r from-primary to-secondary text-foreground font-bold text-xl py-4 rounded-xl hover:opacity-90 active:scale-[0.98] transition-all neon-glow-primary">
             🔥 Roast Yourself
           </Link>
         </div>

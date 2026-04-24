@@ -34,12 +34,16 @@ const STYLE_PROMPTS: Record<RoastStyle, string> = {
 };
 
 const LANGUAGE_DIRECTIONS: Record<Language, string> = {
-  english: "Write entirely in English.",
+  english:
+    "Generate roast in ENGLISH language ONLY. 100% English. Do NOT mix in any Hindi, Hinglish, Spanish, French or any other language words or phrases. Pure English vocabulary and grammar.",
   hinglish:
-    "Write in Hinglish — natural Indian-English mix. Use words like 'bhai', 'yaar', 'matlab', 'arre', 'kya', 'haan', sprinkled into English sentences. Roman script only.",
-  hindi: "Write entirely in Hindi using Devanagari script (हिन्दी).",
-  spanish: "Write entirely in Spanish (Castilian or Latin American — your pick).",
-  french: "Write entirely in French.",
+    "Generate roast in HINGLISH ONLY — a natural Hindi-English code-switch written in ROMAN SCRIPT (no Devanagari). Mix Hindi words like 'bhai', 'yaar', 'matlab', 'arre', 'kya', 'haww', 'sharam karo', 'beta' naturally with English. Do NOT use pure English-only sentences and do NOT use Devanagari script.",
+  hindi:
+    "Generate roast in HINDI language ONLY, written in DEVANAGARI script (हिन्दी). 100% Hindi. Do NOT include any English words, Roman script, Hinglish, or any other language. Pure Hindi vocabulary and grammar.",
+  spanish:
+    "Generate roast in SPANISH language ONLY. 100% Spanish. Do NOT mix in any English, Hindi or other language words or phrases. Pure Spanish vocabulary and grammar.",
+  french:
+    "Generate roast in FRENCH language ONLY. 100% French. Do NOT mix in any English, Hindi or other language words or phrases. Pure French vocabulary and grammar.",
 };
 
 const INTENSITY_DIRECTIONS: Record<number, string> = {

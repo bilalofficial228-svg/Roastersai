@@ -49,42 +49,52 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
+/* LIGHT MODE (root default) */
 :root {
-  --button-outline: rgba(255,255,255, .10);
-  --badge-outline: rgba(255,255,255, .05);
+  --button-outline: rgba(0,0,0, .10);
+  --badge-outline: rgba(0,0,0, .05);
   --opaque-button-border-intensity: 9;
-  --elevate-1: rgba(255,255,255, .04);
-  --elevate-2: rgba(255,255,255, .09);
+  --elevate-1: rgba(0,0,0, .04);
+  --elevate-2: rgba(0,0,0, .09);
 
-  --background: 240 10% 4%;
-  --foreground: 0 0% 98%;
-  --border: 240 10% 15%;
-  --card: 240 10% 6%;
-  --card-foreground: 0 0% 98%;
-  --card-border: 240 10% 15%;
-  --popover: 240 10% 6%;
-  --popover-foreground: 0 0% 98%;
-  --popover-border: 240 10% 15%;
-  
-  --primary: 280 100% 65%;
+  /* #F5F5F5 page, #FFFFFF cards, #111111 text, #E0E0E0 borders */
+  --background: 0 0% 96%;
+  --foreground: 0 0% 7%;
+  --border: 0 0% 88%;
+  --card: 0 0% 100%;
+  --card-foreground: 0 0% 7%;
+  --card-border: 0 0% 88%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 0 0% 7%;
+  --popover-border: 0 0% 88%;
+
+  /* Neon accent colors stay the same in both modes */
+  --primary: 280 100% 55%;
   --primary-foreground: 0 0% 100%;
-  --secondary: 320 100% 55%;
+  --secondary: 320 100% 50%;
   --secondary-foreground: 0 0% 100%;
-  
-  --muted: 240 10% 12%;
-  --muted-foreground: 240 5% 65%;
-  --accent: 190 100% 50%;
+
+  --muted: 0 0% 92%;
+  --muted-foreground: 0 0% 35%;
+  --accent: 190 100% 42%;
   --accent-foreground: 0 0% 100%;
-  --destructive: 0 100% 60%;
+  --destructive: 0 85% 50%;
   --destructive-foreground: 0 0% 100%;
-  --input: 240 10% 20%;
-  --ring: 280 100% 65%;
+  --input: 0 0% 100%;
+  --input-foreground: 0 0% 7%;
+  --input-placeholder: 0 0% 40%;
+  --ring: 280 100% 55%;
 
   --app-font-sans: 'Inter', sans-serif;
   --app-font-display: 'Space Grotesk', sans-serif;
   --radius: 0.75rem;
+
+  /* Effects */
+  --neon-card-shadow: 0 0 20px rgba(139, 0, 255, 0.18);
+  --neon-card-border: rgba(139, 0, 255, 0.35);
 }
 
+/* DARK MODE */
 .dark {
   --button-outline: rgba(255,255,255, .10);
   --badge-outline: rgba(255,255,255, .05);
@@ -92,49 +102,86 @@
   --elevate-1: rgba(255,255,255, .04);
   --elevate-2: rgba(255,255,255, .09);
 
-  --background: 240 10% 4%;
-  --foreground: 0 0% 98%;
-  --border: 240 10% 15%;
-  --card: 240 10% 6%;
-  --card-foreground: 0 0% 98%;
-  --card-border: 240 10% 15%;
-  --popover: 240 10% 6%;
-  --popover-foreground: 0 0% 98%;
-  --popover-border: 240 10% 15%;
-  
+  /* #0A0A0A page, #111111 cards, #F0F0F0 text */
+  --background: 0 0% 4%;
+  --foreground: 0 0% 94%;
+  --border: 0 0% 13%;
+  --card: 0 0% 7%;
+  --card-foreground: 0 0% 94%;
+  --card-border: 0 0% 13%;
+  --popover: 0 0% 7%;
+  --popover-foreground: 0 0% 94%;
+  --popover-border: 0 0% 13%;
+
   --primary: 280 100% 65%;
   --primary-foreground: 0 0% 100%;
   --secondary: 320 100% 55%;
   --secondary-foreground: 0 0% 100%;
-  
-  --muted: 240 10% 12%;
-  --muted-foreground: 240 5% 65%;
+
+  --muted: 0 0% 11%;
+  --muted-foreground: 0 0% 65%;
   --accent: 190 100% 50%;
   --accent-foreground: 0 0% 100%;
   --destructive: 0 100% 60%;
   --destructive-foreground: 0 0% 100%;
-  --input: 240 10% 20%;
+  --input: 0 0% 9%;
+  --input-foreground: 0 0% 100%;
+  --input-placeholder: 0 0% 40%;
   --ring: 280 100% 65%;
+
+  /* Effects */
+  --neon-card-shadow: 0 0 20px rgba(139, 0, 255, 0.30);
+  --neon-card-border: rgba(139, 0, 255, 0.50);
 }
 
 @layer base {
   * {
     @apply border-border;
   }
+  html, body, #root {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+  }
   body {
-    @apply font-sans antialiased bg-background text-foreground;
+    @apply font-sans antialiased;
   }
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display);
+    color: hsl(var(--foreground));
+  }
+  /* Native form controls inherit the theme */
+  input, textarea, select {
+    color: hsl(var(--input-foreground));
+    background-color: hsl(var(--input));
+  }
+  input::placeholder, textarea::placeholder {
+    color: hsl(var(--input-placeholder));
+  }
+  /* Make native <option> elements readable in both themes (some browsers
+     still render the OS popover, but inheriting helps in chromium). */
+  select option {
+    background-color: hsl(var(--card));
+    color: hsl(var(--foreground));
   }
 }
 
+/* Neon glow utilities — these are BORDER/SHADOW effects, not fills */
 .neon-text-primary {
   text-shadow: 0 0 10px hsl(var(--primary) / 0.5), 0 0 20px hsl(var(--primary) / 0.3);
 }
 .neon-glow-primary {
   box-shadow: 0 0 15px hsl(var(--primary) / 0.4), inset 0 0 10px hsl(var(--primary) / 0.2);
 }
+.neon-card {
+  background-color: hsl(var(--card));
+  border: 1px solid var(--neon-card-border);
+  box-shadow: var(--neon-card-shadow);
+}
+.neon-border {
+  border: 1px solid var(--neon-card-border);
+  box-shadow: 0 0 12px rgba(139, 0, 255, 0.25);
+}
+
 .glitch-effect {
   position: relative;
 }
