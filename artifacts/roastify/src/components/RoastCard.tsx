@@ -90,11 +90,16 @@ export function RoastCard({ roast, onRetry, onRoastHarder, isShared }: RoastCard
       {/* The Shareable Card */}
       <div 
         ref={cardRef}
-        className="bg-card border border-primary/30 rounded-2xl p-8 relative overflow-hidden flex flex-col gap-6 items-center text-center shadow-[0_0_40px_rgba(0,0,0,0.8)]"
+        className="rounded-2xl p-8 relative overflow-hidden flex flex-col gap-6 items-center text-center"
+        style={{
+          backgroundColor: "#141414",
+          border: "1px solid rgba(255, 107, 0, 0.4)",
+          boxShadow: "0 20px 60px rgba(0, 0, 0, 0.6), 0 0 40px rgba(255, 0, 85, 0.1)",
+        }}
       >
-        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary via-secondary to-accent" />
+        <div className="absolute top-0 left-0 w-full h-1 fire-bg" />
         
-        <div className="font-display font-bold text-xl tracking-tight glitch-effect neon-text-primary uppercase" data-text="RoastMe.ai">
+        <div className="font-display font-bold text-xl tracking-tight uppercase fire-text">
           RoastMe.ai
         </div>
 
@@ -175,7 +180,7 @@ export function RoastCard({ roast, onRetry, onRoastHarder, isShared }: RoastCard
       {isShared && (
         <div className="flex flex-col gap-4 mt-6 items-center">
           <p className="text-muted-foreground text-sm">Sent to you via roastify.app</p>
-          <Link href="/" className="w-full max-w-sm flex items-center justify-center gap-2 bg-gradient-to-r from-primary to-secondary text-foreground font-bold text-xl py-4 rounded-xl hover:opacity-90 active:scale-[0.98] transition-all neon-glow-primary">
+          <Link href="/" className="w-full max-w-sm flex items-center justify-center gap-2 fire-bg text-white font-bold text-xl py-4 rounded-xl hover:opacity-90 active:scale-[0.98] transition-all fire-glow">
             🔥 Roast Yourself
           </Link>
         </div>

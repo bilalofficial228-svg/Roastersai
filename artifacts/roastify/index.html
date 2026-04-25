@@ -11,28 +11,9 @@
     <meta name="theme-color" content="#0A0A0A" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <script>
-      (function () {
-        try {
-          var url = new URL(window.location.href);
-          var qp = url.searchParams.get('theme');
-          var stored = window.localStorage.getItem('roastify:theme');
-          var theme;
-          if (qp === 'light' || qp === 'dark') {
-            theme = qp;
-            window.localStorage.setItem('roastify:theme', theme);
-          } else if (stored === 'light' || stored === 'dark') {
-            theme = stored;
-          } else {
-            theme = 'dark';
-          }
-          var root = document.documentElement;
-          if (theme === 'dark') root.classList.add('dark');
-          else root.classList.remove('dark');
-          root.style.colorScheme = theme;
-        } catch (e) {
-          document.documentElement.classList.add('dark');
-        }
-      })();
+      // Always-dark fire theme — light mode removed.
+      document.documentElement.classList.add('dark');
+      document.documentElement.style.colorScheme = 'dark';
     </script>
   </head>
   <body>

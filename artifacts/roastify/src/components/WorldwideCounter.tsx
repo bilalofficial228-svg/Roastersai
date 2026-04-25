@@ -22,7 +22,7 @@ export function WorldwideCounter() {
   }, []);
 
   return (
-    <div className="sticky top-0 z-50 w-full bg-gradient-to-r from-red-900/80 via-pink-900/80 to-red-900/80 text-white py-2 px-4 text-center font-bold text-sm tracking-widest uppercase border-b border-red-500/30 backdrop-blur-md flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(220,38,38,0.3)]">
+    <div className="sticky top-0 z-50 w-full text-white py-2 px-4 text-center font-bold text-sm tracking-widest uppercase backdrop-blur-md flex items-center justify-center gap-2" style={{ backgroundColor: "#FF0055", boxShadow: "0 2px 20px rgba(255, 0, 85, 0.4)" }}>
       <span>🔥</span>
       <AnimatePresence mode="popLayout">
         <motion.span

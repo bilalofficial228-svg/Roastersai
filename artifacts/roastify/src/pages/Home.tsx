@@ -55,11 +55,11 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 const intensityLabels: Record<number, { label: string, color: string }> = {
-  1: { label: "1 Baby Roast", color: "text-green-400" },
-  2: { label: "2 Mild Burns", color: "text-yellow-400" },
-  3: { label: "3 Medium Savage", color: "text-orange-500" },
-  4: { label: "4 Full Savage", color: "text-pink-500" },
-  5: { label: "5 NUCLEAR ☢️", color: "text-red-500 font-bold glitch-effect" },
+  1: { label: "1 Baby Roast", color: "text-[#FFB380]" },
+  2: { label: "2 Mild Burns", color: "text-[#FF9040]" },
+  3: { label: "3 Medium Savage", color: "text-[#FF6B00]" },
+  4: { label: "4 Full Savage", color: "text-[#FF3370]" },
+  5: { label: "5 NUCLEAR ☢️", color: "text-[#FF0055] font-black" },
 };
 
 export default function Home() {
@@ -154,7 +154,7 @@ export default function Home() {
               data-testid="input-name"
               {...f.register("name")}
               placeholder="e.g. John Doe"
-              className="w-full bg-card border border-border focus:border-primary focus:ring-1 focus:ring-primary rounded-xl px-4 py-3 text-lg outline-none transition-all placeholder:text-muted-foreground/50"
+              className="w-full bg-input border border-border focus:border-[#FF6B00] focus:ring-1 focus:ring-[#FF6B00] rounded-xl px-4 py-3 text-lg outline-none transition-all placeholder:text-muted-foreground/50"
             />
             {f.formState.errors.name && <span className="text-destructive text-xs font-medium">{f.formState.errors.name.message}</span>}
           </div>
@@ -164,7 +164,7 @@ export default function Home() {
               data-testid="input-city"
               {...f.register("city")}
               placeholder="e.g. New York"
-              className="w-full bg-card border border-border focus:border-primary focus:ring-1 focus:ring-primary rounded-xl px-4 py-3 text-lg outline-none transition-all placeholder:text-muted-foreground/50"
+              className="w-full bg-input border border-border focus:border-[#FF6B00] focus:ring-1 focus:ring-[#FF6B00] rounded-xl px-4 py-3 text-lg outline-none transition-all placeholder:text-muted-foreground/50"
             />
             {f.formState.errors.city && <span className="text-destructive text-xs font-medium">{f.formState.errors.city.message}</span>}
           </div>
@@ -176,7 +176,7 @@ export default function Home() {
             <select
               data-testid="select-job"
               {...f.register("job")}
-              className="w-full bg-card border border-border focus:border-primary focus:ring-1 focus:ring-primary rounded-xl px-4 py-3 text-lg outline-none transition-all text-foreground appearance-none"
+              className="w-full bg-input border border-border focus:border-[#FF6B00] focus:ring-1 focus:ring-[#FF6B00] rounded-xl px-4 py-3 text-lg outline-none transition-all text-foreground appearance-none"
             >
               <option value="student">Student</option>
               <option value="engineer">Engineer</option>
@@ -192,7 +192,7 @@ export default function Home() {
             <select
               data-testid="select-status"
               {...f.register("status")}
-              className="w-full bg-card border border-border focus:border-primary focus:ring-1 focus:ring-primary rounded-xl px-4 py-3 text-lg outline-none transition-all text-foreground appearance-none"
+              className="w-full bg-input border border-border focus:border-[#FF6B00] focus:ring-1 focus:ring-[#FF6B00] rounded-xl px-4 py-3 text-lg outline-none transition-all text-foreground appearance-none"
             >
               <option value="single">Single</option>
               <option value="in_relationship">In a Relationship</option>
@@ -208,7 +208,7 @@ export default function Home() {
             data-testid="input-weakness"
             {...f.register("weakness")}
             placeholder="e.g. always late, can't say no, addicted to memes"
-            className="w-full bg-card border border-border focus:border-primary focus:ring-1 focus:ring-primary rounded-xl px-4 py-3 text-lg outline-none transition-all placeholder:text-muted-foreground/50"
+            className="w-full bg-input border border-border focus:border-[#FF6B00] focus:ring-1 focus:ring-[#FF6B00] rounded-xl px-4 py-3 text-lg outline-none transition-all placeholder:text-muted-foreground/50"
           />
         </div>
 
@@ -232,8 +232,8 @@ export default function Home() {
                   onClick={() => f.setValue("style", style.id as RoastStyle)}
                   className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-200 border ${
                     isSelected 
-                      ? "bg-primary text-primary-foreground border-primary neon-glow-primary" 
-                      : "bg-muted/50 text-muted-foreground border-border hover:bg-muted"
+                      ? "bg-[#FF6B00]/15 text-[#FF6B00] border-[#FF6B00]" 
+                      : "bg-[#1C1C1C] text-[#777777] border-[#2A2A2A] hover:bg-[#252525] hover:text-foreground"
                   }`}
                 >
                   <Icon size={16} className={isSelected ? "animate-pulse" : ""} />
@@ -258,8 +258,8 @@ export default function Home() {
                   onClick={() => f.setValue("language", lang as Language)}
                   className={`px-3 py-1.5 rounded-full text-sm font-bold transition-all border ${
                     isSelected 
-                      ? "bg-foreground text-background border-foreground" 
-                      : "bg-muted text-foreground/60 border-border hover:bg-muted hover:text-foreground"
+                      ? "bg-[#FF0055]/15 text-[#FF0055] border-[#FF0055]" 
+                      : "bg-[#1C1C1C] text-[#777777] border-[#2A2A2A] hover:bg-[#252525] hover:text-foreground"
                   }`}
                 >
                   {lang.charAt(0).toUpperCase() + lang.slice(1)}
@@ -321,15 +321,15 @@ export default function Home() {
           <motion.div 
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-medium mb-2"
+            className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium mb-2"
+            style={{ backgroundColor: "rgba(255,107,0,0.1)", border: "1px solid rgba(255,107,0,0.3)", color: "#FF6B00" }}
           >
             <Sparkles size={16} /> <span>100% Brutal AI</span>
           </motion.div>
           <motion.h1 
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            data-text="Get Roasted by AI"
-            className="text-5xl md:text-7xl font-bold tracking-tight glitch-effect neon-text-primary uppercase"
+            className="text-5xl md:text-7xl font-bold tracking-tight uppercase fire-text"
           >
             Get Roasted by AI
           </motion.h1>
@@ -346,14 +346,15 @@ export default function Home() {
             <DialogTrigger asChild>
               <button 
                 data-testid="button-roast-friend"
-                className="flex items-center gap-2 px-6 py-3 rounded-full bg-secondary/20 border border-secondary/50 text-secondary hover:bg-secondary/30 transition-all font-bold"
+                className="flex items-center gap-2 px-6 py-3 rounded-full bg-transparent border-2 transition-all font-bold hover:bg-[#FF6B00]/10"
+                style={{ borderColor: "#FF6B00", color: "#FF6B00" }}
               >
                 <Target size={18} /> 🎯 Roast My Friend
               </button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[500px] bg-card border-border text-foreground max-h-[90vh] overflow-y-auto">
               <DialogHeader>
-                <DialogTitle className="text-2xl font-display font-bold neon-text-primary">Roast Your Friend</DialogTitle>
+                <DialogTitle className="text-2xl font-display font-bold fire-text">Roast Your Friend</DialogTitle>
                 <p className="text-sm text-muted-foreground mt-2">
                   Filling for a friend? Add their details below — we'll generate a private link to share. 😈
                 </p>
@@ -365,7 +366,7 @@ export default function Home() {
                   <button 
                     type="submit"
                     disabled={generateRoast.isPending}
-                    className="w-full bg-gradient-to-r from-primary to-secondary text-foreground font-bold text-xl py-4 rounded-xl hover:opacity-90 active:scale-[0.98] transition-all disabled:opacity-50 neon-glow-primary flex justify-center items-center gap-2"
+                    className="w-full fire-bg text-white font-bold text-xl py-4 rounded-xl hover:opacity-90 active:scale-[0.98] transition-all disabled:opacity-50 fire-glow flex justify-center items-center gap-2"
                   >
                     {generateRoast.isPending ? <><Flame className="animate-bounce" /> Cooking...</> : "Generate Share Link"}
                   </button>
@@ -411,7 +412,7 @@ export default function Home() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
               onSubmit={form.handleSubmit(onSubmit)} 
-              className="w-full max-w-3xl mt-6 p-6 md:p-8 bg-card border border-border rounded-2xl shadow-2xl backdrop-blur-sm flex flex-col gap-6"
+              className="w-full max-w-3xl mt-6 p-6 md:p-8 premium-card backdrop-blur-sm flex flex-col gap-6"
             >
               {renderFormFields(form, false)}
 
@@ -419,7 +420,7 @@ export default function Home() {
                 type="submit"
                 data-testid="button-roast-me"
                 disabled={generateRoast.isPending}
-                className="mt-6 w-full bg-gradient-to-r from-primary to-secondary text-foreground font-bold text-2xl py-5 rounded-xl hover:opacity-90 active:scale-[0.98] transition-all disabled:opacity-50 disabled:pointer-events-none neon-glow-primary flex justify-center items-center gap-3"
+                className="mt-6 w-full fire-bg text-white font-bold text-2xl py-5 rounded-xl hover:opacity-90 active:scale-[0.98] transition-all disabled:opacity-50 disabled:pointer-events-none fire-glow flex justify-center items-center gap-3"
               >
                 {generateRoast.isPending ? (
                   <>

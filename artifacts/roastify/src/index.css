@@ -49,89 +49,58 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
-/* LIGHT MODE (root default) */
-:root {
-  --button-outline: rgba(0,0,0, .10);
-  --badge-outline: rgba(0,0,0, .05);
+/*
+ * SINGLE THEME — premium fire-themed dark.
+ * No light mode. No purple. Accents: fire orange (#FF6B00) + hot pink (#FF0055) + gold (#FFD700) for #1.
+ */
+:root,
+.dark {
+  --button-outline: rgba(255,255,255, .08);
+  --badge-outline: rgba(255,255,255, .04);
   --opaque-button-border-intensity: 9;
-  --elevate-1: rgba(0,0,0, .04);
-  --elevate-2: rgba(0,0,0, .09);
+  --elevate-1: rgba(255,255,255, .04);
+  --elevate-2: rgba(255,255,255, .09);
 
-  /* #F5F5F5 page, #FFFFFF cards, #111111 text, #E0E0E0 borders */
-  --background: 0 0% 96%;
-  --foreground: 0 0% 7%;
-  --border: 0 0% 88%;
-  --card: 0 0% 100%;
-  --card-foreground: 0 0% 7%;
-  --card-border: 0 0% 88%;
-  --popover: 0 0% 100%;
-  --popover-foreground: 0 0% 7%;
-  --popover-border: 0 0% 88%;
+  /* Surfaces */
+  --background: 0 0% 5.1%;     /* #0D0D0D */
+  --foreground: 0 0% 100%;     /* #FFFFFF */
+  --border: 0 0% 16.5%;        /* #2A2A2A */
+  --card: 0 0% 7.8%;           /* #141414 */
+  --card-foreground: 0 0% 100%;
+  --card-border: 0 0% 16.5%;
+  --popover: 0 0% 7.8%;
+  --popover-foreground: 0 0% 100%;
+  --popover-border: 0 0% 16.5%;
+  --input: 0 0% 11%;           /* #1C1C1C */
+  --input-foreground: 0 0% 100%;
+  --input-placeholder: 0 0% 33%; /* #555555 */
 
-  /* Neon accent colors stay the same in both modes */
-  --primary: 280 100% 55%;
+  /* Accents — fire palette */
+  --primary: 25 100% 50%;          /* #FF6B00 fire orange */
   --primary-foreground: 0 0% 100%;
-  --secondary: 320 100% 50%;
+  --secondary: 340 100% 50%;       /* #FF0055 hot pink */
   --secondary-foreground: 0 0% 100%;
-
-  --muted: 0 0% 92%;
-  --muted-foreground: 0 0% 35%;
-  --accent: 190 100% 42%;
+  --accent: 25 100% 50%;
   --accent-foreground: 0 0% 100%;
-  --destructive: 0 85% 50%;
+
+  --muted: 0 0% 11%;
+  --muted-foreground: 0 0% 47%;    /* #777 */
+
+  --destructive: 340 100% 50%;
   --destructive-foreground: 0 0% 100%;
-  --input: 0 0% 100%;
-  --input-foreground: 0 0% 7%;
-  --input-placeholder: 0 0% 40%;
-  --ring: 280 100% 55%;
+  --ring: 25 100% 50%;
 
   --app-font-sans: 'Inter', sans-serif;
   --app-font-display: 'Space Grotesk', sans-serif;
   --radius: 0.75rem;
 
-  /* Effects */
-  --neon-card-shadow: 0 0 20px rgba(139, 0, 255, 0.18);
-  --neon-card-border: rgba(139, 0, 255, 0.35);
-}
-
-/* DARK MODE */
-.dark {
-  --button-outline: rgba(255,255,255, .10);
-  --badge-outline: rgba(255,255,255, .05);
-  --opaque-button-border-intensity: 9;
-  --elevate-1: rgba(255,255,255, .04);
-  --elevate-2: rgba(255,255,255, .09);
-
-  /* #0A0A0A page, #111111 cards, #F0F0F0 text */
-  --background: 0 0% 4%;
-  --foreground: 0 0% 94%;
-  --border: 0 0% 13%;
-  --card: 0 0% 7%;
-  --card-foreground: 0 0% 94%;
-  --card-border: 0 0% 13%;
-  --popover: 0 0% 7%;
-  --popover-foreground: 0 0% 94%;
-  --popover-border: 0 0% 13%;
-
-  --primary: 280 100% 65%;
-  --primary-foreground: 0 0% 100%;
-  --secondary: 320 100% 55%;
-  --secondary-foreground: 0 0% 100%;
-
-  --muted: 0 0% 11%;
-  --muted-foreground: 0 0% 65%;
-  --accent: 190 100% 50%;
-  --accent-foreground: 0 0% 100%;
-  --destructive: 0 100% 60%;
-  --destructive-foreground: 0 0% 100%;
-  --input: 0 0% 9%;
-  --input-foreground: 0 0% 100%;
-  --input-placeholder: 0 0% 40%;
-  --ring: 280 100% 65%;
-
-  /* Effects */
-  --neon-card-shadow: 0 0 20px rgba(139, 0, 255, 0.30);
-  --neon-card-border: rgba(139, 0, 255, 0.50);
+  /* Fire effect tokens */
+  --fire-orange: #FF6B00;
+  --fire-pink: #FF0055;
+  --gold: #FFD700;
+  --fire-gradient: linear-gradient(135deg, #FF6B00 0%, #FF0055 100%);
+  --fire-glow: 0 8px 30px rgba(255, 107, 0, 0.4);
+  --fire-glow-soft: 0 4px 20px rgba(255, 107, 0, 0.25);
 }
 
 @layer base {
@@ -141,15 +110,21 @@
   html, body, #root {
     background-color: hsl(var(--background));
     color: hsl(var(--foreground));
+    color-scheme: dark;
   }
   body {
     @apply font-sans antialiased;
+    min-height: 100dvh;
+    background:
+      radial-gradient(ellipse at top, #1a0500 0%, transparent 60%),
+      radial-gradient(ellipse at bottom right, #1a001a 0%, transparent 50%),
+      #0D0D0D;
+    background-attachment: fixed;
   }
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display);
     color: hsl(var(--foreground));
   }
-  /* Native form controls inherit the theme */
   input, textarea, select {
     color: hsl(var(--input-foreground));
     background-color: hsl(var(--input));
@@ -157,70 +132,65 @@
   input::placeholder, textarea::placeholder {
     color: hsl(var(--input-placeholder));
   }
-  /* Make native <option> elements readable in both themes (some browsers
-     still render the OS popover, but inheriting helps in chromium). */
   select option {
-    background-color: hsl(var(--card));
-    color: hsl(var(--foreground));
+    background-color: #141414;
+    color: #FFFFFF;
+  }
+  ::selection {
+    background-color: rgba(255, 107, 0, 0.35);
+    color: #FFFFFF;
   }
 }
 
-/* Neon glow utilities — these are BORDER/SHADOW effects, not fills */
-.neon-text-primary {
-  text-shadow: 0 0 10px hsl(var(--primary) / 0.5), 0 0 20px hsl(var(--primary) / 0.3);
+/* === Fire utility classes === */
+.fire-text {
+  background: var(--fire-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
 }
-.neon-glow-primary {
-  box-shadow: 0 0 15px hsl(var(--primary) / 0.4), inset 0 0 10px hsl(var(--primary) / 0.2);
+.fire-bg {
+  background: var(--fire-gradient);
 }
-.neon-card {
-  background-color: hsl(var(--card));
-  border: 1px solid var(--neon-card-border);
-  box-shadow: var(--neon-card-shadow);
+.fire-glow {
+  box-shadow: var(--fire-glow);
 }
+.fire-glow-soft {
+  box-shadow: var(--fire-glow-soft);
+}
+.fire-border {
+  border: 1px solid var(--fire-orange);
+}
+.gold-border-l {
+  border-left: 3px solid var(--gold);
+}
+.text-gold {
+  color: var(--gold);
+}
+
+/* Premium card shadow */
+.premium-card {
+  background: #141414;
+  border: 1px solid #2A2A2A;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+/* Slider styling — fire orange */
+[data-orientation="horizontal"][role="slider"] {
+  background-color: var(--fire-orange) !important;
+  border-color: var(--fire-orange) !important;
+  box-shadow: 0 0 12px rgba(255, 107, 0, 0.5);
+}
+
+/* Legacy classes (kept as no-ops to avoid breaking anything that still references them) */
+.neon-text-primary,
+.neon-glow-primary,
+.neon-card,
 .neon-border {
-  border: 1px solid var(--neon-card-border);
-  box-shadow: 0 0 12px rgba(139, 0, 255, 0.25);
+  /* intentionally unstyled in fire theme */
 }
 
-.glitch-effect {
-  position: relative;
-}
-.glitch-effect::before,
-.glitch-effect::after {
-  content: attr(data-text);
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: inherit;
-}
-.glitch-effect::before {
-  left: 2px;
-  text-shadow: -1px 0 red;
-  clip: rect(24px, 550px, 90px, 0);
-  animation: glitch-anim-2 3s infinite linear alternate-reverse;
-}
-.glitch-effect::after {
-  left: -2px;
-  text-shadow: -1px 0 blue;
-  clip: rect(85px, 550px, 140px, 0);
-  animation: glitch-anim 2.5s infinite linear alternate-reverse;
-}
-
-@keyframes glitch-anim {
-  0% { clip: rect(10px, 9999px, 83px, 0); }
-  20% { clip: rect(66px, 9999px, 14px, 0); }
-  40% { clip: rect(54px, 9999px, 7px, 0); }
-  60% { clip: rect(31px, 9999px, 49px, 0); }
-  80% { clip: rect(93px, 9999px, 12px, 0); }
-  100% { clip: rect(18px, 9999px, 29px, 0); }
-}
-@keyframes glitch-anim-2 {
-  0% { clip: rect(65px, 9999px, 100px, 0); }
-  20% { clip: rect(3px, 9999px, 20px, 0); }
-  40% { clip: rect(80px, 9999px, 4px, 0); }
-  60% { clip: rect(22px, 9999px, 50px, 0); }
-  80% { clip: rect(44px, 9999px, 98px, 0); }
-  100% { clip: rect(12px, 9999px, 30px, 0); }
-}
+/* Glitch effect kept for backward compatibility (not used on hero anymore) */
+.glitch-effect { position: relative; }

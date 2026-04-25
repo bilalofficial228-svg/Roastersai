@@ -5,7 +5,6 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
 import Home from "@/pages/Home";
 import SharedRoastPage from "@/pages/SharedRoastPage";
-import ThemeToggle, { applyTheme } from "@/components/ThemeToggle";
 import { useEffect } from "react";
 
 const queryClient = new QueryClient();
@@ -22,15 +21,14 @@ function Router() {
 
 function App() {
   useEffect(() => {
-    const stored = window.localStorage.getItem("roastify:theme");
-    applyTheme(stored === "light" ? "light" : "dark");
+    document.documentElement.classList.add("dark");
+    document.documentElement.style.colorScheme = "dark";
   }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
-          <ThemeToggle />
           <Router />
         </WouterRouter>
         <Toaster />
