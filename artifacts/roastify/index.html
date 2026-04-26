@@ -15,15 +15,14 @@
       (function () {
         try {
           var t = localStorage.getItem('roastify:theme');
-          if (t === 'light') {
-            document.documentElement.style.colorScheme = 'light';
-          } else {
+          if (t === 'dark') {
             document.documentElement.classList.add('dark');
             document.documentElement.style.colorScheme = 'dark';
+          } else {
+            document.documentElement.style.colorScheme = 'light';
           }
         } catch (e) {
-          document.documentElement.classList.add('dark');
-          document.documentElement.style.colorScheme = 'dark';
+          document.documentElement.style.colorScheme = 'light';
         }
       })();
     </script>

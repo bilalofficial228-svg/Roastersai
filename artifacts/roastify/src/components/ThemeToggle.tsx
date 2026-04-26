@@ -5,7 +5,7 @@ function getStoredTheme(): "dark" | "light" {
     const stored = localStorage.getItem("roastify:theme");
     if (stored === "light" || stored === "dark") return stored;
   } catch {}
-  return "dark";
+  return "light";
 }
 
 function applyTheme(theme: "dark" | "light") {
@@ -68,8 +68,8 @@ export default function ThemeToggle() {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        background: "rgba(255,255,255,0.1)",
-        border: "1px solid rgba(255,255,255,0.2)",
+        background: isDark ? "rgba(255,255,255,0.10)" : "rgba(0,0,0,0.05)",
+        border: isDark ? "1px solid rgba(255,255,255,0.20)" : "1px solid rgba(0,0,0,0.12)",
         color: isDark ? "#ffffff" : "#333333",
         cursor: "pointer",
         transition: "all 0.3s ease",

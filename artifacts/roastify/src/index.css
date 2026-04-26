@@ -62,55 +62,59 @@
   --elevate-1: rgba(0,0,0, .04);
   --elevate-2: rgba(0,0,0, .07);
 
-  /* Surfaces */
-  --background: 15 100% 98%;    /* #FFF7F3 */
-  --foreground: 0 0% 13%;       /* #222222 */
-  --border: 20 30% 88%;         /* #E8DDD8 */
+  /* Surfaces — clean Netflix white */
+  --background: 0 0% 100%;      /* #FFFFFF */
+  --foreground: 0 0% 8%;        /* #141414 */
+  --border: 0 0% 89%;           /* #E3E3E3 */
   --card: 0 0% 100%;            /* #FFFFFF */
-  --card-foreground: 0 0% 13%;
-  --card-border: 20 30% 88%;
+  --card-foreground: 0 0% 8%;
+  --card-border: 0 0% 89%;
   --popover: 0 0% 100%;
-  --popover-foreground: 0 0% 13%;
-  --popover-border: 20 30% 88%;
-  --input: 15 50% 97%;          /* #FBF4F2 */
-  --input-foreground: 0 0% 13%; /* #222222 */
-  --input-placeholder: 0 0% 60%; /* #999999 */
+  --popover-foreground: 0 0% 8%;
+  --popover-border: 0 0% 89%;
+  --input: 0 0% 96%;            /* #F5F5F5 */
+  --input-foreground: 0 0% 8%;  /* #141414 */
+  --input-placeholder: 0 0% 55%; /* #8C8C8C */
 
   /* Brand palette — red + orange */
-  --primary: 0 100% 65%;            /* #FF4D4D */
+  --primary: 16 100% 50%;           /* #FF4500 */
   --primary-foreground: 0 0% 100%;
   --secondary: 33 100% 50%;         /* #FF8A00 */
   --secondary-foreground: 0 0% 100%;
-  --accent: 0 100% 65%;
+  --accent: 16 100% 50%;
   --accent-foreground: 0 0% 100%;
 
-  --muted: 20 20% 95%;          /* #F4EFED */
-  --muted-foreground: 0 0% 40%; /* #666666 */
+  --muted: 0 0% 96%;            /* #F5F5F5 */
+  --muted-foreground: 0 0% 38%; /* #616161 */
 
-  --destructive: 0 100% 65%;
+  --destructive: 0 100% 60%;
   --destructive-foreground: 0 0% 100%;
-  --ring: 0 100% 65%;
+  --ring: 16 100% 50%;
 
   --app-font-sans: 'Inter', sans-serif;
   --app-font-display: 'Space Grotesk', sans-serif;
   --radius: 0.75rem;
 
   /* Fire effect tokens */
-  --fire-orange: #FF4D4D;
+  --fire-orange: #FF4500;
   --fire-pink: #FF8A00;
   --gold: #FFD700;
-  --fire-gradient: linear-gradient(135deg, #FF4D4D 0%, #FF8A00 100%);
-  --fire-glow: 0 8px 30px rgba(255, 77, 77, 0.35);
-  --fire-glow-soft: 0 4px 20px rgba(255, 77, 77, 0.2);
+  --fire-gradient: linear-gradient(135deg, #FF4500 0%, #FF8A00 100%);
+  --fire-glow: 0 8px 30px rgba(255, 69, 0, 0.30);
+  --fire-glow-soft: 0 4px 20px rgba(255, 69, 0, 0.15);
+
+  /* Light-mode glass tokens */
+  --glass-bg: rgba(0,0,0,0.04);
+  --glass-border: rgba(0,0,0,0.10);
 
   /* History panel — light */
-  --subtitle-color: #666666;
+  --subtitle-color: #555555;
   --history-bg: #FFFFFF;
   --history-card: #F5F5F5;
-  --history-card-border: #E8E8E8;
-  --history-text: #1A1A1A;
-  --history-muted: #888888;
-  --history-border: #E8E8E8;
+  --history-card-border: #E3E3E3;
+  --history-text: #141414;
+  --history-muted: #777777;
+  --history-border: #E3E3E3;
 }
 
 /* --- DARK MODE --- */
@@ -156,6 +160,11 @@
   --fire-glow-soft: 0 4px 20px rgba(255, 77, 77, 0.25);
 
   --subtitle-color: #AAAAAA;
+
+  /* Dark-mode glass tokens */
+  --glass-bg: rgba(255,255,255,0.08);
+  --glass-border: rgba(255,255,255,0.15);
+
   /* History panel — dark */
   --history-bg: #111111;
   --history-card: #1A1A1A;
@@ -182,7 +191,7 @@
   body {
     @apply font-sans antialiased;
     min-height: 100dvh;
-    background: #F8F0EB;
+    background: #FFFFFF;
     background-attachment: fixed;
   }
   .dark body {
@@ -247,17 +256,17 @@
 /* Premium card */
 .premium-card {
   background: #FFFFFF;
-  border: none;
+  border: 1px solid #E8E8E8;
   border-top: 3px solid #FF4500;
-  border-radius: 12px;
-  box-shadow: 0 8px 30px rgba(255, 69, 0, 0.1);
+  border-radius: 16px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.04), 0 12px 40px rgba(0,0,0,0.08);
 }
 .dark .premium-card {
   background: #1A1A1A;
   border: none;
   border-top: 3px solid #FF4500;
-  border-radius: 12px;
-  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
+  border-radius: 16px;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.6);
 }
 
 /* Netflix-style solid CTA button */
@@ -283,9 +292,13 @@
   background: #222222;
 }
 
-/* Heading glow in dark mode */
+/* Heading glow — dark mode: red haze */
 .dark .fire-text {
   filter: drop-shadow(0 0 24px rgba(255, 77, 77, 0.45)) drop-shadow(0 0 60px rgba(255, 138, 0, 0.2));
+}
+/* Heading glow — light mode: warm orange lift */
+html:not(.dark) .fire-text {
+  filter: drop-shadow(0 2px 12px rgba(255, 69, 0, 0.25));
 }
 
 
@@ -298,9 +311,32 @@ textarea:focus {
   outline: none;
 }
 
-/* Dark mode form labels */
+/* Form labels */
+html:not(.dark) label {
+  color: #1A1A1A;
+}
 .dark label {
   color: rgba(255, 255, 255, 0.65);
+}
+
+/* Light mode section headings */
+html:not(.dark) h2 {
+  color: #141414;
+}
+
+/* Light mode muted cards */
+html:not(.dark) .bg-muted {
+  background: #F5F5F5 !important;
+}
+
+/* Light mode trending cards */
+html:not(.dark) .bg-card {
+  background: #FFFFFF !important;
+}
+
+/* Light mode Live Feed heading */
+html:not(.dark) section h2 {
+  color: #141414 !important;
 }
 
 /* Slider styling — fire orange */
@@ -318,6 +354,31 @@ textarea:focus {
 [id*="replit-badge"] {
   display: none !important;
   visibility: hidden !important;
+}
+
+/* Light mode page — subtle warm gradient at top */
+html:not(.dark) #root > div {
+  background: linear-gradient(180deg,
+    rgba(255,69,0,0.04) 0%,
+    rgba(255,138,0,0.02) 12%,
+    #FFFFFF 30%
+  );
+}
+
+/* Light mode trending cards */
+html:not(.dark) .border-border {
+  border-color: #E3E3E3;
+}
+
+/* Light mode roast style buttons */
+html:not(.dark) .bg-muted.text-muted-foreground {
+  background: #F0F0F0;
+  color: #444444;
+}
+
+/* Light mode "Auto-updating" dot */
+html:not(.dark) .bg-secondary {
+  background-color: #FF8A00;
 }
 
 /* Legacy classes (kept as no-ops to avoid breaking anything that still references them) */
