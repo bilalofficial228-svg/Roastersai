@@ -343,8 +343,8 @@ export default function Home() {
           <motion.h1 
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="tracking-tight uppercase fire-text"
-            style={{ fontSize: "clamp(48px, 12vw, 80px)" }}
+            className="uppercase fire-text"
+            style={{ fontSize: "clamp(48px, 12vw, 80px)", fontFamily: "'Bebas Neue', Impact, sans-serif", letterSpacing: "2px" }}
           >
             Get Roasted by AI
           </motion.h1>
