@@ -291,10 +291,25 @@ export function RoastHistory({ open, onClose }: RoastHistoryProps) {
                       exit={{ opacity: 0, y: 8 }}
                       transition={{ duration: 0.18 }}
                       onClick={() => setConfirmClear(true)}
-                      className="w-full py-3 rounded-xl text-sm font-bold transition-opacity hover:opacity-70 active:scale-[0.98]"
-                      style={{ border: "1px solid #FF2E88", color: "#FF2E88", background: "transparent" }}
+                      className="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-bold transition-all active:scale-[0.97] group"
+                      style={{
+                        border: "1px solid rgba(255,46,136,0.45)",
+                        color: "#FF2E88",
+                        background: "rgba(255,46,136,0.05)",
+                        boxShadow: "0 0 0 0 rgba(255,46,136,0)",
+                        transition: "box-shadow 0.2s, background 0.2s, opacity 0.2s",
+                      }}
+                      onMouseEnter={e => {
+                        (e.currentTarget as HTMLButtonElement).style.background = "rgba(255,46,136,0.12)";
+                        (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 0 14px rgba(255,46,136,0.20)";
+                      }}
+                      onMouseLeave={e => {
+                        (e.currentTarget as HTMLButtonElement).style.background = "rgba(255,46,136,0.05)";
+                        (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 0 0 0 rgba(255,46,136,0)";
+                      }}
                     >
-                      🗑️ Clear All History
+                      <Trash2 size={15} strokeWidth={2.2} />
+                      Clear All History
                     </motion.button>
                   )}
                 </AnimatePresence>
