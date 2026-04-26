@@ -90,9 +90,9 @@ export function RoastCard({ roast, onRetry, onNewRoast, isShared }: RoastCardPro
           data-testid="button-back"
           className="self-start flex items-center gap-2 font-semibold text-sm hover:opacity-70 active:scale-95 transition-all"
           style={{
-            color: "var(--fire-orange, #FF4500)",
-            background: "rgba(255,69,0,0.08)",
-            border: "1px solid rgba(255,69,0,0.18)",
+            color: "var(--neon-pink, #FF2E88)",
+            background: "rgba(255,46,136,0.08)",
+            border: "1px solid rgba(255,46,136,0.20)",
             borderRadius: 10,
             padding: "8px 14px",
           }}
@@ -113,7 +113,7 @@ export function RoastCard({ roast, onRetry, onNewRoast, isShared }: RoastCardPro
       >
         <div className="absolute top-0 left-0 w-full h-1 fire-bg" />
 
-        <div className="font-display font-extrabold text-lg tracking-widest uppercase" style={{ color: "#FF4500" }}>
+        <div className="font-display font-extrabold text-lg tracking-widest uppercase" style={{ color: "#FF2E88" }}>
           ROASTERSAI.COM
         </div>
 
@@ -149,8 +149,8 @@ export function RoastCard({ roast, onRetry, onNewRoast, isShared }: RoastCardPro
           backgroundColor: "#0D0D0D",
           borderRadius: 20,
           padding: 48,
-          border: "2px solid rgba(255,69,0,0.45)",
-          boxShadow: "0 0 60px rgba(255,69,0,0.25), inset 0 0 30px rgba(255,0,85,0.05)",
+          border: "2px solid rgba(255,46,136,0.50)",
+          boxShadow: "0 0 60px rgba(255,46,136,0.20), inset 0 0 30px rgba(180,79,255,0.05)",
           fontFamily: "'Space Grotesk', sans-serif",
           display: "flex",
           flexDirection: "column",
@@ -159,10 +159,10 @@ export function RoastCard({ roast, onRetry, onNewRoast, isShared }: RoastCardPro
           textAlign: "center",
         }}
       >
-        <div style={{ color: "#FF4500", fontWeight: 800, fontSize: 13, letterSpacing: 4, textTransform: "uppercase" }}>
+        <div style={{ color: "#FF2E88", fontWeight: 800, fontSize: 13, letterSpacing: 4, textTransform: "uppercase" }}>
           ROASTERSAI.COM
         </div>
-        <div style={{ width: "100%", height: 1, background: "linear-gradient(90deg, transparent, #FF4500, transparent)" }} />
+        <div style={{ width: "100%", height: 1, background: "linear-gradient(90deg, transparent, #FF2E88, transparent)" }} />
         <p style={{ color: "#FFFFFF", fontSize: 26, fontWeight: 700, lineHeight: 1.45, margin: 0 }}>
           "{roast.text}"
         </p>
@@ -218,7 +218,7 @@ export function RoastCard({ roast, onRetry, onNewRoast, isShared }: RoastCardPro
             onClick={handleShare}
             style={{
               ...btnBase,
-              background: "linear-gradient(135deg, #FF4500, #FF006E)",
+              background: "linear-gradient(135deg, #FF2E88, #FF4500)",
               color: "#FFFFFF",
             }}
           >
@@ -249,7 +249,7 @@ export function RoastCard({ roast, onRetry, onNewRoast, isShared }: RoastCardPro
           <Link
             href="/"
             className="w-full max-w-sm flex items-center justify-center gap-2 text-white font-bold text-xl py-4 rounded-xl hover:opacity-90 active:scale-[0.98] transition-all fire-glow"
-            style={{ background: "linear-gradient(135deg, #FF4500, #FF006E)" }}
+            style={{ background: "linear-gradient(135deg, #FF2E88, #FF4500)" }}
           >
             🔥 Roast Yourself
           </Link>

@@ -50,128 +50,133 @@
 }
 
 /* ============================================
- * FIRE THEME — Light mode & Dark mode.
- * Accents: orange (#FF6B00) + pink (#FF0055) + gold (#FFD700) for #1.
- * No purple anywhere.
+ * NEON MAGENTA THEME — Cyberpunk vibe.
+ * Primary: #FF2E88 neon pink/magenta
+ * Secondary: #FF4500 fire orange (gradient partner)
+ * Accent: cyan in dark, teal in light
  * ============================================ */
 
 /* --- LIGHT MODE (default :root) --- */
 :root {
-  --button-outline: rgba(180,70,0, .12);
-  --badge-outline: rgba(180,70,0, .06);
-  --elevate-1: rgba(180,70,0, .05);
-  --elevate-2: rgba(180,70,0, .09);
+  --button-outline: rgba(200, 16, 126, .12);
+  --badge-outline: rgba(200, 16, 126, .06);
+  --elevate-1: rgba(200, 16, 126, .04);
+  --elevate-2: rgba(200, 16, 126, .08);
 
-  /* Surfaces — warm fire-orange tinted (matches stats card) */
-  --background: 18 80% 97%;     /* #FFF5F0 — warm peach white */
-  --foreground: 0 0% 8%;        /* #141414 */
-  --border: 18 50% 87%;         /* #EAD8D1 — warm border */
-  --card: 0 0% 100%;            /* #FFFFFF — cards pop on warm bg */
-  --card-foreground: 0 0% 8%;
-  --card-border: 18 50% 87%;
+  /* Surfaces — soft lavender-white */
+  --background: 270 100% 98%;    /* #FAF5FF */
+  --foreground: 240 27% 14%;     /* #1A1A2E */
+  --border: 270 33% 89%;         /* #E4D9F5 */
+  --card: 0 0% 100%;             /* #FFFFFF */
+  --card-foreground: 240 27% 14%;
+  --card-border: 270 33% 89%;
   --popover: 0 0% 100%;
-  --popover-foreground: 0 0% 8%;
-  --popover-border: 18 50% 87%;
-  --input: 18 60% 95%;          /* #F5EAE5 — warm input */
-  --input-foreground: 0 0% 8%;  /* #141414 */
-  --input-placeholder: 0 0% 55%; /* #8C8C8C */
+  --popover-foreground: 240 27% 14%;
+  --popover-border: 270 33% 89%;
+  --input: 270 50% 96%;          /* #F5EFFF — light violet tint */
+  --input-foreground: 240 27% 14%;
+  --input-placeholder: 240 10% 55%;
 
-  /* Brand palette — red + orange */
-  --primary: 16 100% 50%;           /* #FF4500 */
+  /* Brand palette — magenta primary, orange secondary */
+  --primary: 324 85% 42%;            /* #C8107E deep magenta */
   --primary-foreground: 0 0% 100%;
-  --secondary: 33 100% 50%;         /* #FF8A00 */
+  --secondary: 16 100% 50%;          /* #FF4500 orange */
   --secondary-foreground: 0 0% 100%;
-  --accent: 16 100% 50%;
+  --accent: 187 100% 38%;            /* #00B8CC teal */
   --accent-foreground: 0 0% 100%;
 
-  --muted: 18 50% 95%;          /* #F5ECEA — warm muted */
-  --muted-foreground: 0 0% 38%; /* #616161 */
+  --muted: 270 50% 95%;          /* #F3ECFF soft violet muted */
+  --muted-foreground: 240 15% 40%;
 
   --destructive: 0 100% 60%;
   --destructive-foreground: 0 0% 100%;
-  --ring: 16 100% 50%;
+  --ring: 324 85% 42%;
 
   --app-font-sans: 'Inter', sans-serif;
   --app-font-display: 'Space Grotesk', sans-serif;
   --radius: 0.75rem;
 
-  /* Fire effect tokens */
-  --fire-orange: #FF4500;
-  --fire-pink: #FF8A00;
+  /* Neon tokens — light mode versions */
+  --neon-pink: #C8107E;
+  --neon-orange: #FF4500;
+  --neon-cyan: #00B8CC;
   --gold: #FFD700;
-  --fire-gradient: linear-gradient(135deg, #FF4500 0%, #FF8A00 100%);
-  --fire-glow: 0 8px 30px rgba(255, 69, 0, 0.30);
-  --fire-glow-soft: 0 4px 20px rgba(255, 69, 0, 0.15);
+  --neon-gradient: linear-gradient(135deg, #FF2E88 0%, #FF4500 100%);
+  --neon-glow: 0 8px 30px rgba(200, 16, 126, 0.25);
+  --neon-glow-soft: 0 4px 20px rgba(200, 16, 126, 0.12);
 
-  /* Light-mode glass tokens — warm tinted */
-  --glass-bg: rgba(255,80,0,0.06);
-  --glass-border: rgba(255,80,0,0.14);
+  /* Glass tokens — violet tinted */
+  --glass-bg: rgba(180, 0, 120, 0.05);
+  --glass-border: rgba(180, 0, 120, 0.14);
 
-  /* History panel — warm light */
-  --subtitle-color: #555555;
-  --history-bg: #FFF5F0;
+  /* History panel — light lavender */
+  --subtitle-color: #555577;
+  --history-bg: #FAF5FF;
   --history-card: #FFFFFF;
-  --history-card-border: #EAD8D1;
-  --history-text: #141414;
-  --history-muted: #777777;
-  --history-border: #EAD8D1;
+  --history-card-border: #E4D9F5;
+  --history-text: #1A1A2E;
+  --history-muted: #7777AA;
+  --history-border: #E4D9F5;
 }
 
 /* --- DARK MODE --- */
 .dark {
-  --button-outline: rgba(255,255,255, .08);
-  --badge-outline: rgba(255,255,255, .04);
-  --elevate-1: rgba(255,255,255, .04);
-  --elevate-2: rgba(255,255,255, .09);
+  --button-outline: rgba(255,255,255, .06);
+  --badge-outline: rgba(255,255,255, .03);
+  --elevate-1: rgba(255,255,255, .03);
+  --elevate-2: rgba(255,255,255, .07);
 
-  /* Surfaces */
-  --background: 0 0% 5.9%;     /* #0F0F0F */
-  --foreground: 0 0% 91.8%;    /* #EAEAEA */
-  --border: 0 0% 15%;          /* #262626 */
-  --card: 0 0% 10.2%;          /* #1A1A1A */
-  --card-foreground: 0 0% 91.8%;
-  --card-border: 0 0% 15%;
-  --popover: 0 0% 10.2%;
-  --popover-foreground: 0 0% 91.8%;
-  --popover-border: 0 0% 15%;
-  --input: 0 0% 13.3%;         /* #222222 */
-  --input-foreground: 0 0% 91.8%;
-  --input-placeholder: 0 0% 38%; /* #616161 */
+  /* Surfaces — void dark with violet tint */
+  --background: 240 25% 6%;      /* #0A0A0F void black-blue */
+  --foreground: 240 100% 94%;    /* #E0E0FF bluish white */
+  --border: 240 25% 14%;         /* #1E1E2E dark navy */
+  --card: 240 27% 10%;           /* #12121F dark navy card */
+  --card-foreground: 240 100% 94%;
+  --card-border: 240 25% 14%;
+  --popover: 240 27% 10%;
+  --popover-foreground: 240 100% 94%;
+  --popover-border: 240 25% 14%;
+  --input: 240 25% 13%;          /* #191929 */
+  --input-foreground: 240 100% 94%;
+  --input-placeholder: 240 15% 45%;
 
-  /* Brand palette — red + orange */
-  --primary: 0 100% 65%;           /* #FF4D4D */
+  /* Brand palette — neon hot pink primary, orange secondary */
+  --primary: 334 100% 59%;           /* #FF2E88 neon hot pink */
   --primary-foreground: 0 0% 100%;
-  --secondary: 33 100% 50%;        /* #FF8A00 */
+  --secondary: 16 100% 50%;          /* #FF4500 fire orange */
   --secondary-foreground: 0 0% 100%;
-  --accent: 0 100% 65%;
-  --accent-foreground: 0 0% 100%;
+  --accent: 183 100% 50%;            /* #00F0FF electric cyan */
+  --accent-foreground: 0 0% 7%;
 
-  --muted: 0 0% 15%;
-  --muted-foreground: 0 0% 52%;    /* #858585 */
+  --muted: 240 25% 14%;
+  --muted-foreground: 240 20% 58%;   /* #848AAD */
 
   --destructive: 0 100% 65%;
   --destructive-foreground: 0 0% 100%;
-  --ring: 0 100% 65%;
+  --ring: 334 100% 59%;
 
-  --fire-orange: #FF4D4D;
-  --fire-pink: #FF8A00;
-  --fire-gradient: linear-gradient(135deg, #FF4D4D 0%, #FF8A00 100%);
-  --fire-glow: 0 8px 30px rgba(255, 77, 77, 0.4);
-  --fire-glow-soft: 0 4px 20px rgba(255, 77, 77, 0.25);
+  /* Neon tokens — dark mode full glow */
+  --neon-pink: #FF2E88;
+  --neon-orange: #FF4500;
+  --neon-cyan: #00F0FF;
+  --gold: #FFD700;
+  --neon-gradient: linear-gradient(135deg, #FF2E88 0%, #FF4500 100%);
+  --neon-glow: 0 8px 40px rgba(255, 46, 136, 0.5), 0 0 80px rgba(255, 69, 0, 0.15);
+  --neon-glow-soft: 0 4px 24px rgba(255, 46, 136, 0.3);
 
-  --subtitle-color: #AAAAAA;
+  /* Glass tokens — dark pink-tinted */
+  --glass-bg: rgba(255, 46, 136, 0.08);
+  --glass-border: rgba(255, 46, 136, 0.18);
 
-  /* Dark-mode glass tokens */
-  --glass-bg: rgba(255,255,255,0.08);
-  --glass-border: rgba(255,255,255,0.15);
+  --subtitle-color: #9999CC;
 
-  /* History panel — dark */
-  --history-bg: #111111;
-  --history-card: #1A1A1A;
-  --history-card-border: #2A2A2A;
-  --history-text: #FFFFFF;
-  --history-muted: #666666;
-  --history-border: #222222;
+  /* History panel — dark void */
+  --history-bg: #0D0D1A;
+  --history-card: #12121F;
+  --history-card-border: #1E1E2E;
+  --history-text: #E0E0FF;
+  --history-muted: #6666AA;
+  --history-border: #1E1E2E;
 }
 
 @layer base {
@@ -191,11 +196,11 @@
   body {
     @apply font-sans antialiased;
     min-height: 100dvh;
-    background: #FFFFFF;
+    background: hsl(270, 100%, 98%);
     background-attachment: fixed;
   }
   .dark body {
-    background: #0F0F0F;
+    background: #0A0A0F;
     background-attachment: fixed;
   }
   h1, h2, h3, h4, h5, h6 {
@@ -210,22 +215,30 @@
     color: hsl(var(--input-placeholder));
   }
   select option {
-    background-color: #141414;
-    color: #FFFFFF;
+    background-color: #12121F;
+    color: #E0E0FF;
+  }
+  .dark select option {
+    background-color: #12121F;
+    color: #E0E0FF;
+  }
+  html:not(.dark) select option {
+    background-color: #FFFFFF;
+    color: #1A1A2E;
   }
   ::selection {
-    background-color: rgba(255, 107, 0, 0.35);
+    background-color: rgba(255, 46, 136, 0.30);
     color: #FFFFFF;
   }
 }
 
-/* === Fire utility classes === */
+/* === Neon utility classes === */
 @keyframes shine {
   0%   { background-position: 0% center; }
   100% { background-position: 200% center; }
 }
 .fire-text {
-  background: linear-gradient(135deg, #FF6B00 0%, #FF0055 50%, #FF6B00 100%);
+  background: linear-gradient(135deg, #FF2E88 0%, #FF6B00 50%, #B44FFF 100%);
   background-size: 200% auto;
   -webkit-background-clip: text;
   background-clip: text;
@@ -235,16 +248,16 @@
   font-weight: 900;
 }
 .fire-bg {
-  background: var(--fire-gradient);
+  background: var(--neon-gradient);
 }
 .fire-glow {
-  box-shadow: var(--fire-glow);
+  box-shadow: var(--neon-glow);
 }
 .fire-glow-soft {
-  box-shadow: var(--fire-glow-soft);
+  box-shadow: var(--neon-glow-soft);
 }
 .fire-border {
-  border: 1px solid var(--fire-orange);
+  border: 1px solid var(--neon-pink);
 }
 .gold-border-l {
   border-left: 3px solid var(--gold);
@@ -253,109 +266,108 @@
   color: var(--gold);
 }
 
-/* Premium card */
+/* Premium form card */
 .premium-card {
   background: #FFFFFF;
-  border: 1px solid #E8E8E8;
-  border-top: 3px solid #FF4500;
+  border: 1px solid #E4D9F5;
+  border-top: 3px solid #C8107E;
   border-radius: 16px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.04), 0 12px 40px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 6px rgba(200,0,120,0.04), 0 12px 40px rgba(200,0,120,0.08);
 }
 .dark .premium-card {
-  background: #1A1A1A;
+  background: #12121F;
   border: none;
-  border-top: 3px solid #FF4500;
+  border-top: 3px solid #FF2E88;
   border-radius: 16px;
-  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 8px 40px rgba(0,0,0,0.7), 0 0 30px rgba(255,46,136,0.08);
 }
 
-/* Netflix-style solid CTA button */
+/* CTA button */
 .cta-netflix-btn {
-  background: #FF4500;
+  background: linear-gradient(135deg, #FF2E88 0%, #FF4500 100%);
   border-radius: 6px;
   font-size: 18px;
   font-weight: 700;
   letter-spacing: 0.05em;
   width: 100%;
   padding: 18px;
-  transition: background 0.2s ease;
+  transition: opacity 0.2s ease;
 }
 .cta-netflix-btn:hover:not(:disabled) {
-  background: #FF5500;
+  opacity: 0.9;
 }
 
-/* Card hover in dark */
+/* Leaderboard card hover — dark */
 .dark .leaderboard-card {
   transition: background 0.2s;
 }
 .dark .leaderboard-card:hover {
-  background: #222222;
+  background: #1A1A2E;
 }
 
-/* Card hover in light */
+/* Leaderboard card hover — light */
 html:not(.dark) .leaderboard-card {
   transition: background 0.2s, border-color 0.2s;
 }
 html:not(.dark) .leaderboard-card:hover {
-  background: #FFF8F5;
-  border-color: rgba(255,69,0,0.25) !important;
+  background: #F5EEFF;
+  border-color: rgba(200,16,126,0.20) !important;
 }
 
-/* Heading glow — dark mode: red haze */
+/* Heading glow — dark: neon pink haze */
 .dark .fire-text {
-  filter: drop-shadow(0 0 24px rgba(255, 77, 77, 0.45)) drop-shadow(0 0 60px rgba(255, 138, 0, 0.2));
+  filter: drop-shadow(0 0 24px rgba(255, 46, 136, 0.55)) drop-shadow(0 0 60px rgba(180, 79, 255, 0.20));
 }
-/* Heading glow — light mode: warm orange lift */
+/* Heading glow — light: magenta lift */
 html:not(.dark) .fire-text {
-  filter: drop-shadow(0 2px 12px rgba(255, 69, 0, 0.25));
+  filter: drop-shadow(0 2px 14px rgba(200, 16, 126, 0.28));
 }
 
-
-/* Input focus glow — both modes */
+/* Input focus glow */
 input:focus,
 select:focus,
 textarea:focus {
-  border-color: #FF4500 !important;
-  box-shadow: 0 0 0 2px rgba(255, 69, 0, 0.15) !important;
+  border-color: #FF2E88 !important;
+  box-shadow: 0 0 0 2px rgba(255, 46, 136, 0.18) !important;
   outline: none;
 }
 
 /* Form labels */
 html:not(.dark) label {
-  color: #1A1A1A;
+  color: #1A1A2E;
 }
 .dark label {
-  color: rgba(255, 255, 255, 0.65);
+  color: rgba(224, 224, 255, 0.70);
 }
 
 /* Light mode section headings */
 html:not(.dark) h2 {
-  color: #141414;
+  color: #1A1A2E;
 }
 
-/* Light mode muted cards — warm tint */
+/* Light mode muted cards */
 html:not(.dark) .bg-muted {
-  background: #F5ECEA !important;
+  background: #F3ECFF !important;
 }
 
-/* Light mode trending cards */
+/* Light mode cards */
 html:not(.dark) .bg-card {
   background: #FFFFFF !important;
 }
 
-/* Light mode Live Feed heading */
+/* Live Feed heading */
 html:not(.dark) section h2 {
-  color: #141414 !important;
+  color: #1A1A2E !important;
 }
 
-/* Slider styling — fire orange */
+/* Slider — neon pink */
 [data-orientation="horizontal"][role="slider"] {
-  background-color: var(--fire-orange) !important;
-  border-color: var(--fire-orange) !important;
-  box-shadow: 0 0 12px rgba(255, 107, 0, 0.5);
+  background-color: #FF2E88 !important;
+  border-color: #FF2E88 !important;
+  box-shadow: 0 0 12px rgba(255, 46, 136, 0.55);
 }
 
-/* Hide Replit watermark / badge */
+/* Hide Replit watermark */
 .replit-badge,
 [data-replit-badge],
 #replit-badge,
@@ -365,38 +377,45 @@ html:not(.dark) section h2 {
   visibility: hidden !important;
 }
 
-/* Light mode page — warm fire gradient flowing from top into warm base */
+/* Light mode page — violet gradient top */
 html:not(.dark) #root > div {
   background: linear-gradient(180deg,
-    rgba(255,69,0,0.10) 0%,
-    rgba(255,100,0,0.06) 10%,
-    hsl(18,80%,97%) 35%
+    rgba(200, 16, 126, 0.07) 0%,
+    rgba(150, 0, 200, 0.04) 12%,
+    hsl(270, 100%, 98%) 35%
   );
 }
 
-/* Light mode trending cards */
+/* Dark mode page — deep void with faint pink glow top */
+.dark #root > div {
+  background: radial-gradient(ellipse at 50% -10%, rgba(255,46,136,0.10) 0%, #0A0A0F 55%);
+}
+
+/* Border color override — light */
 html:not(.dark) .border-border {
-  border-color: #EAD8D1;
+  border-color: #E4D9F5;
 }
 
-/* Light mode roast style buttons */
+/* Roast style buttons — light */
 html:not(.dark) .bg-muted.text-muted-foreground {
-  background: #F2E6E2;
-  color: #444444;
+  background: #EDE4F8;
+  color: #333355;
 }
 
-/* Light mode "Auto-updating" dot */
+/* Auto-updating dot */
 html:not(.dark) .bg-secondary {
-  background-color: #FF8A00;
+  background-color: #FF4500;
+}
+.dark .bg-secondary {
+  background-color: #FF4500;
 }
 
-/* Legacy classes (kept as no-ops to avoid breaking anything that still references them) */
+/* Legacy noop classes */
 .neon-text-primary,
 .neon-glow-primary,
 .neon-card,
 .neon-border {
-  /* intentionally unstyled in fire theme */
+  /* intentionally unstyled */
 }
 
-/* Glitch effect kept for backward compatibility (not used on hero anymore) */
 .glitch-effect { position: relative; }

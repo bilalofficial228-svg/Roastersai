@@ -184,9 +184,9 @@ export function RoastHistory({ open, onClose }: RoastHistoryProps) {
                           className="flex items-center justify-center rounded-xl hover:opacity-75 active:scale-95 transition-all"
                           style={{
                             width: 38, height: 38,
-                            background: "rgba(255,107,0,0.15)",
-                            color: "#FF6B00",
-                            border: "1px solid rgba(255,107,0,0.25)",
+                            background: "rgba(255,46,136,0.12)",
+                            color: "#FF2E88",
+                            border: "1px solid rgba(255,46,136,0.25)",
                           }}
                           title="Share"
                         >
@@ -198,8 +198,8 @@ export function RoastHistory({ open, onClose }: RoastHistoryProps) {
                           style={{
                             width: 38, height: 38,
                             background: "rgba(255,0,85,0.12)",
-                            color: "#FF0055",
-                            border: "1px solid rgba(255,0,85,0.22)",
+                            color: "#FF2E88",
+                            border: "1px solid rgba(255,46,136,0.22)",
                           }}
                           title="Delete"
                         >
@@ -224,7 +224,7 @@ export function RoastHistory({ open, onClose }: RoastHistoryProps) {
                       <button
                         onClick={() => setExpanded(expanded === entry.id ? null : entry.id)}
                         className="flex items-center gap-1 text-xs font-medium self-start hover:opacity-70 transition-opacity"
-                        style={{ color: "#FF6B00" }}
+                        style={{ color: "#FF2E88" }}
                       >
                         {expanded === entry.id ? <><ChevronUp size={12} /> Show less</> : <><ChevronDown size={12} /> Read more</>}
                       </button>
@@ -233,7 +233,7 @@ export function RoastHistory({ open, onClose }: RoastHistoryProps) {
                     <div className="flex items-center gap-2 mt-1">
                       <span
                         className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded"
-                        style={{ background: "rgba(255,107,0,0.12)", color: "#FF6B00", border: "1px solid rgba(255,107,0,0.25)" }}
+                        style={{ background: "rgba(255,46,136,0.10)", color: "#FF2E88", border: "1px solid rgba(255,46,136,0.22)" }}
                       >
                         {entry.style}
                       </span>
@@ -277,7 +277,7 @@ export function RoastHistory({ open, onClose }: RoastHistoryProps) {
                         <button
                           onClick={clearAll}
                           className="flex-1 py-2.5 rounded-xl text-sm font-bold transition-opacity hover:opacity-80"
-                          style={{ background: "#FF0055", color: "#FFFFFF", border: "none" }}
+                          style={{ background: "linear-gradient(135deg, #FF2E88, #FF4500)", color: "#FFFFFF", border: "none" }}
                         >
                           Yes, delete all
                         </button>
@@ -292,7 +292,7 @@ export function RoastHistory({ open, onClose }: RoastHistoryProps) {
                       transition={{ duration: 0.18 }}
                       onClick={() => setConfirmClear(true)}
                       className="w-full py-3 rounded-xl text-sm font-bold transition-opacity hover:opacity-70 active:scale-[0.98]"
-                      style={{ border: "1px solid #FF0055", color: "#FF0055", background: "transparent" }}
+                      style={{ border: "1px solid #FF2E88", color: "#FF2E88", background: "transparent" }}
                     >
                       🗑️ Clear All History
                     </motion.button>

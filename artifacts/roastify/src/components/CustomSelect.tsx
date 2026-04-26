@@ -40,7 +40,7 @@ export function CustomSelect({ options, value, onChange, testId }: CustomSelectP
           {selected?.label || "Select…"}
         </span>
         <motion.div animate={{ rotate: open ? 180 : 0 }} transition={{ duration: 0.22, ease: "easeInOut" }}>
-          <ChevronDown size={18} style={{ color: "#FF4500" }} />
+          <ChevronDown size={18} style={{ color: "var(--neon-pink, #FF2E88)" }} />
         </motion.div>
       </button>
 

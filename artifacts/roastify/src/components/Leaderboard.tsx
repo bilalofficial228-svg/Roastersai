@@ -59,9 +59,9 @@ export function Leaderboard() {
               <div
                 className="flex items-center gap-1.5 shrink-0 px-3 py-1.5 rounded-full font-bold tabular-nums"
                 style={{
-                  backgroundColor: "rgba(255, 107, 0, 0.1)",
-                  border: "1px solid rgba(255, 107, 0, 0.3)",
-                  color: "#FF6B00",
+                  backgroundColor: "rgba(255, 46, 136, 0.10)",
+                  border: "1px solid rgba(255, 46, 136, 0.28)",
+                  color: "#FF2E88",
                 }}
               >
                 <Flame size={16} />

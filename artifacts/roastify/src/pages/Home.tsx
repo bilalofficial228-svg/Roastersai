@@ -336,7 +336,7 @@ export default function Home() {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium mb-2"
-            style={{ backgroundColor: "rgba(255,107,0,0.1)", border: "1px solid rgba(255,107,0,0.3)", color: "#FF6B00" }}
+            style={{ backgroundColor: "rgba(255,46,136,0.08)", border: "1px solid rgba(255,46,136,0.28)", color: "#FF2E88" }}
           >
             <Sparkles size={16} /> <span>100% Brutal AI</span>
           </motion.div>
@@ -352,7 +352,7 @@ export default function Home() {
             <motion.p
               initial={{ opacity: 0, y: -8 }}
               animate={{ opacity: 1, y: 0 }}
-              style={{ color: "#FF4500", fontSize: 13, fontWeight: 600, marginTop: -12 }}
+              style={{ color: "#FF2E88", fontSize: 13, fontWeight: 600, marginTop: -12 }}
             >
               🔥 You've been roasted {roastCount} time{roastCount !== 1 ? "s" : ""}
             </motion.p>
@@ -371,8 +371,8 @@ export default function Home() {
             <DialogTrigger asChild>
               <button 
                 data-testid="button-roast-friend"
-                className="flex items-center gap-2 px-6 py-3 rounded-full bg-transparent border-2 transition-all font-bold hover:bg-[#FF6B00]/10"
-                style={{ borderColor: "#FF6B00", color: "#FF6B00" }}
+                className="flex items-center gap-2 px-6 py-3 rounded-full bg-transparent border-2 transition-all font-bold hover:bg-[#FF2E88]/10"
+                style={{ borderColor: "#FF2E88", color: "#FF2E88" }}
               >
                 <Target size={18} /> Roast My Friend
               </button>
