@@ -20,6 +20,10 @@ export function RoastCard({ roast, onRetry, onNewRoast, isShared }: RoastCardPro
   const queryClient = useQueryClient();
   const reactMutation = useReactToRoast();
   const [reactions, setReactions] = useState(roast.reactions);
+  const selectedKey = `reacted:${roast.id}`;
+  const [selectedReaction, setSelectedReaction] = useState<ReactionType | null>(
+    () => (localStorage.getItem(selectedKey) as ReactionType | null)
+  );
 
   useEffect(() => {
     setReactions(roast.reactions);
@@ -47,24 +51,44 @@ export function RoastCard({ roast, onRetry, onNewRoast, isShared }: RoastCardPro
   };
 
   const handleReact = (type: ReactionType) => {
-    const key = `reacted:${roast.id}:${type}`;
-    if (localStorage.getItem(key)) return;
-    setReactions(prev => ({ ...prev, [type]: prev[type] + 1 }));
-    localStorage.setItem(key, "true");
-    reactMutation.mutate({ id: roast.id, data: { type } }, {
-      onSuccess: (newCounts) => {
-        setReactions(newCounts);
-        queryClient.invalidateQueries({ queryKey: getGetRoastQueryKey(roast.id) });
-        queryClient.invalidateQueries({ queryKey: getGetLeaderboardQueryKey() });
-      },
-      onError: () => {
-        setReactions(prev => ({ ...prev, [type]: prev[type] - 1 }));
-        localStorage.removeItem(key);
-      }
-    });
-  };
+    if (reactMutation.isPending) return;
 
-  const hasReacted = (type: ReactionType) => !!localStorage.getItem(`reacted:${roast.id}:${type}`);
+    const votedKey = `voted:${roast.id}:${type}`;
+    const alreadyVoted = !!localStorage.getItem(votedKey);
+
+    if (selectedReaction === type) {
+      // Toggle off — deselect, no API decrement
+      setSelectedReaction(null);
+      localStorage.removeItem(selectedKey);
+      setReactions(prev => ({ ...prev, [type]: Math.max(0, prev[type] - 1) }));
+      return;
+    }
+
+    // Switching from a previous selection
+    if (selectedReaction !== null) {
+      setReactions(prev => ({ ...prev, [selectedReaction]: Math.max(0, prev[selectedReaction] - 1) }));
+    }
+
+    // Select new
+    setSelectedReaction(type);
+    localStorage.setItem(selectedKey, type);
+
+    if (!alreadyVoted) {
+      setReactions(prev => ({ ...prev, [type]: prev[type] + 1 }));
+      localStorage.setItem(votedKey, "true");
+      reactMutation.mutate({ id: roast.id, data: { type } }, {
+        onSuccess: (newCounts) => {
+          setReactions(newCounts);
+          queryClient.invalidateQueries({ queryKey: getGetRoastQueryKey(roast.id) });
+          queryClient.invalidateQueries({ queryKey: getGetLeaderboardQueryKey() });
+        },
+        onError: () => {
+          setReactions(prev => ({ ...prev, [type]: Math.max(0, prev[type] - 1) }));
+          localStorage.removeItem(votedKey);
+        }
+      });
+    }
+  };
 
   const btnBase: React.CSSProperties = {
     display: "flex",
@@ -181,12 +205,19 @@ export function RoastCard({ roast, onRetry, onNewRoast, isShared }: RoastCardPro
               key={type}
               data-testid={`button-react-${type}`}
               onClick={() => handleReact(type)}
-              disabled={hasReacted(type) || reactMutation.isPending}
-              className={`flex items-center gap-2 px-4 py-2 rounded-full font-bold transition-all ${
-                hasReacted(type)
-                  ? "bg-primary/20 text-primary border border-primary/50"
-                  : "bg-muted text-foreground/70 hover:text-foreground border border-border"
-              }`}
+              disabled={reactMutation.isPending}
+              className="flex items-center gap-2 px-4 py-2 rounded-full font-bold transition-all border"
+              style={selectedReaction === type ? {
+                background: "rgba(255,46,136,0.18)",
+                color: "#FF2E88",
+                borderColor: "#FF2E88",
+                boxShadow: "0 0 10px rgba(255,46,136,0.30)",
+                transform: "scale(1.06)",
+              } : {
+                background: "hsl(var(--muted))",
+                color: "hsl(var(--foreground) / 0.65)",
+                borderColor: "hsl(var(--border))",
+              }}
             >
               <span>{emojis[type]}</span>
               <span>{reactions[type]}</span>

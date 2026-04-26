@@ -456,7 +456,7 @@ export default function Home() {
                     <span>AI is cooking…</span>
                   </>
                 ) : (
-                  <><Bot size={20} color="white" /> Get Roasted 🔥</>  
+                  <><Bot size={16} color="white" /> Get Roasted 🔥</>  
                 )}
               </motion.button>
             </motion.form>
