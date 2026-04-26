@@ -57,22 +57,22 @@
 
 /* --- LIGHT MODE (default :root) --- */
 :root {
-  --button-outline: rgba(0,0,0, .08);
-  --badge-outline: rgba(0,0,0, .04);
-  --elevate-1: rgba(0,0,0, .04);
-  --elevate-2: rgba(0,0,0, .07);
+  --button-outline: rgba(180,70,0, .12);
+  --badge-outline: rgba(180,70,0, .06);
+  --elevate-1: rgba(180,70,0, .05);
+  --elevate-2: rgba(180,70,0, .09);
 
-  /* Surfaces — clean Netflix white */
-  --background: 0 0% 100%;      /* #FFFFFF */
+  /* Surfaces — warm fire-orange tinted (matches stats card) */
+  --background: 18 80% 97%;     /* #FFF5F0 — warm peach white */
   --foreground: 0 0% 8%;        /* #141414 */
-  --border: 0 0% 89%;           /* #E3E3E3 */
-  --card: 0 0% 100%;            /* #FFFFFF */
+  --border: 18 50% 87%;         /* #EAD8D1 — warm border */
+  --card: 0 0% 100%;            /* #FFFFFF — cards pop on warm bg */
   --card-foreground: 0 0% 8%;
-  --card-border: 0 0% 89%;
+  --card-border: 18 50% 87%;
   --popover: 0 0% 100%;
   --popover-foreground: 0 0% 8%;
-  --popover-border: 0 0% 89%;
-  --input: 0 0% 96%;            /* #F5F5F5 */
+  --popover-border: 18 50% 87%;
+  --input: 18 60% 95%;          /* #F5EAE5 — warm input */
   --input-foreground: 0 0% 8%;  /* #141414 */
   --input-placeholder: 0 0% 55%; /* #8C8C8C */
 
@@ -84,7 +84,7 @@
   --accent: 16 100% 50%;
   --accent-foreground: 0 0% 100%;
 
-  --muted: 0 0% 96%;            /* #F5F5F5 */
+  --muted: 18 50% 95%;          /* #F5ECEA — warm muted */
   --muted-foreground: 0 0% 38%; /* #616161 */
 
   --destructive: 0 100% 60%;
@@ -103,18 +103,18 @@
   --fire-glow: 0 8px 30px rgba(255, 69, 0, 0.30);
   --fire-glow-soft: 0 4px 20px rgba(255, 69, 0, 0.15);
 
-  /* Light-mode glass tokens */
-  --glass-bg: rgba(0,0,0,0.04);
-  --glass-border: rgba(0,0,0,0.10);
+  /* Light-mode glass tokens — warm tinted */
+  --glass-bg: rgba(255,80,0,0.06);
+  --glass-border: rgba(255,80,0,0.14);
 
-  /* History panel — light */
+  /* History panel — warm light */
   --subtitle-color: #555555;
-  --history-bg: #FFFFFF;
-  --history-card: #F5F5F5;
-  --history-card-border: #E3E3E3;
+  --history-bg: #FFF5F0;
+  --history-card: #FFFFFF;
+  --history-card-border: #EAD8D1;
   --history-text: #141414;
   --history-muted: #777777;
-  --history-border: #E3E3E3;
+  --history-border: #EAD8D1;
 }
 
 /* --- DARK MODE --- */
@@ -292,6 +292,15 @@
   background: #222222;
 }
 
+/* Card hover in light */
+html:not(.dark) .leaderboard-card {
+  transition: background 0.2s, border-color 0.2s;
+}
+html:not(.dark) .leaderboard-card:hover {
+  background: #FFF8F5;
+  border-color: rgba(255,69,0,0.25) !important;
+}
+
 /* Heading glow — dark mode: red haze */
 .dark .fire-text {
   filter: drop-shadow(0 0 24px rgba(255, 77, 77, 0.45)) drop-shadow(0 0 60px rgba(255, 138, 0, 0.2));
@@ -324,9 +333,9 @@ html:not(.dark) h2 {
   color: #141414;
 }
 
-/* Light mode muted cards */
+/* Light mode muted cards — warm tint */
 html:not(.dark) .bg-muted {
-  background: #F5F5F5 !important;
+  background: #F5ECEA !important;
 }
 
 /* Light mode trending cards */
@@ -356,23 +365,23 @@ html:not(.dark) section h2 {
   visibility: hidden !important;
 }
 
-/* Light mode page — subtle warm gradient at top */
+/* Light mode page — warm fire gradient flowing from top into warm base */
 html:not(.dark) #root > div {
   background: linear-gradient(180deg,
-    rgba(255,69,0,0.04) 0%,
-    rgba(255,138,0,0.02) 12%,
-    #FFFFFF 30%
+    rgba(255,69,0,0.10) 0%,
+    rgba(255,100,0,0.06) 10%,
+    hsl(18,80%,97%) 35%
   );
 }
 
 /* Light mode trending cards */
 html:not(.dark) .border-border {
-  border-color: #E3E3E3;
+  border-color: #EAD8D1;
 }
 
 /* Light mode roast style buttons */
 html:not(.dark) .bg-muted.text-muted-foreground {
-  background: #F0F0F0;
+  background: #F2E6E2;
   color: #444444;
 }
 
