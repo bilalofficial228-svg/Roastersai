@@ -16,7 +16,14 @@ export function Leaderboard() {
 
       <div className="flex flex-col gap-3">
         {leaderboard.slice(0, 5).map((entry, i) => {
-          const isFirst = i === 0;
+          const rankStyles: Record<number, { borderLeft: string; boxShadow?: string; opacity: number; rankColor: string }> = {
+            0: { borderLeft: "3px solid #FFD700", boxShadow: "0 0 20px rgba(255,215,0,0.15)",   opacity: 1,   rankColor: "#FFD700" },
+            1: { borderLeft: "3px solid #C0C0C0", boxShadow: "0 0 15px rgba(192,192,192,0.1)", opacity: 1,   rankColor: "#C0C0C0" },
+            2: { borderLeft: "3px solid #CD7F32", boxShadow: "0 0 15px rgba(205,127,50,0.1)",  opacity: 1,   rankColor: "#CD7F32" },
+            3: { borderLeft: "3px solid #333333",                                              opacity: 0.5, rankColor: "#777777" },
+            4: { borderLeft: "3px solid #333333",                                              opacity: 0.5, rankColor: "#777777" },
+          };
+          const rs = rankStyles[i] ?? rankStyles[4];
           return (
             <motion.div
               key={entry.rank + entry.name}
@@ -24,17 +31,18 @@ export function Leaderboard() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: i * 0.1 }}
               data-testid={`card-leaderboard-${entry.rank}`}
-              className="flex flex-col sm:flex-row items-start sm:items-center gap-4 p-4 rounded-xl border border-border transition-all"
+              className="flex flex-col sm:flex-row items-start sm:items-center gap-4 p-4 rounded-xl border-y border-r border-border transition-all"
               style={{
-                backgroundColor: isFirst ? "hsl(var(--card))" : "hsl(var(--card))",
-                borderLeft: isFirst ? "3px solid #FFD700" : undefined,
-                boxShadow: isFirst ? "0 0 24px rgba(255, 215, 0, 0.12)" : undefined,
+                backgroundColor: "hsl(var(--card))",
+                borderLeft: rs.borderLeft,
+                boxShadow: rs.boxShadow,
+                opacity: rs.opacity,
               }}
             >
               <div className="flex items-center gap-4 min-w-[150px]">
                 <span
                   className="text-2xl font-bold font-display"
-                  style={{ color: isFirst ? "#FFD700" : "#777777" }}
+                  style={{ color: rs.rankColor }}
                 >
                   #{entry.rank}
                 </span>

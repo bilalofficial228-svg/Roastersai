@@ -242,19 +242,16 @@
 
 /* Premium card shadow */
 .premium-card {
-  background: hsl(var(--card));
-  border: 1px solid hsl(var(--border));
+  background: #FFFFFF;
+  border: 1px solid #FFD4C0;
   border-radius: 20px;
-  box-shadow: 0 4px 20px rgba(255, 69, 0, 0.1), 0 1px 4px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 8px 30px rgba(255, 69, 0, 0.1);
 }
 .dark .premium-card {
-  background: #111111;
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: #1A1A1A;
+  border: 1px solid rgba(255, 69, 0, 0.2);
   border-radius: 20px;
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.04) inset,
-    0 24px 60px rgba(0, 0, 0, 0.7),
-    0 4px 16px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 30px rgba(255, 69, 0, 0.08);
 }
 
 /* Heading glow in dark mode */
@@ -271,20 +268,12 @@
   animation: cta-pulse 3s ease-in-out infinite;
 }
 
-/* Input focus glow — light mode */
-html:not(.dark) input:focus,
-html:not(.dark) select:focus,
-html:not(.dark) textarea:focus {
-  box-shadow: 0 0 0 3px rgba(255, 69, 0, 0.15) !important;
-  outline: none;
-}
-
-/* Input focus glow — dark mode */
-.dark input:focus,
-.dark select:focus,
-.dark textarea:focus {
-  border-color: rgba(255, 107, 0, 0.5) !important;
-  box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.1) !important;
+/* Input focus glow — both modes */
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: #FF4500 !important;
+  box-shadow: 0 0 0 2px rgba(255, 69, 0, 0.15) !important;
   outline: none;
 }
 
