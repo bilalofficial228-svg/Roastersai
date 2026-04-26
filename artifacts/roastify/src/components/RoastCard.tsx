@@ -56,35 +56,39 @@ export function RoastCard({ roast, onRetry, onNewRoast, isShared }: RoastCardPro
     const votedKey = `voted:${roast.id}:${type}`;
     const alreadyVoted = !!localStorage.getItem(votedKey);
 
+    // Toggle off same emoji
     if (selectedReaction === type) {
-      // Toggle off — deselect, no API decrement
       setSelectedReaction(null);
       localStorage.removeItem(selectedKey);
       setReactions(prev => ({ ...prev, [type]: Math.max(0, prev[type] - 1) }));
       return;
     }
 
-    // Switching from a previous selection
+    // Deduct from previously selected emoji
     if (selectedReaction !== null) {
       setReactions(prev => ({ ...prev, [selectedReaction]: Math.max(0, prev[selectedReaction] - 1) }));
     }
 
-    // Select new
+    // Select new — always +1 display regardless of whether API was already called
     setSelectedReaction(type);
     localStorage.setItem(selectedKey, type);
+    setReactions(prev => ({ ...prev, [type]: prev[type] + 1 }));
 
+    // Only hit the API once per type per roast
     if (!alreadyVoted) {
-      setReactions(prev => ({ ...prev, [type]: prev[type] + 1 }));
       localStorage.setItem(votedKey, "true");
       reactMutation.mutate({ id: roast.id, data: { type } }, {
-        onSuccess: (newCounts) => {
-          setReactions(newCounts);
+        onSuccess: () => {
+          // Invalidate quietly — don't replace local optimistic state with raw server counts
           queryClient.invalidateQueries({ queryKey: getGetRoastQueryKey(roast.id) });
           queryClient.invalidateQueries({ queryKey: getGetLeaderboardQueryKey() });
         },
         onError: () => {
+          // Roll back on failure
           setReactions(prev => ({ ...prev, [type]: Math.max(0, prev[type] - 1) }));
+          setSelectedReaction(null);
           localStorage.removeItem(votedKey);
+          localStorage.removeItem(selectedKey);
         }
       });
     }
