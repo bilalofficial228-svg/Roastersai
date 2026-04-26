@@ -63,45 +63,45 @@
   --elevate-2: rgba(0,0,0, .07);
 
   /* Surfaces */
-  --background: 15 100% 97%;    /* #FFF5F0 */
-  --foreground: 0 0% 10%;       /* #1A1A1A */
-  --border: 15 100% 91%;        /* #FFE0D0 */
+  --background: 15 100% 98%;    /* #FFF7F3 */
+  --foreground: 0 0% 13%;       /* #222222 */
+  --border: 20 30% 88%;         /* #E8DDD8 */
   --card: 0 0% 100%;            /* #FFFFFF */
-  --card-foreground: 0 0% 10%;
-  --card-border: 15 100% 91%;
+  --card-foreground: 0 0% 13%;
+  --card-border: 20 30% 88%;
   --popover: 0 0% 100%;
-  --popover-foreground: 0 0% 10%;
-  --popover-border: 15 100% 91%;
-  --input: 15 100% 98%;         /* #FFF8F5 */
-  --input-foreground: 0 0% 10%; /* #1A1A1A */
-  --input-placeholder: 0 0% 67%; /* #AAAAAA */
+  --popover-foreground: 0 0% 13%;
+  --popover-border: 20 30% 88%;
+  --input: 15 50% 97%;          /* #FBF4F2 */
+  --input-foreground: 0 0% 13%; /* #222222 */
+  --input-placeholder: 0 0% 60%; /* #999999 */
 
-  /* Accents — same fire palette */
-  --primary: 16 100% 50%;           /* #FF4500 */
+  /* Brand palette — red + orange */
+  --primary: 0 100% 65%;            /* #FF4D4D */
   --primary-foreground: 0 0% 100%;
-  --secondary: 328 100% 50%;        /* #FF006E */
+  --secondary: 33 100% 50%;         /* #FF8A00 */
   --secondary-foreground: 0 0% 100%;
-  --accent: 16 100% 50%;
+  --accent: 0 100% 65%;
   --accent-foreground: 0 0% 100%;
 
-  --muted: 0 0% 96%;           /* #F5F5F5 */
+  --muted: 20 20% 95%;          /* #F4EFED */
   --muted-foreground: 0 0% 40%; /* #666666 */
 
-  --destructive: 328 100% 50%;
+  --destructive: 0 100% 65%;
   --destructive-foreground: 0 0% 100%;
-  --ring: 16 100% 50%;
+  --ring: 0 100% 65%;
 
   --app-font-sans: 'Inter', sans-serif;
   --app-font-display: 'Space Grotesk', sans-serif;
   --radius: 0.75rem;
 
   /* Fire effect tokens */
-  --fire-orange: #FF4500;
-  --fire-pink: #FF006E;
+  --fire-orange: #FF4D4D;
+  --fire-pink: #FF8A00;
   --gold: #FFD700;
-  --fire-gradient: linear-gradient(135deg, #FF4500 0%, #FF006E 100%);
-  --fire-glow: 0 8px 30px rgba(255, 69, 0, 0.35);
-  --fire-glow-soft: 0 4px 20px rgba(255, 69, 0, 0.2);
+  --fire-gradient: linear-gradient(135deg, #FF4D4D 0%, #FF8A00 100%);
+  --fire-glow: 0 8px 30px rgba(255, 77, 77, 0.35);
+  --fire-glow-soft: 0 4px 20px rgba(255, 77, 77, 0.2);
 
   /* History panel — light */
   --history-bg: #FFFFFF;
@@ -120,39 +120,39 @@
   --elevate-2: rgba(255,255,255, .09);
 
   /* Surfaces */
-  --background: 0 0% 5.1%;     /* #0D0D0D */
-  --foreground: 0 0% 100%;     /* #FFFFFF */
-  --border: 0 0% 16.5%;        /* #2A2A2A */
-  --card: 0 0% 7.8%;           /* #141414 */
-  --card-foreground: 0 0% 100%;
-  --card-border: 0 0% 16.5%;
-  --popover: 0 0% 7.8%;
-  --popover-foreground: 0 0% 100%;
-  --popover-border: 0 0% 16.5%;
-  --input: 0 0% 10.2%;         /* #1A1A1A */
-  --input-foreground: 0 0% 100%;
-  --input-placeholder: 0 0% 33%; /* #555555 */
+  --background: 0 0% 5.9%;     /* #0F0F0F */
+  --foreground: 0 0% 91.8%;    /* #EAEAEA */
+  --border: 0 0% 15%;          /* #262626 */
+  --card: 0 0% 10.2%;          /* #1A1A1A */
+  --card-foreground: 0 0% 91.8%;
+  --card-border: 0 0% 15%;
+  --popover: 0 0% 10.2%;
+  --popover-foreground: 0 0% 91.8%;
+  --popover-border: 0 0% 15%;
+  --input: 0 0% 13.3%;         /* #222222 */
+  --input-foreground: 0 0% 91.8%;
+  --input-placeholder: 0 0% 38%; /* #616161 */
 
-  /* Accents — fire palette */
-  --primary: 25 100% 50%;          /* #FF6B00 fire orange */
+  /* Brand palette — red + orange */
+  --primary: 0 100% 65%;           /* #FF4D4D */
   --primary-foreground: 0 0% 100%;
-  --secondary: 340 100% 50%;       /* #FF0055 hot pink */
+  --secondary: 33 100% 50%;        /* #FF8A00 */
   --secondary-foreground: 0 0% 100%;
-  --accent: 25 100% 50%;
+  --accent: 0 100% 65%;
   --accent-foreground: 0 0% 100%;
 
-  --muted: 0 0% 11%;
-  --muted-foreground: 0 0% 47%;    /* #777 */
+  --muted: 0 0% 15%;
+  --muted-foreground: 0 0% 52%;    /* #858585 */
 
-  --destructive: 340 100% 50%;
+  --destructive: 0 100% 65%;
   --destructive-foreground: 0 0% 100%;
-  --ring: 25 100% 50%;
+  --ring: 0 100% 65%;
 
-  --fire-orange: #FF6B00;
-  --fire-pink: #FF0055;
-  --fire-gradient: linear-gradient(135deg, #FF6B00 0%, #FF0055 100%);
-  --fire-glow: 0 8px 30px rgba(255, 107, 0, 0.4);
-  --fire-glow-soft: 0 4px 20px rgba(255, 107, 0, 0.25);
+  --fire-orange: #FF4D4D;
+  --fire-pink: #FF8A00;
+  --fire-gradient: linear-gradient(135deg, #FF4D4D 0%, #FF8A00 100%);
+  --fire-glow: 0 8px 30px rgba(255, 77, 77, 0.4);
+  --fire-glow-soft: 0 4px 20px rgba(255, 77, 77, 0.25);
 
   /* History panel — dark */
   --history-bg: #111111;
@@ -181,15 +181,15 @@
     @apply font-sans antialiased;
     min-height: 100dvh;
     background:
-      radial-gradient(ellipse at top, rgba(255, 69, 0, 0.06) 0%, transparent 55%),
-      #FFF5F0;
+      radial-gradient(ellipse at top, rgba(255, 77, 77, 0.05) 0%, transparent 50%),
+      #FFF7F3;
     background-attachment: fixed;
   }
   .dark body {
     background:
-      radial-gradient(ellipse at top, #1a0500 0%, transparent 60%),
-      radial-gradient(ellipse at bottom right, #1a001a 0%, transparent 50%),
-      #0D0D0D;
+      radial-gradient(ellipse at top, rgba(255,77,77,0.07) 0%, transparent 55%),
+      radial-gradient(ellipse at bottom right, rgba(255,138,0,0.04) 0%, transparent 50%),
+      #0F0F0F;
     background-attachment: fixed;
   }
   h1, h2, h3, h4, h5, h6 {
@@ -259,7 +259,16 @@
 
 /* Heading glow in dark mode */
 .dark .fire-text {
-  filter: drop-shadow(0 0 24px rgba(255, 69, 0, 0.4)) drop-shadow(0 0 60px rgba(255, 0, 85, 0.2));
+  filter: drop-shadow(0 0 24px rgba(255, 77, 77, 0.45)) drop-shadow(0 0 60px rgba(255, 138, 0, 0.2));
+}
+
+/* CTA button pulse glow in dark mode */
+@keyframes cta-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 77, 77, 0), var(--fire-glow); }
+  50%       { box-shadow: 0 0 22px 6px rgba(255, 77, 77, 0.28), var(--fire-glow); }
+}
+.dark .cta-roast-btn {
+  animation: cta-pulse 3s ease-in-out infinite;
 }
 
 /* Input focus glow — light mode */

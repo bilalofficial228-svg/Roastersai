@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Flame, Ghost, Zap, HeartPulse, Sparkles, Target, Copy, Share2, History } from "lucide-react";
+import { CustomSelect } from "@/components/CustomSelect";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -58,11 +59,11 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 const intensityLabels: Record<number, { label: string, color: string }> = {
-  1: { label: "1 Baby Roast", color: "text-[#FFB380]" },
-  2: { label: "2 Mild Burns", color: "text-[#FF9040]" },
-  3: { label: "3 Medium Savage", color: "text-[#FF6B00]" },
-  4: { label: "4 Full Savage", color: "text-[#FF3370]" },
-  5: { label: "5 NUCLEAR ☢️", color: "text-[#FF0055] font-black" },
+  1: { label: "Low 🔥",          color: "text-[#FFB380]" },
+  2: { label: "Low 🔥🔥",        color: "text-[#FF9040]" },
+  3: { label: "Medium 🔥🔥",     color: "text-primary" },
+  4: { label: "High 🔥🔥🔥",     color: "text-primary" },
+  5: { label: "NUCLEAR ☢️🔥🔥🔥", color: "text-primary font-black" },
 };
 
 export default function Home() {
@@ -172,7 +173,7 @@ export default function Home() {
               data-testid="input-name"
               {...f.register("name")}
               placeholder="e.g. John Doe"
-              className="w-full bg-input border border-border focus:border-[#FF6B00] focus:ring-1 focus:ring-[#FF6B00] rounded-xl px-4 py-3 text-lg outline-none transition-all placeholder:text-muted-foreground/50"
+              className="w-full bg-input border border-border focus:border-primary focus:ring-1 focus:ring-primary/30 rounded-xl px-4 py-3 text-lg outline-none transition-all placeholder:text-muted-foreground/50"
             />
             {f.formState.errors.name && <span className="text-destructive text-xs font-medium">{f.formState.errors.name.message}</span>}
           </div>
@@ -182,7 +183,7 @@ export default function Home() {
               data-testid="input-city"
               {...f.register("city")}
               placeholder="e.g. New York"
-              className="w-full bg-input border border-border focus:border-[#FF6B00] focus:ring-1 focus:ring-[#FF6B00] rounded-xl px-4 py-3 text-lg outline-none transition-all placeholder:text-muted-foreground/50"
+              className="w-full bg-input border border-border focus:border-primary focus:ring-1 focus:ring-primary/30 rounded-xl px-4 py-3 text-lg outline-none transition-all placeholder:text-muted-foreground/50"
             />
             {f.formState.errors.city && <span className="text-destructive text-xs font-medium">{f.formState.errors.city.message}</span>}
           </div>
@@ -191,32 +192,34 @@ export default function Home() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="flex flex-col gap-2">
             <label className="text-sm font-bold text-foreground/80">Job</label>
-            <select
-              data-testid="select-job"
-              {...f.register("job")}
-              className="w-full bg-input border border-border focus:border-[#FF6B00] focus:ring-1 focus:ring-[#FF6B00] rounded-xl px-4 py-3 text-lg outline-none transition-all text-foreground appearance-none"
-            >
-              <option value="student">Student</option>
-              <option value="engineer">Engineer</option>
-              <option value="doctor">Doctor</option>
-              <option value="designer">Designer</option>
-              <option value="unemployed">Unemployed</option>
-              <option value="influencer">Influencer</option>
-              <option value="other">Other</option>
-            </select>
+            <CustomSelect
+              testId="select-job"
+              value={f.watch("job")}
+              onChange={(v) => f.setValue("job", v as FormValues["job"])}
+              options={[
+                { value: "student",     label: "🎓 Student" },
+                { value: "engineer",    label: "⚙️ Engineer" },
+                { value: "doctor",      label: "🩺 Doctor" },
+                { value: "designer",    label: "🎨 Designer" },
+                { value: "unemployed",  label: "😅 Unemployed" },
+                { value: "influencer",  label: "📱 Influencer" },
+                { value: "other",       label: "🤷 Other" },
+              ]}
+            />
           </div>
           <div className="flex flex-col gap-2">
             <label className="text-sm font-bold text-foreground/80">Relationship Status</label>
-            <select
-              data-testid="select-status"
-              {...f.register("status")}
-              className="w-full bg-input border border-border focus:border-[#FF6B00] focus:ring-1 focus:ring-[#FF6B00] rounded-xl px-4 py-3 text-lg outline-none transition-all text-foreground appearance-none"
-            >
-              <option value="single">Single</option>
-              <option value="in_relationship">In a Relationship</option>
-              <option value="married">Married</option>
-              <option value="complicated">It's Complicated</option>
-            </select>
+            <CustomSelect
+              testId="select-status"
+              value={f.watch("status")}
+              onChange={(v) => f.setValue("status", v as FormValues["status"])}
+              options={[
+                { value: "single",          label: "💔 Single" },
+                { value: "in_relationship", label: "❤️ In a Relationship" },
+                { value: "married",         label: "💍 Married" },
+                { value: "complicated",     label: "🤯 It's Complicated" },
+              ]}
+            />
           </div>
         </div>
 
@@ -226,7 +229,7 @@ export default function Home() {
             data-testid="input-weakness"
             {...f.register("weakness")}
             placeholder="e.g. always late, can't say no, addicted to memes"
-            className="w-full bg-input border border-border focus:border-[#FF6B00] focus:ring-1 focus:ring-[#FF6B00] rounded-xl px-4 py-3 text-lg outline-none transition-all placeholder:text-muted-foreground/50"
+            className="w-full bg-input border border-border focus:border-primary focus:ring-1 focus:ring-primary/30 rounded-xl px-4 py-3 text-lg outline-none transition-all placeholder:text-muted-foreground/50"
           />
         </div>
 
@@ -250,8 +253,8 @@ export default function Home() {
                   onClick={() => f.setValue("style", style.id as RoastStyle)}
                   className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-200 border ${
                     isSelected 
-                      ? "bg-[#FF4500]/15 text-[#FF4500] border-[#FF4500]" 
-                      : "bg-muted text-muted-foreground border-border hover:text-foreground"
+                      ? "bg-primary/10 text-primary border-primary" 
+                      : "bg-muted text-muted-foreground border-border hover:text-foreground hover:border-primary/30"
                   }`}
                 >
                   <Icon size={16} className={isSelected ? "animate-pulse" : ""} />
@@ -265,21 +268,23 @@ export default function Home() {
         {/* Language */}
         <div className="flex flex-col gap-2">
           <label className="text-sm font-bold text-foreground/80">Language</label>
-          <select
-            data-testid="select-language"
-            {...f.register("language")}
-            className="w-full bg-input border border-border focus:border-[#FF6B00] focus:ring-1 focus:ring-[#FF6B00] rounded-xl px-4 py-3 text-base outline-none transition-all text-foreground appearance-none cursor-pointer"
-          >
-            <option value="english">🇺🇸 English</option>
-            <option value="hindi">🇮🇳 Hindi</option>
-            <option value="spanish">🇪🇸 Spanish</option>
-            <option value="arabic">🇸🇦 Arabic</option>
-            <option value="french">🇫🇷 French</option>
-            <option value="portuguese">🇧🇷 Portuguese</option>
-            <option value="german">🇩🇪 German</option>
-            <option value="chinese">🇨🇳 Chinese</option>
-            <option value="urdu">🇵🇰 Urdu</option>
-          </select>
+          <CustomSelect
+            testId="select-language"
+            value={f.watch("language")}
+            onChange={(v) => f.setValue("language", v as FormValues["language"])}
+            options={[
+              { value: "english",    label: "🇺🇸 English" },
+              { value: "hindi",      label: "🇮🇳 Hindi" },
+              { value: "hinglish",   label: "🇮🇳 Hinglish" },
+              { value: "spanish",    label: "🇪🇸 Spanish" },
+              { value: "arabic",     label: "🇸🇦 Arabic" },
+              { value: "french",     label: "🇫🇷 French" },
+              { value: "portuguese", label: "🇧🇷 Portuguese" },
+              { value: "german",     label: "🇩🇪 German" },
+              { value: "chinese",    label: "🇨🇳 Chinese" },
+              { value: "urdu",       label: "🇵🇰 Urdu" },
+            ]}
+          />
         </div>
 
         {/* Intensity */}
@@ -455,11 +460,14 @@ export default function Home() {
               <div className="absolute top-0 left-0 w-full h-[2px] fire-bg" />
               {renderFormFields(form, false)}
 
-              <button 
+              <motion.button 
                 type="submit"
                 data-testid="button-roast-me"
                 disabled={generateRoast.isPending}
-                className="mt-6 w-full fire-bg text-white font-bold text-2xl py-5 rounded-xl hover:opacity-90 active:scale-[0.98] transition-all disabled:opacity-50 disabled:pointer-events-none fire-glow flex justify-center items-center gap-3"
+                whileHover={{ scale: generateRoast.isPending ? 1 : 1.025 }}
+                whileTap={{ scale: generateRoast.isPending ? 1 : 0.97 }}
+                transition={{ type: "spring", stiffness: 400, damping: 20 }}
+                className="mt-6 w-full fire-bg text-white font-bold text-2xl py-5 rounded-xl transition-opacity disabled:opacity-50 disabled:pointer-events-none fire-glow cta-roast-btn flex justify-center items-center gap-3"
               >
                 {generateRoast.isPending ? (
                   <>
@@ -469,7 +477,7 @@ export default function Home() {
                 ) : (
                   "Roast Me 🔥"
                 )}
-              </button>
+              </motion.button>
             </motion.form>
           )}
         </section>
