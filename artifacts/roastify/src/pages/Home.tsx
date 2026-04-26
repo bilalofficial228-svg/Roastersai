@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Flame, Ghost, Zap, HeartPulse, Sparkles, Volume2, VolumeX, Target, Copy, Share2, History } from "lucide-react";
+import { Flame, Ghost, Zap, HeartPulse, Sparkles, Target, Copy, Share2, History } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -67,10 +67,12 @@ const intensityLabels: Record<number, { label: string, color: string }> = {
 
 export default function Home() {
   const [currentRoast, setCurrentRoast] = useState<Roast | null>(null);
-  const [soundEnabled, setSoundEnabled] = useState(() => localStorage.getItem("roastify:muted") !== "true");
   const [friendDialogOpen, setFriendDialogOpen] = useState(false);
   const [friendRoast, setFriendRoast] = useState<Roast | null>(null);
   const [historyOpen, setHistoryOpen] = useState(false);
+  const [roastCount, setRoastCount] = useState<number>(() => {
+    try { return parseInt(localStorage.getItem("roastersai:count") || "0", 10) || 0; } catch { return 0; }
+  });
 
   const queryClient = useQueryClient();
   const { toast } = useToast();
@@ -100,17 +102,17 @@ export default function Home() {
     defaultValues: defaultFormValues
   });
 
-  useEffect(() => {
-    localStorage.setItem("roastify:muted", String(!soundEnabled));
-  }, [soundEnabled]);
-
   const onSubmit = (values: FormValues) => {
     setCurrentRoast(null);
     generateRoast.mutate({ data: { ...values } }, {
       onSuccess: (roast) => {
         setCurrentRoast(roast);
-        if (soundEnabled) playWhoosh();
         triggerHaptic();
+        setRoastCount(prev => {
+          const next = prev + 1;
+          try { localStorage.setItem("roastersai:count", String(next)); } catch {}
+          return next;
+        });
         saveToHistory({
           name: roast.name,
           job: roast.job,
@@ -134,7 +136,6 @@ export default function Home() {
     generateRoast.mutate({ data: { ...values } }, {
       onSuccess: (roast) => {
         setFriendRoast(roast);
-        if (soundEnabled) playWhoosh();
         triggerHaptic();
         queryClient.invalidateQueries({ queryKey: getListTrendingRoastsQueryKey() });
         queryClient.invalidateQueries({ queryKey: getGetRoastStatsQueryKey() });
@@ -318,21 +319,27 @@ export default function Home() {
         
         {/* Header / Controls */}
         <div className="flex justify-end gap-2 w-full max-w-3xl">
-          <button 
-            data-testid="button-sound-toggle"
-            onClick={() => setSoundEnabled(!soundEnabled)}
-            className="p-3 rounded-full bg-muted/50 hover:bg-muted text-muted-foreground hover:text-primary transition-colors border border-border"
-            title={soundEnabled ? "Mute sound 🔇" : "Enable sound 🔊"}
-          >
-            {soundEnabled ? <Volume2 size={20} /> : <VolumeX size={20} />}
-          </button>
           <button
             data-testid="button-history"
             onClick={() => setHistoryOpen(true)}
-            className="p-3 rounded-full bg-muted/50 hover:bg-muted text-muted-foreground hover:text-primary transition-colors border border-border"
             title="Roast History"
+            style={{
+              width: 44,
+              height: 44,
+              borderRadius: "50%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              background: "rgba(255,255,255,0.08)",
+              border: "1px solid rgba(255,255,255,0.15)",
+              color: "inherit",
+              cursor: "pointer",
+              transition: "all 0.2s ease",
+              flexShrink: 0,
+            }}
+            className="text-muted-foreground hover:text-primary"
           >
-            <History size={20} />
+            <History size={22} />
           </button>
           <ThemeToggle />
         </div>
@@ -355,6 +362,15 @@ export default function Home() {
           >
             Get Roasted by AI
           </motion.h1>
+          {roastCount > 0 && (
+            <motion.p
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              style={{ color: "#FF4500", fontSize: 13, fontWeight: 600, marginTop: -12 }}
+            >
+              🔥 You've been roasted {roastCount} time{roastCount !== 1 ? "s" : ""}
+            </motion.p>
+          )}
           <motion.p 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -371,7 +387,7 @@ export default function Home() {
                 className="flex items-center gap-2 px-6 py-3 rounded-full bg-transparent border-2 transition-all font-bold hover:bg-[#FF6B00]/10"
                 style={{ borderColor: "#FF6B00", color: "#FF6B00" }}
               >
-                <Target size={18} /> 🎯 Roast My Friend
+                <Target size={18} /> Roast My Friend
               </button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[500px] bg-card border-border text-foreground max-h-[90vh] overflow-y-auto">
