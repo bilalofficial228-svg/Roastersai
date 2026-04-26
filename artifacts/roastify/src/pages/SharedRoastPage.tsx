@@ -3,6 +3,7 @@ import { useParams } from "wouter";
 import { useGetRoast, getGetRoastQueryKey } from "@workspace/api-client-react";
 import { WorldwideCounter } from "@/components/WorldwideCounter";
 import { RoastCard } from "@/components/RoastCard";
+import { InfoModal } from "@/components/InfoModal";
 import { Flame, Loader2 } from "lucide-react";
 
 export default function SharedRoastPage() {
@@ -43,13 +44,24 @@ export default function SharedRoastPage() {
         <div className="max-w-4xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-muted-foreground font-medium">
           <div className="flex items-center gap-2">
             <Flame size={16} className="text-primary" />
-            <span>Roastify © {new Date().getFullYear()}</span>
+            <span>RoastersAI © {new Date().getFullYear()}</span>
           </div>
           <div className="flex gap-6">
-            <a href="#" className="hover:text-primary transition-colors">About</a>
-            <a href="#" className="hover:text-primary transition-colors">Contact</a>
-            <a href="#" className="hover:text-primary transition-colors">Privacy</a>
-            <a href="#" className="hover:text-primary transition-colors">Terms</a>
+            <InfoModal
+              trigger={<button className="hover:text-primary transition-colors cursor-pointer">About Us</button>}
+              title="About RoastersAI 🔥"
+              content={`RoastersAI is the world's most savage AI roast generator. Built for fun, not for feelings. We support 9 languages so everyone can get roasted equally. Don't take it personally 😂`}
+            />
+            <InfoModal
+              trigger={<button className="hover:text-primary transition-colors cursor-pointer">Contact</button>}
+              title="Contact Us"
+              content={`Have suggestions or feedback?\nEmail us: hello@roastersai.com\nWe read every message (and might roast you back 🔥)`}
+            />
+            <InfoModal
+              trigger={<button className="hover:text-primary transition-colors cursor-pointer">Privacy Policy</button>}
+              title="Privacy Policy"
+              content={`Last updated: 2025.\n\nRoastersAI does not store any personal information you enter. All roasts are generated in real-time and not saved to any database. We use Google Analytics to track anonymous visitor statistics. No data is sold to third parties. By using this site you agree to these terms.`}
+            />
           </div>
         </div>
       </footer>

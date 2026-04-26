@@ -50,7 +50,12 @@ export const Language = {
   hinglish: "hinglish",
   hindi: "hindi",
   spanish: "spanish",
+  arabic: "arabic",
   french: "french",
+  portuguese: "portuguese",
+  german: "german",
+  chinese: "chinese",
+  urdu: "urdu",
 } as const;
 
 export type ReactionType = (typeof ReactionType)[keyof typeof ReactionType];

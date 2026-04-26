@@ -3,17 +3,29 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
-    <title>AI Roast Generator – Funny & Savage Roasts Online</title>
-    <meta name="description" content="Type anything and get a savage, funny AI roast instantly. The chaotic-good AI comedian for the internet." />
-    <meta property="og:title" content="AI Roast Generator – Funny & Savage Roasts Online" />
-    <meta property="og:description" content="Type anything and get a savage, funny AI roast instantly." />
+    <title>RoastersAI — Get Roasted by AI 🔥</title>
+    <meta name="description" content="Free AI roast generator in 9 languages. Hindi, English, Arabic, Spanish and more. Get savage roasts instantly!" />
+    <meta property="og:title" content="RoastersAI — Get Roasted by AI 🔥" />
+    <meta property="og:description" content="Free AI roast generator in Hindi, Hinglish and English. Get savage roasts instantly. Don't take it personally 😂" />
     <meta property="og:type" content="website" />
     <meta name="theme-color" content="#0A0A0A" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <script>
-      // Always-dark fire theme — light mode removed.
-      document.documentElement.classList.add('dark');
-      document.documentElement.style.colorScheme = 'dark';
+      // Apply saved theme before paint to prevent flash.
+      (function () {
+        try {
+          var t = localStorage.getItem('roastify:theme');
+          if (t === 'light') {
+            document.documentElement.style.colorScheme = 'light';
+          } else {
+            document.documentElement.classList.add('dark');
+            document.documentElement.style.colorScheme = 'dark';
+          }
+        } catch (e) {
+          document.documentElement.classList.add('dark');
+          document.documentElement.style.colorScheme = 'dark';
+        }
+      })();
     </script>
   </head>
   <body>

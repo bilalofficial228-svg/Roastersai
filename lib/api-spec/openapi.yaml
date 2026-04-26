@@ -196,7 +196,7 @@ components:
       enum: [single, in_relationship, married, complicated]
     Language:
       type: string
-      enum: [english, hinglish, hindi, spanish, french]
+      enum: [english, hinglish, hindi, spanish, arabic, french, portuguese, german, chinese, urdu]
     ReactionType:
       type: string
       enum: [hilarious, savage, dead, too_real]

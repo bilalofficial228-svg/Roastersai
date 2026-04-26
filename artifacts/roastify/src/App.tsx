@@ -5,7 +5,6 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
 import Home from "@/pages/Home";
 import SharedRoastPage from "@/pages/SharedRoastPage";
-import { useEffect } from "react";
 
 const queryClient = new QueryClient();
 
@@ -20,11 +19,6 @@ function Router() {
 }
 
 function App() {
-  useEffect(() => {
-    document.documentElement.classList.add("dark");
-    document.documentElement.style.colorScheme = "dark";
-  }, []);
-
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>

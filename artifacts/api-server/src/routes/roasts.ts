@@ -19,7 +19,7 @@ type Job =
   | "influencer"
   | "other";
 type Status = "single" | "in_relationship" | "married" | "complicated";
-type Language = "english" | "hinglish" | "hindi" | "spanish" | "french";
+type Language = "english" | "hinglish" | "hindi" | "spanish" | "arabic" | "french" | "portuguese" | "german" | "chinese" | "urdu";
 type ReactionType = "hilarious" | "savage" | "dead" | "too_real";
 
 const STYLE_PROMPTS: Record<RoastStyle, string> = {
@@ -42,8 +42,18 @@ const LANGUAGE_DIRECTIONS: Record<Language, string> = {
     "Generate roast in HINDI language ONLY, written in DEVANAGARI script (हिन्दी). 100% Hindi. Do NOT include any English words, Roman script, Hinglish, or any other language. Pure Hindi vocabulary and grammar.",
   spanish:
     "Generate roast in SPANISH language ONLY. 100% Spanish. Do NOT mix in any English, Hindi or other language words or phrases. Pure Spanish vocabulary and grammar.",
+  arabic:
+    "Generate roast in ARABIC language ONLY, written in Arabic script (RTL). 100% Arabic. Do NOT include any English words, Roman script, or any other language. Use Modern Standard Arabic (فصحى). Pure Arabic vocabulary and grammar.",
   french:
     "Generate roast in FRENCH language ONLY. 100% French. Do NOT mix in any English, Hindi or other language words or phrases. Pure French vocabulary and grammar.",
+  portuguese:
+    "Generate roast in PORTUGUESE (Brazilian Portuguese) language ONLY. 100% Portuguese. Do NOT mix in any English or other language words. Pure Portuguese vocabulary and grammar.",
+  german:
+    "Generate roast in GERMAN language ONLY. 100% Deutsch. Do NOT mix in any English or other language words. Pure German vocabulary and grammar.",
+  chinese:
+    "Generate roast in SIMPLIFIED CHINESE (普通话) language ONLY, written in Chinese characters. 100% Chinese. Do NOT include any English words, Pinyin, or any other language. Pure Simplified Chinese.",
+  urdu:
+    "Generate roast in URDU language ONLY, written in Urdu Nastaliq script (اردو). 100% Urdu. Do NOT include any English words, Roman script, or any other language. Pure Urdu vocabulary and grammar.",
 };
 
 const INTENSITY_DIRECTIONS: Record<number, string> = {

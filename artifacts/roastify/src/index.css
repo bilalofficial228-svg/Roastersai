@@ -49,15 +49,65 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
-/*
- * SINGLE THEME — premium fire-themed dark.
- * No light mode. No purple. Accents: fire orange (#FF6B00) + hot pink (#FF0055) + gold (#FFD700) for #1.
- */
-:root,
+/* ============================================
+ * FIRE THEME — Light mode & Dark mode.
+ * Accents: orange (#FF6B00) + pink (#FF0055) + gold (#FFD700) for #1.
+ * No purple anywhere.
+ * ============================================ */
+
+/* --- LIGHT MODE (default :root) --- */
+:root {
+  --button-outline: rgba(0,0,0, .08);
+  --badge-outline: rgba(0,0,0, .04);
+  --elevate-1: rgba(0,0,0, .04);
+  --elevate-2: rgba(0,0,0, .07);
+
+  /* Surfaces */
+  --background: 33 100% 97%;    /* #FFF8F0 warm cream */
+  --foreground: 20 100% 8%;     /* #1A0500 very dark warm */
+  --border: 30 35% 85%;         /* #E5D4C0 */
+  --card: 0 0% 100%;            /* #FFFFFF */
+  --card-foreground: 20 100% 8%;
+  --card-border: 30 35% 85%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 20 100% 8%;
+  --popover-border: 30 35% 85%;
+  --input: 33 50% 94%;          /* #F5EAD9 warm input bg */
+  --input-foreground: 20 100% 8%;
+  --input-placeholder: 30 20% 55%; /* warm gray */
+
+  /* Accents — same fire palette */
+  --primary: 25 100% 50%;          /* #FF6B00 fire orange */
+  --primary-foreground: 0 0% 100%;
+  --secondary: 340 100% 50%;       /* #FF0055 hot pink */
+  --secondary-foreground: 0 0% 100%;
+  --accent: 25 100% 50%;
+  --accent-foreground: 0 0% 100%;
+
+  --muted: 33 40% 92%;          /* #F5E8D5 */
+  --muted-foreground: 25 20% 42%; /* #8A7060 warm muted text */
+
+  --destructive: 340 100% 50%;
+  --destructive-foreground: 0 0% 100%;
+  --ring: 25 100% 50%;
+
+  --app-font-sans: 'Inter', sans-serif;
+  --app-font-display: 'Space Grotesk', sans-serif;
+  --radius: 0.75rem;
+
+  /* Fire effect tokens */
+  --fire-orange: #FF6B00;
+  --fire-pink: #FF0055;
+  --gold: #FFD700;
+  --fire-gradient: linear-gradient(135deg, #FF6B00 0%, #FF0055 100%);
+  --fire-glow: 0 8px 30px rgba(255, 107, 0, 0.35);
+  --fire-glow-soft: 0 4px 20px rgba(255, 107, 0, 0.2);
+}
+
+/* --- DARK MODE --- */
 .dark {
   --button-outline: rgba(255,255,255, .08);
   --badge-outline: rgba(255,255,255, .04);
-  --opaque-button-border-intensity: 9;
   --elevate-1: rgba(255,255,255, .04);
   --elevate-2: rgba(255,255,255, .09);
 
@@ -90,15 +140,6 @@
   --destructive-foreground: 0 0% 100%;
   --ring: 25 100% 50%;
 
-  --app-font-sans: 'Inter', sans-serif;
-  --app-font-display: 'Space Grotesk', sans-serif;
-  --radius: 0.75rem;
-
-  /* Fire effect tokens */
-  --fire-orange: #FF6B00;
-  --fire-pink: #FF0055;
-  --gold: #FFD700;
-  --fire-gradient: linear-gradient(135deg, #FF6B00 0%, #FF0055 100%);
   --fire-glow: 0 8px 30px rgba(255, 107, 0, 0.4);
   --fire-glow-soft: 0 4px 20px rgba(255, 107, 0, 0.25);
 }
@@ -110,11 +151,22 @@
   html, body, #root {
     background-color: hsl(var(--background));
     color: hsl(var(--foreground));
+  }
+  html.dark, html.dark body, html.dark #root {
     color-scheme: dark;
+  }
+  html:not(.dark), html:not(.dark) body, html:not(.dark) #root {
+    color-scheme: light;
   }
   body {
     @apply font-sans antialiased;
     min-height: 100dvh;
+    background:
+      radial-gradient(ellipse at top, rgba(255, 107, 0, 0.07) 0%, transparent 60%),
+      hsl(var(--background));
+    background-attachment: fixed;
+  }
+  .dark body {
     background:
       radial-gradient(ellipse at top, #1a0500 0%, transparent 60%),
       radial-gradient(ellipse at bottom right, #1a001a 0%, transparent 50%),
@@ -182,6 +234,16 @@
   background-color: var(--fire-orange) !important;
   border-color: var(--fire-orange) !important;
   box-shadow: 0 0 12px rgba(255, 107, 0, 0.5);
+}
+
+/* Hide Replit watermark / badge */
+.replit-badge,
+[data-replit-badge],
+#replit-badge,
+[class*="replit-badge"],
+[id*="replit-badge"] {
+  display: none !important;
+  visibility: hidden !important;
 }
 
 /* Legacy classes (kept as no-ops to avoid breaking anything that still references them) */

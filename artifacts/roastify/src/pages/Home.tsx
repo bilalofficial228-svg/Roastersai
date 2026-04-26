@@ -13,6 +13,8 @@ import { Leaderboard } from "@/components/Leaderboard";
 import { RoastCard } from "@/components/RoastCard";
 import { Slider } from "@/components/ui/slider";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import ThemeToggle from "@/components/ThemeToggle";
+import { InfoModal } from "@/components/InfoModal";
 
 // --- Audio / Haptics ---
 const playWhoosh = () => {
@@ -48,7 +50,7 @@ const formSchema = z.object({
   weakness: z.string().max(120, "Keep it short!").optional().nullable(),
   status: z.enum(["single", "in_relationship", "married", "complicated"] as const),
   style: z.enum(["friendly", "savage", "dark", "desi"] as const),
-  language: z.enum(["english", "hinglish", "hindi", "spanish", "french"] as const),
+  language: z.enum(["english", "hinglish", "hindi", "spanish", "arabic", "french", "portuguese", "german", "chinese", "urdu"] as const),
   intensity: z.number().min(1).max(5),
 });
 
@@ -244,29 +246,24 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Languages */}
+        {/* Language */}
         <div className="flex flex-col gap-2">
           <label className="text-sm font-bold text-foreground/80">Language</label>
-          <div className="flex flex-wrap gap-2">
-            {["english", "hinglish", "hindi", "spanish", "french"].map((lang) => {
-              const isSelected = f.watch("language") === lang;
-              return (
-                <button
-                  key={lang}
-                  type="button"
-                  data-testid={`pill-language-${lang}`}
-                  onClick={() => f.setValue("language", lang as Language)}
-                  className={`px-3 py-1.5 rounded-full text-sm font-bold transition-all border ${
-                    isSelected 
-                      ? "bg-[#FF0055]/15 text-[#FF0055] border-[#FF0055]" 
-                      : "bg-[#1C1C1C] text-[#777777] border-[#2A2A2A] hover:bg-[#252525] hover:text-foreground"
-                  }`}
-                >
-                  {lang.charAt(0).toUpperCase() + lang.slice(1)}
-                </button>
-              );
-            })}
-          </div>
+          <select
+            data-testid="select-language"
+            {...f.register("language")}
+            className="w-full bg-input border border-border focus:border-[#FF6B00] focus:ring-1 focus:ring-[#FF6B00] rounded-xl px-4 py-3 text-base outline-none transition-all text-foreground appearance-none cursor-pointer"
+          >
+            <option value="english">🇺🇸 English</option>
+            <option value="hindi">🇮🇳 Hindi</option>
+            <option value="spanish">🇪🇸 Spanish</option>
+            <option value="arabic">🇸🇦 Arabic</option>
+            <option value="french">🇫🇷 French</option>
+            <option value="portuguese">🇧🇷 Portuguese</option>
+            <option value="german">🇩🇪 German</option>
+            <option value="chinese">🇨🇳 Chinese</option>
+            <option value="urdu">🇵🇰 Urdu</option>
+          </select>
         </div>
 
         {/* Intensity */}
@@ -304,8 +301,8 @@ export default function Home() {
 
       <main className="flex-1 w-full max-w-5xl mx-auto px-4 py-8 md:py-16 z-10 flex flex-col gap-12 items-center">
         
-        {/* Header / Sound Toggle */}
-        <div className="flex justify-end w-full max-w-3xl">
+        {/* Header / Controls */}
+        <div className="flex justify-end gap-2 w-full max-w-3xl">
           <button 
             data-testid="button-sound-toggle"
             onClick={() => setSoundEnabled(!soundEnabled)}
@@ -314,6 +311,7 @@ export default function Home() {
           >
             {soundEnabled ? <Volume2 size={20} /> : <VolumeX size={20} />}
           </button>
+          <ThemeToggle />
         </div>
 
         {/* Hero Section */}
@@ -536,13 +534,24 @@ export default function Home() {
         <div className="max-w-4xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-muted-foreground font-medium">
           <div className="flex items-center gap-2">
             <Flame size={16} className="text-primary" />
-            <span>Roastify © {new Date().getFullYear()}</span>
+            <span>RoastersAI © {new Date().getFullYear()}</span>
           </div>
           <div className="flex gap-6">
-            <a href="#" className="hover:text-primary transition-colors">About</a>
-            <a href="#" className="hover:text-primary transition-colors">Contact</a>
-            <a href="#" className="hover:text-primary transition-colors">Privacy</a>
-            <a href="#" className="hover:text-primary transition-colors">Terms</a>
+            <InfoModal
+              trigger={<button className="hover:text-primary transition-colors cursor-pointer">About Us</button>}
+              title="About RoastersAI 🔥"
+              content={`RoastersAI is the world's most savage AI roast generator. Built for fun, not for feelings. We support 9 languages so everyone can get roasted equally. Don't take it personally 😂`}
+            />
+            <InfoModal
+              trigger={<button className="hover:text-primary transition-colors cursor-pointer">Contact</button>}
+              title="Contact Us"
+              content={`Have suggestions or feedback?\nEmail us: hello@roastersai.com\nWe read every message (and might roast you back 🔥)`}
+            />
+            <InfoModal
+              trigger={<button className="hover:text-primary transition-colors cursor-pointer">Privacy Policy</button>}
+              title="Privacy Policy"
+              content={`Last updated: 2025.\n\nRoastersAI does not store any personal information you enter. All roasts are generated in real-time and not saved to any database. We use Google Analytics to track anonymous visitor statistics. No data is sold to third parties. By using this site you agree to these terms.`}
+            />
           </div>
         </div>
       </footer>
