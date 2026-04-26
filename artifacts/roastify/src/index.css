@@ -360,6 +360,21 @@ html:not(.dark) section h2 {
   color: #1A1A2E !important;
 }
 
+/* Dropdown scrollbar */
+[style*="maxHeight"][style*="overflowY"]::-webkit-scrollbar,
+div[style*="overflow-y"]::-webkit-scrollbar {
+  width: 4px;
+}
+[style*="maxHeight"][style*="overflowY"]::-webkit-scrollbar-track,
+div[style*="overflow-y"]::-webkit-scrollbar-track {
+  background: transparent;
+}
+[style*="maxHeight"][style*="overflowY"]::-webkit-scrollbar-thumb,
+div[style*="overflow-y"]::-webkit-scrollbar-thumb {
+  background: rgba(255,46,136,0.35);
+  border-radius: 999px;
+}
+
 /* Slider — neon pink */
 [data-orientation="horizontal"][role="slider"] {
   background-color: #FF2E88 !important;

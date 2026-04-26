@@ -52,22 +52,26 @@ export function CustomSelect({ options, value, onChange, testId }: CustomSelectP
             exit={{ opacity: 0, y: -6, scaleY: 0.94 }}
             transition={{ duration: 0.15, ease: "easeOut" }}
             style={{ transformOrigin: "top", background: "hsl(var(--card))", zIndex: 100 }}
-            className="absolute top-full mt-1 left-0 right-0 rounded-xl overflow-hidden shadow-2xl border border-border"
+            className="absolute top-full mt-1 left-0 right-0 rounded-xl shadow-2xl border border-border overflow-hidden"
           >
-            {options.map(opt => (
-              <button
-                key={opt.value}
-                type="button"
-                onClick={() => { onChange(opt.value); setOpen(false); }}
-                className={`w-full text-left px-4 py-3 text-sm font-medium transition-colors hover:bg-muted ${
-                  value === opt.value
-                    ? "text-primary font-bold bg-primary/5"
-                    : "text-foreground"
-                }`}
-              >
-                {opt.label}
-              </button>
-            ))}
+            <div style={{ maxHeight: 220, overflowY: "auto" }}
+              className="scrollbar-thin scrollbar-thumb-border scrollbar-track-transparent"
+            >
+              {options.map(opt => (
+                <button
+                  key={opt.value}
+                  type="button"
+                  onClick={() => { onChange(opt.value); setOpen(false); }}
+                  className={`w-full text-left px-4 py-3 text-sm font-medium transition-colors hover:bg-muted ${
+                    value === opt.value
+                      ? "text-primary font-bold bg-primary/5"
+                      : "text-foreground"
+                  }`}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
