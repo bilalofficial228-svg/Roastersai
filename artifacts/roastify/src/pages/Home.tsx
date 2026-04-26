@@ -450,8 +450,9 @@ export default function Home() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
               onSubmit={form.handleSubmit(onSubmit)} 
-              className="w-full max-w-3xl mt-6 p-6 md:p-8 premium-card backdrop-blur-sm flex flex-col gap-6"
+              className="w-full max-w-3xl mt-6 p-6 md:p-8 premium-card backdrop-blur-sm flex flex-col gap-6 relative overflow-hidden"
             >
+              <div className="absolute top-0 left-0 w-full h-[2px] fire-bg" />
               {renderFormFields(form, false)}
 
               <button 
