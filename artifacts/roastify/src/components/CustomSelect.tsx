@@ -33,14 +33,14 @@ export function CustomSelect({ options, value, onChange, testId }: CustomSelectP
       <button
         type="button"
         onClick={() => setOpen(v => !v)}
-        className="w-full bg-input border border-border rounded-xl px-4 py-3 text-lg text-left flex items-center justify-between text-foreground transition-all hover:border-primary/40"
-        style={{ outline: "none" }}
+        className="w-full bg-input border border-border rounded-xl text-left flex items-center justify-between text-foreground transition-all hover:border-primary/40"
+        style={{ outline: "none", height: 52, padding: "14px 16px", fontSize: 15 }}
       >
         <span className={selected ? "text-foreground" : "text-muted-foreground/50"}>
           {selected?.label || "Select…"}
         </span>
         <motion.div animate={{ rotate: open ? 180 : 0 }} transition={{ duration: 0.22, ease: "easeInOut" }}>
-          <ChevronDown size={18} className="text-muted-foreground" />
+          <ChevronDown size={18} style={{ color: "#FF4500" }} />
         </motion.div>
       </button>
 

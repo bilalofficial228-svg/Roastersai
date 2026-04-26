@@ -16,12 +16,12 @@ export function Leaderboard() {
 
       <div className="flex flex-col gap-3">
         {leaderboard.slice(0, 5).map((entry, i) => {
-          const rankStyles: Record<number, { borderLeft: string; boxShadow?: string; opacity: number; rankColor: string }> = {
-            0: { borderLeft: "3px solid #FFD700", boxShadow: "0 0 20px rgba(255,215,0,0.15)",   opacity: 1,   rankColor: "#FFD700" },
-            1: { borderLeft: "3px solid #C0C0C0", boxShadow: "0 0 15px rgba(192,192,192,0.1)", opacity: 1,   rankColor: "#C0C0C0" },
-            2: { borderLeft: "3px solid #CD7F32", boxShadow: "0 0 15px rgba(205,127,50,0.1)",  opacity: 1,   rankColor: "#CD7F32" },
-            3: { borderLeft: "3px solid #333333",                                              opacity: 0.5, rankColor: "#777777" },
-            4: { borderLeft: "3px solid #333333",                                              opacity: 0.5, rankColor: "#777777" },
+          const rankStyles: Record<number, { borderLeft: string; boxShadow?: string; bg: string; opacity: number; rankColor: string }> = {
+            0: { borderLeft: "3px solid #FFD700", boxShadow: "0 0 20px rgba(255,215,0,0.15)",  bg: "rgba(255,215,0,0.05)",  opacity: 1,   rankColor: "#FFD700" },
+            1: { borderLeft: "3px solid #C0C0C0", boxShadow: "0 0 15px rgba(192,192,192,0.1)", bg: "rgba(192,192,192,0.03)", opacity: 1,   rankColor: "#C0C0C0" },
+            2: { borderLeft: "3px solid #CD7F32", boxShadow: "0 0 15px rgba(205,127,50,0.1)",  bg: "rgba(205,127,50,0.03)",  opacity: 1,   rankColor: "#CD7F32" },
+            3: { borderLeft: "3px solid #2A2A2A", bg: "transparent",                           opacity: 0.4, rankColor: "#555555" },
+            4: { borderLeft: "3px solid #2A2A2A", bg: "transparent",                           opacity: 0.4, rankColor: "#555555" },
           };
           const rs = rankStyles[i] ?? rankStyles[4];
           return (
@@ -33,7 +33,7 @@ export function Leaderboard() {
               data-testid={`card-leaderboard-${entry.rank}`}
               className="flex flex-col sm:flex-row items-start sm:items-center gap-4 p-4 rounded-xl border-y border-r border-border transition-all"
               style={{
-                backgroundColor: "hsl(var(--card))",
+                backgroundColor: rs.bg || "hsl(var(--card))",
                 borderLeft: rs.borderLeft,
                 boxShadow: rs.boxShadow,
                 opacity: rs.opacity,

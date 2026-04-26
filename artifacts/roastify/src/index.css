@@ -104,6 +104,7 @@
   --fire-glow-soft: 0 4px 20px rgba(255, 77, 77, 0.2);
 
   /* History panel — light */
+  --subtitle-color: #666666;
   --history-bg: #FFFFFF;
   --history-card: #F5F5F5;
   --history-card-border: #E8E8E8;
@@ -154,6 +155,7 @@
   --fire-glow: 0 8px 30px rgba(255, 77, 77, 0.4);
   --fire-glow-soft: 0 4px 20px rgba(255, 77, 77, 0.25);
 
+  --subtitle-color: #AAAAAA;
   /* History panel — dark */
   --history-bg: #111111;
   --history-card: #1A1A1A;
@@ -180,16 +182,11 @@
   body {
     @apply font-sans antialiased;
     min-height: 100dvh;
-    background:
-      radial-gradient(ellipse at top, rgba(255, 77, 77, 0.05) 0%, transparent 50%),
-      #FFF7F3;
+    background: #F8F0EB;
     background-attachment: fixed;
   }
   .dark body {
-    background:
-      radial-gradient(ellipse at top, rgba(255,77,77,0.07) 0%, transparent 55%),
-      radial-gradient(ellipse at bottom right, rgba(255,138,0,0.04) 0%, transparent 50%),
-      #0F0F0F;
+    background: #0F0F0F;
     background-attachment: fixed;
   }
   h1, h2, h3, h4, h5, h6 {
@@ -214,12 +211,19 @@
 }
 
 /* === Fire utility classes === */
+@keyframes shine {
+  0%   { background-position: 0% center; }
+  100% { background-position: 200% center; }
+}
 .fire-text {
-  background: var(--fire-gradient);
+  background: linear-gradient(135deg, #FF6B00 0%, #FF0055 50%, #FF6B00 100%);
+  background-size: 200% auto;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   color: transparent;
+  animation: shine 3s linear infinite;
+  font-weight: 900;
 }
 .fire-bg {
   background: var(--fire-gradient);
@@ -240,18 +244,43 @@
   color: var(--gold);
 }
 
-/* Premium card shadow */
+/* Premium card */
 .premium-card {
   background: #FFFFFF;
-  border: 1px solid #FFD4C0;
-  border-radius: 20px;
+  border: none;
+  border-top: 3px solid #FF4500;
+  border-radius: 12px;
   box-shadow: 0 8px 30px rgba(255, 69, 0, 0.1);
 }
 .dark .premium-card {
   background: #1A1A1A;
-  border: 1px solid rgba(255, 69, 0, 0.2);
-  border-radius: 20px;
-  box-shadow: 0 0 30px rgba(255, 69, 0, 0.08);
+  border: none;
+  border-top: 3px solid #FF4500;
+  border-radius: 12px;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
+}
+
+/* Netflix-style solid CTA button */
+.cta-netflix-btn {
+  background: #FF4500;
+  border-radius: 6px;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  width: 100%;
+  padding: 18px;
+  transition: background 0.2s ease;
+}
+.cta-netflix-btn:hover:not(:disabled) {
+  background: #FF5500;
+}
+
+/* Card hover in dark */
+.dark .leaderboard-card {
+  transition: background 0.2s;
+}
+.dark .leaderboard-card:hover {
+  background: #222222;
 }
 
 /* Heading glow in dark mode */
@@ -259,14 +288,6 @@
   filter: drop-shadow(0 0 24px rgba(255, 77, 77, 0.45)) drop-shadow(0 0 60px rgba(255, 138, 0, 0.2));
 }
 
-/* CTA button pulse glow in dark mode */
-@keyframes cta-pulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 77, 77, 0), var(--fire-glow); }
-  50%       { box-shadow: 0 0 22px 6px rgba(255, 77, 77, 0.28), var(--fire-glow); }
-}
-.dark .cta-roast-btn {
-  animation: cta-pulse 3s ease-in-out infinite;
-}
 
 /* Input focus glow — both modes */
 input:focus,

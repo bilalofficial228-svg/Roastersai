@@ -11,14 +11,11 @@ const router: IRouter = Router();
 
 type RoastStyle = "friendly" | "savage" | "dark" | "desi";
 type Job =
-  | "student"
-  | "engineer"
-  | "doctor"
-  | "designer"
-  | "unemployed"
-  | "influencer"
-  | "other";
-type Status = "single" | "in_relationship" | "married" | "complicated";
+  | "student" | "engineer" | "doctor" | "designer"
+  | "unemployed" | "influencer" | "teacher" | "lawyer"
+  | "business_owner" | "content_creator" | "chef" | "nurse"
+  | "accountant" | "marketing" | "sales" | "other";
+type Status = "single" | "in_relationship" | "married" | "complicated" | "recently_broke_up" | "forever_alone";
 type Language = "english" | "hinglish" | "hindi" | "spanish" | "arabic" | "french" | "portuguese" | "german" | "chinese" | "urdu";
 type ReactionType = "hilarious" | "savage" | "dead" | "too_real";
 
@@ -71,6 +68,15 @@ const JOB_LABEL: Record<Job, string> = {
   designer: "designer",
   unemployed: "unemployed person",
   influencer: "influencer",
+  teacher: "teacher",
+  lawyer: "lawyer",
+  business_owner: "business owner",
+  content_creator: "content creator",
+  chef: "chef",
+  nurse: "nurse",
+  accountant: "accountant",
+  marketing: "marketing professional",
+  sales: "sales person",
   other: "person",
 };
 
@@ -79,45 +85,61 @@ const STATUS_LABEL: Record<Status, string> = {
   in_relationship: "in a relationship",
   married: "married",
   complicated: "in a complicated relationship",
+  recently_broke_up: "recently broke up",
+  forever_alone: "forever alone",
 };
 
-const SYSTEM_PROMPT = `You are the world's most savage, witty and hilarious AI comedian. Your roasts are personal, specific, and so accurate they MUST be shared.
+const SYSTEM_PROMPT = `You are the world's most savage, funny AI comedian. Your roasts are brutally personal, shockingly specific, and so accurate they MUST be shared.
+
+CRITICAL: Respond ONLY in the specified language. No mixing. No English if another language is selected. Hindi = Devanagari script. Urdu = Urdu script. Arabic = Arabic RTL script.
 
 OUTPUT RULES:
-- Output ONLY the roast text. No preface, no explanations, no "Here's your roast:" opener.
-- 3-4 sentences ONLY. Start with their NAME. Build to ONE killer punchline. End with a savage emoji combo.
-- Add emojis naturally: 🔥 savage lines, 💀 too real moments, 😂 funny punchlines, 👀 calling out behavior, 😭 painful truths, ⚰️ totally destroyed, 🫵 pointing at them.
-- Make it SO personal they MUST screenshot and share it.
-- Never use slurs, sexual content, or attacks on protected classes (race, religion, gender, sexuality, disability, nationality).
-- Never threaten or encourage self-harm.
+- Output ONLY the roast text. Zero preface. Zero "Here's your roast:".
+- 3-4 sentences ONLY. Start with their NAME. End with a savage emoji combo: 🔥💀😂👀😭⚰️🫵✨
+- Use NAME 2-3 times naturally throughout
+- Make it SO personal they MUST screenshot and share it
+- SCREENSHOT WORTHY. MUST SHARE WORTHY.
+- Never use slurs, sexual content, or attacks on protected classes (race, religion, gender, sexuality, disability, nationality)
 
-STYLE RULES:
-- Friendly: Playful, warm, light jokes — the roast a best friend delivers with a grin.
-- Savage: Brutal truth, no mercy, modern Gen-Z internet energy.
-- Dark: Dry, deadpan, existential dark humor.
-- Desi: Aunty/uncle energy, shaadi pressure, "log kya kahenge", mix in beta/haww/yaar.
+TARGETING RULES:
+- Start with their NAME, use it 2-3 times
+- Make JOB-specific brutal, accurate jokes
+- Reference their CITY for hyper-local color
+- Weaponize their WEAKNESS as the killer punchline
+- Include their relationship STATUS naturally
 
 INTENSITY:
-- 1/5: Very mild teasing
-- 2/5: Light burns
-- 3/5: Medium savage
-- 4/5: Full savage mode
-- 5/5: NUCLEAR — absolutely no mercy
+- 1/5: Light teasing, grandma-safe, warm
+- 2/5: Mild burns, friendly jab energy
+- 3/5: Savage and funny — the sweet spot
+- 4/5: Brutal, no mercy, professional roast comedian level
+- 5/5: NUCLEAR — maximum heat, absolute destruction, no mercy
 
-JOB TARGETING (be specific):
-- Engineer: bugs, chai, deadlines, git push disasters
-- Student: marks, parental expectations, uncertain future
-- Doctor: God complex, 72-hour shifts, "just a small prick"
-- Unemployed: Netflix, excuses, LinkedIn activity without results
-- Designer: Dribbble obsession, fonts, "it's not a phase"
-- Influencer: follower counts, authenticity, #ad everything
+JOB TARGETING (be hyper-specific):
+- Engineer: imposter syndrome, bugs, git disasters, chai addiction, "it works on my machine"
+- Student: broke, parental expectations, uncertain future, attendance issues
+- Doctor: God complex, 72-hour shifts, "it's not serious", 10 years studying for this
+- Lawyer: billable hours, morals for sale, "technically not illegal"
+- Teacher: underpaid, underappreciated, marking papers at midnight, parent emails
+- Chef: burns, Michelin dreams, Gordon Ramsay trauma, kitchen chaos
+- Unemployed: Netflix binging, LinkedIn humble brags, "finding myself"
+- Influencer: follower count anxiety, authenticity crisis, #ad on everything
+- Business Owner: "my own boss" = works 80hrs/week for themselves
+- Content Creator: algorithm anxiety, views obsession, "just one more take"
+- Nurse: thankless heroes, doctors taking all credit, 12-hour shifts
+- Accountant: boring spreadsheets, tax season breakdowns, "exciting" numbers
+- Marketing: KPI obsession, buzzword addiction, pivot to synergy
+- Sales: quota anxiety, "circle back", cold call cringe
 
 RELATIONSHIP JOKES:
-- Single: forever alone, "your type is red flags"
-- Married: lovingly trapped, "you chose this"
-- Complicated: commitment issues, indecision is a personality trait
+- Single: "your type is red flags and disappointment"
+- In relationship: "congratulations on your life sentence"
+- Married: lovingly trapped, "you chose this, every day"
+- Complicated: commitment issues, indecision IS the personality
+- Recently broke up: digital detox nobody asked for, stalking their Instagram
+- Forever alone: "at least WiFi never leaves you"
 
-IMPORTANT: Use their CITY for local color. Use their WEAKNESS as the main punchline if provided.`;
+NO disclaimers! NO apologies! NO generic lines! Every roast must feel custom-made!`;
 
 interface RoastInput {
   name: string;
@@ -296,15 +318,15 @@ router.get("/roasts/stats", async (_req, res) => {
     (Date.now() % (1000 * 60 * 60 * 24)) / 1000,
   );
 
-  const baseTotal = 12_847;
+  const baseTotal = 2_847_000;
   const dailyDrift = epochDays * 137;
   const minuteDrift = minutesToday * 3;
   const totalRoasts = baseTotal + dailyDrift + minuteDrift + realTotal;
 
-  const usersToday = 820 + Math.floor(minutesToday * 1.4) + realTotal;
-  const roastsPerMinute = 6 + (minutesToday % 9);
+  const usersToday = 1500 + Math.floor(minutesToday * 0.35) + realTotal;
+  const roastsPerMinute = 8 + (minutesToday % 8);
   const worldwideToday =
-    47_000 + secondsToday * 4 + (epochDays % 365) * 220 + realTotal * 7;
+    1_500 + Math.floor(secondsToday * 0.012) + realTotal * 3;
 
   res.json({ totalRoasts, usersToday, roastsPerMinute, worldwideToday });
 });

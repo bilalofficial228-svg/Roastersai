@@ -14,4 +14,6 @@ export const RelationshipStatus = {
   in_relationship: "in_relationship",
   married: "married",
   complicated: "complicated",
+  recently_broke_up: "recently_broke_up",
+  forever_alone: "forever_alone",
 } as const;

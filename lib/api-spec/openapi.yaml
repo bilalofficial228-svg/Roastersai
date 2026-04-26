@@ -190,10 +190,10 @@ components:
       description: Tone of the roast
     Job:
       type: string
-      enum: [student, engineer, doctor, designer, unemployed, influencer, other]
+      enum: [student, engineer, doctor, designer, unemployed, influencer, teacher, lawyer, business_owner, content_creator, chef, nurse, accountant, marketing, sales, other]
     RelationshipStatus:
       type: string
-      enum: [single, in_relationship, married, complicated]
+      enum: [single, in_relationship, married, complicated, recently_broke_up, forever_alone]
     Language:
       type: string
       enum: [english, hinglish, hindi, spanish, arabic, french, portuguese, german, chinese, urdu]

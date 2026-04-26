@@ -47,10 +47,10 @@ const triggerHaptic = () => {
 // --- Form Schema ---
 const formSchema = z.object({
   name: z.string().min(1, "Name is required").max(60, "Name is too long"),
-  job: z.enum(["student", "engineer", "doctor", "designer", "unemployed", "influencer", "other"] as const),
+  job: z.enum(["student", "engineer", "doctor", "designer", "unemployed", "influencer", "teacher", "lawyer", "business_owner", "content_creator", "chef", "nurse", "accountant", "marketing", "sales", "other"] as const),
   city: z.string().min(1, "City is required").max(60, "City is too long"),
   weakness: z.string().max(120, "Keep it short!").optional().nullable(),
-  status: z.enum(["single", "in_relationship", "married", "complicated"] as const),
+  status: z.enum(["single", "in_relationship", "married", "complicated", "recently_broke_up", "forever_alone"] as const),
   style: z.enum(["friendly", "savage", "dark", "desi"] as const),
   language: z.enum(["english", "hinglish", "hindi", "spanish", "arabic", "french", "portuguese", "german", "chinese", "urdu"] as const),
   intensity: z.number().min(1).max(5),
@@ -59,11 +59,11 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 const intensityLabels: Record<number, { label: string, color: string }> = {
-  1: { label: "Low 🔥",          color: "text-[#FFB380]" },
-  2: { label: "Low 🔥🔥",        color: "text-[#FF9040]" },
-  3: { label: "Medium 🔥🔥",     color: "text-primary" },
-  4: { label: "High 🔥🔥🔥",     color: "text-primary" },
-  5: { label: "NUCLEAR ☢️🔥🔥🔥", color: "text-primary font-black" },
+  1: { label: "😊 BABY ROAST",    color: "text-[#FFB380]" },
+  2: { label: "🌶️ MILD BURNS",   color: "text-[#FF9040]" },
+  3: { label: "🔥 MEDIUM SAVAGE", color: "text-[#FF6B00]" },
+  4: { label: "💀 FULL SAVAGE",   color: "text-primary" },
+  5: { label: "☢️ NUCLEAR",       color: "text-primary font-black" },
 };
 
 export default function Home() {
@@ -197,13 +197,22 @@ export default function Home() {
               value={f.watch("job")}
               onChange={(v) => f.setValue("job", v as FormValues["job"])}
               options={[
-                { value: "student",     label: "🎓 Student" },
-                { value: "engineer",    label: "⚙️ Engineer" },
-                { value: "doctor",      label: "🩺 Doctor" },
-                { value: "designer",    label: "🎨 Designer" },
-                { value: "unemployed",  label: "😅 Unemployed" },
-                { value: "influencer",  label: "📱 Influencer" },
-                { value: "other",       label: "🤷 Other" },
+                { value: "student",          label: "🎓 Student" },
+                { value: "engineer",         label: "⚙️ Engineer" },
+                { value: "doctor",           label: "🩺 Doctor" },
+                { value: "designer",         label: "🎨 Designer" },
+                { value: "teacher",          label: "📚 Teacher" },
+                { value: "lawyer",           label: "⚖️ Lawyer" },
+                { value: "business_owner",   label: "💼 Business Owner" },
+                { value: "content_creator",  label: "🎬 Content Creator" },
+                { value: "chef",             label: "👨‍🍳 Chef" },
+                { value: "nurse",            label: "🏥 Nurse" },
+                { value: "accountant",       label: "🧮 Accountant" },
+                { value: "marketing",        label: "📊 Marketing" },
+                { value: "sales",            label: "💰 Sales" },
+                { value: "unemployed",       label: "😅 Unemployed" },
+                { value: "influencer",       label: "📱 Influencer" },
+                { value: "other",            label: "🤷 Other" },
               ]}
             />
           </div>
@@ -214,10 +223,12 @@ export default function Home() {
               value={f.watch("status")}
               onChange={(v) => f.setValue("status", v as FormValues["status"])}
               options={[
-                { value: "single",          label: "💔 Single" },
-                { value: "in_relationship", label: "❤️ In a Relationship" },
-                { value: "married",         label: "💍 Married" },
-                { value: "complicated",     label: "🤯 It's Complicated" },
+                { value: "single",             label: "💔 Single" },
+                { value: "in_relationship",    label: "💑 In a Relationship" },
+                { value: "married",            label: "💍 Married" },
+                { value: "complicated",        label: "😅 It's Complicated" },
+                { value: "recently_broke_up",  label: "😭 Recently Broke Up" },
+                { value: "forever_alone",      label: "🫠 Forever Alone" },
               ]}
             />
           </div>
@@ -275,7 +286,6 @@ export default function Home() {
             options={[
               { value: "english",    label: "🇺🇸 English" },
               { value: "hindi",      label: "🇮🇳 Hindi" },
-              { value: "hinglish",   label: "🇮🇳 Hinglish" },
               { value: "spanish",    label: "🇪🇸 Spanish" },
               { value: "arabic",     label: "🇸🇦 Arabic" },
               { value: "french",     label: "🇫🇷 French" },
@@ -289,9 +299,10 @@ export default function Home() {
 
         {/* Intensity */}
         <div className="flex flex-col gap-4 mt-2">
-          <div className="flex items-center justify-between">
-            <label className="text-sm font-bold text-foreground/80">Burn Intensity</label>
-            <span className={`text-sm font-black uppercase tracking-wider ${intensityLabels[intensity].color}`}>
+          <div className="flex flex-col gap-1 items-center">
+            <label className="text-sm font-bold text-foreground/80 self-start">Burn Intensity</label>
+            <span className={`text-xs font-bold uppercase tracking-wider text-center ${intensityLabels[intensity].color}`}
+              style={{ fontSize: 12, color: "#FF4500" }}>
               {intensityLabels[intensity].label}
             </span>
           </div>
@@ -363,7 +374,8 @@ export default function Home() {
           <motion.h1 
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="text-5xl md:text-7xl font-bold tracking-tight uppercase fire-text"
+            className="tracking-tight uppercase fire-text"
+            style={{ fontSize: "clamp(48px, 12vw, 80px)" }}
           >
             Get Roasted by AI
           </motion.h1>
@@ -380,7 +392,8 @@ export default function Home() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.1 }}
-            className="text-lg md:text-xl text-muted-foreground max-w-lg mb-4"
+            className="max-w-lg mb-4"
+            style={{ fontSize: 15, color: "var(--subtitle-color, #666666)" }}
           >
             Tell us about yourself and get a savage, funny roast instantly. Don't take it personally. 😂
           </motion.p>
@@ -455,19 +468,18 @@ export default function Home() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
               onSubmit={form.handleSubmit(onSubmit)} 
-              className="w-full max-w-3xl mt-6 p-6 md:p-8 premium-card backdrop-blur-sm flex flex-col gap-6 relative overflow-hidden"
+              className="w-full max-w-3xl mt-6 p-6 md:p-8 premium-card backdrop-blur-sm flex flex-col gap-6"
             >
-              <div className="absolute top-0 left-0 w-full h-[2px] fire-bg" />
               {renderFormFields(form, false)}
 
               <motion.button 
                 type="submit"
                 data-testid="button-roast-me"
                 disabled={generateRoast.isPending}
-                whileHover={{ scale: generateRoast.isPending ? 1 : 1.025 }}
-                whileTap={{ scale: generateRoast.isPending ? 1 : 0.97 }}
-                transition={{ type: "spring", stiffness: 400, damping: 20 }}
-                className="mt-6 w-full fire-bg text-white font-bold text-2xl py-5 rounded-xl transition-opacity disabled:opacity-50 disabled:pointer-events-none fire-glow cta-roast-btn flex justify-center items-center gap-3"
+                whileHover={{ scale: generateRoast.isPending ? 1 : 1.01 }}
+                whileTap={{ scale: generateRoast.isPending ? 1 : 0.99 }}
+                transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                className="mt-6 cta-netflix-btn text-white disabled:opacity-50 disabled:pointer-events-none flex justify-center items-center gap-3"
               >
                 {generateRoast.isPending ? (
                   <>

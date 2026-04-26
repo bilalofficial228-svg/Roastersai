@@ -30,6 +30,15 @@ export const Job = {
   designer: "designer",
   unemployed: "unemployed",
   influencer: "influencer",
+  teacher: "teacher",
+  lawyer: "lawyer",
+  business_owner: "business_owner",
+  content_creator: "content_creator",
+  chef: "chef",
+  nurse: "nurse",
+  accountant: "accountant",
+  marketing: "marketing",
+  sales: "sales",
   other: "other",
 } as const;
 
@@ -41,6 +50,8 @@ export const RelationshipStatus = {
   in_relationship: "in_relationship",
   married: "married",
   complicated: "complicated",
+  recently_broke_up: "recently_broke_up",
+  forever_alone: "forever_alone",
 } as const;
 
 export type Language = (typeof Language)[keyof typeof Language];
