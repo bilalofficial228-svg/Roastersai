@@ -1,0 +1,13 @@
+uploads = []
+
+[[generated]]
+id = "XF2PUQzAEGZQq6gmyKw3L"
+uri = "file://attached_assets/generated_images/roastify_dark_light_mockup.png"
+type = "image"
+title = "roastify dark light mode mockup"
+
+[[outputs]]
+id = "yPgRL417U5u9DxFcJ1fk3"
+uri = "file://attached_assets/generated_images/roastify_dark_light_mockup.png"
+type = "image"
+title = "RoastersAI — Dark & Light Mode Mockup"
