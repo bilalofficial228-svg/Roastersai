@@ -278,7 +278,7 @@ export default function Home() {
               { value: "spanish",    label: "🇪🇸 Spanish" },
               { value: "arabic",     label: "🇸🇦 Arabic" },
               { value: "french",     label: "🇫🇷 French" },
-              { value: "portuguese", label: "🇧🇷 Portuguese" },
+              { value: "portuguese", label: "🇧🇷 Portuguese (Brazil)" },
               { value: "german",     label: "🇩🇪 German" },
               { value: "chinese",    label: "🇨🇳 Chinese" },
               { value: "urdu",       label: "🇵🇰 Urdu" },
@@ -572,7 +572,7 @@ export default function Home() {
                   <div>
                     <h3 className="font-bold text-primary mb-1">9 Languages Supported</h3>
                     <p className="text-sm leading-relaxed opacity-85">
-                      English, Hindi, Urdu, Arabic, Spanish, French, German, Portuguese, and Japanese — because everyone deserves to be roasted in their mother tongue.
+                      English, Hindi, Urdu, Arabic, Spanish, French, German, Portuguese (Brazil), and Japanese — because everyone deserves to be roasted in their mother tongue.
                     </p>
                   </div>
                   <div>
