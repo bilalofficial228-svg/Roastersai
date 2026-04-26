@@ -109,25 +109,30 @@ export function RoastHistory({ open, onClose }: RoastHistoryProps) {
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "tween", duration: 0.3, ease: "easeInOut" }}
-            className="fixed top-0 right-0 z-[9999]"
             style={{
+              position: "fixed",
+              top: 0,
+              right: 0,
               width: "min(400px, 85vw)",
               height: "100vh",
-              overflowY: "auto",
+              zIndex: 9999,
+              display: "flex",
+              flexDirection: "column",
+              overflow: "hidden",
               background: "var(--history-bg, #111111)",
               borderLeft: "1px solid var(--history-border, #222222)",
             }}
           >
-            {/* Header */}
+            {/* Header — always visible at top */}
             <div
-              className="flex items-center justify-between"
               style={{
-                position: "sticky",
-                top: 0,
-                zIndex: 10,
-                background: "var(--history-bg, #111111)",
+                flexShrink: 0,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
                 padding: "16px 20px",
                 borderBottom: "1px solid var(--history-border, #222222)",
+                background: "var(--history-bg, #111111)",
               }}
             >
               <h2 className="text-lg font-bold font-display" style={{ color: "var(--history-text, #FFFFFF)" }}>
@@ -142,8 +147,8 @@ export function RoastHistory({ open, onClose }: RoastHistoryProps) {
               </button>
             </div>
 
-            {/* Content */}
-            <div className="p-4 flex flex-col gap-3" style={{ paddingBottom: 80 }}>
+            {/* Content — scrollable middle */}
+            <div style={{ flex: 1, overflowY: "auto", padding: 16, display: "flex", flexDirection: "column", gap: 12 }}>
               {entries.length === 0 ? (
                 <div className="flex flex-col items-center justify-center h-full gap-3 text-center py-16">
                   <span className="text-5xl">🔥</span>
@@ -252,11 +257,15 @@ export function RoastHistory({ open, onClose }: RoastHistoryProps) {
               )}
             </div>
 
-            {/* Footer */}
+            {/* Footer — always visible at bottom */}
             {entries.length > 0 && (
               <div
-                className="px-4 py-4 shrink-0"
-                style={{ borderTop: "1px solid var(--history-border, #222222)" }}
+                style={{
+                  flexShrink: 0,
+                  padding: "12px 16px",
+                  borderTop: "1px solid var(--history-border, #222222)",
+                  background: "var(--history-bg, #111111)",
+                }}
               >
                 <AnimatePresence mode="wait">
                   {confirmClear ? (
