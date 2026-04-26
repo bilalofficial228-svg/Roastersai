@@ -95,56 +95,52 @@ export default function Home() {
     defaultValues: defaultFormValues
   });
 
-  const onSubmit = (values: FormValues) => {
-    if (isLoadingRef.current || generateRoast.isPending) return;
+  const onSubmit = async (values: FormValues) => {
+    if (isLoadingRef.current) return;
     isLoadingRef.current = true;
     setCurrentRoast(null);
-    generateRoast.mutate({ data: { ...values, intensity: 3 } }, {
-      onSuccess: (roast) => {
-        isLoadingRef.current = false;
-        setCurrentRoast(roast);
-        triggerHaptic();
-        setRoastCount(prev => {
-          const next = prev + 1;
-          try { localStorage.setItem("roastersai:count", String(next)); } catch {}
-          return next;
-        });
-        saveToHistory({
-          name: roast.name,
-          job: roast.job,
-          city: roast.city,
-          style: roast.style,
-          language: roast.language,
-          intensity: roast.intensity,
-          roastText: roast.text,
-        });
-        queryClient.invalidateQueries({ queryKey: getListTrendingRoastsQueryKey() });
-        queryClient.invalidateQueries({ queryKey: getGetRoastStatsQueryKey() });
-      },
-      onError: () => {
-        isLoadingRef.current = false;
-        toast({ title: "Error", description: "The AI refused to roast this. Try again.", variant: "destructive" });
-      }
-    });
+    try {
+      const roast = await generateRoast.mutateAsync({ data: { ...values, intensity: 3 } });
+      setCurrentRoast(roast);
+      triggerHaptic();
+      setRoastCount(prev => {
+        const next = prev + 1;
+        try { localStorage.setItem("roastersai:count", String(next)); } catch {}
+        return next;
+      });
+      saveToHistory({
+        name: roast.name,
+        job: roast.job,
+        city: roast.city,
+        style: roast.style,
+        language: roast.language,
+        intensity: roast.intensity,
+        roastText: roast.text,
+      });
+      queryClient.invalidateQueries({ queryKey: getListTrendingRoastsQueryKey() });
+      queryClient.invalidateQueries({ queryKey: getGetRoastStatsQueryKey() });
+    } catch {
+      toast({ title: "Error", description: "The AI refused to roast this. Try again.", variant: "destructive" });
+    } finally {
+      isLoadingRef.current = false;
+    }
   };
 
-  const onFriendSubmit = (values: FormValues) => {
-    if (isLoadingRef.current || generateRoast.isPending) return;
+  const onFriendSubmit = async (values: FormValues) => {
+    if (isLoadingRef.current) return;
     isLoadingRef.current = true;
     setFriendRoast(null);
-    generateRoast.mutate({ data: { ...values, intensity: 3 } }, {
-      onSuccess: (roast) => {
-        isLoadingRef.current = false;
-        setFriendRoast(roast);
-        triggerHaptic();
-        queryClient.invalidateQueries({ queryKey: getListTrendingRoastsQueryKey() });
-        queryClient.invalidateQueries({ queryKey: getGetRoastStatsQueryKey() });
-      },
-      onError: () => {
-        isLoadingRef.current = false;
-        toast({ title: "Error", description: "Generation failed.", variant: "destructive" });
-      }
-    });
+    try {
+      const roast = await generateRoast.mutateAsync({ data: { ...values, intensity: 3 } });
+      setFriendRoast(roast);
+      triggerHaptic();
+      queryClient.invalidateQueries({ queryKey: getListTrendingRoastsQueryKey() });
+      queryClient.invalidateQueries({ queryKey: getGetRoastStatsQueryKey() });
+    } catch {
+      toast({ title: "Error", description: "Generation failed.", variant: "destructive" });
+    } finally {
+      isLoadingRef.current = false;
+    }
   };
 
   const handleRetry = () => {
