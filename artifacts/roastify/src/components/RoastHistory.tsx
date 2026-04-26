@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Trash2, Share2, Copy, ChevronDown, ChevronUp } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 export interface HistoryEntry {
   id: number;
@@ -50,9 +51,14 @@ interface RoastHistoryProps {
 export function RoastHistory({ open, onClose }: RoastHistoryProps) {
   const [entries, setEntries] = useState<HistoryEntry[]>([]);
   const [expanded, setExpanded] = useState<number | null>(null);
+  const [confirmClear, setConfirmClear] = useState(false);
+  const { toast } = useToast();
 
   useEffect(() => {
-    if (open) setEntries(loadHistory());
+    if (open) {
+      setEntries(loadHistory());
+      setConfirmClear(false);
+    }
   }, [open]);
 
   const deleteEntry = (id: number) => {
@@ -64,18 +70,21 @@ export function RoastHistory({ open, onClose }: RoastHistoryProps) {
   const clearAll = () => {
     setEntries([]);
     localStorage.removeItem(STORAGE_KEY);
+    setConfirmClear(false);
   };
 
   const copyEntry = (entry: HistoryEntry) => {
     navigator.clipboard.writeText(entry.roastText).catch(() => {});
+    toast({ title: "Copied! 🔥", description: "Roast copied to clipboard." });
   };
 
   const shareEntry = (entry: HistoryEntry) => {
     const text = `"${entry.roastText}" — roasted by RoastersAI.com`;
     if (navigator.share) {
-      navigator.share({ title: "My Roast", text }).catch(() => {});
+      navigator.share({ title: "My Roast 🔥", text }).catch(() => {});
     } else {
-      navigator.clipboard.writeText(text);
+      navigator.clipboard.writeText(text).catch(() => {});
+      toast({ title: "Copied!", description: "Roast text copied — paste it anywhere." });
     }
   };
 
@@ -146,7 +155,7 @@ export function RoastHistory({ open, onClose }: RoastHistoryProps) {
                     }}
                   >
                     <div className="flex items-start justify-between gap-2">
-                      <div>
+                      <div className="min-w-0">
                         <p className="font-bold text-sm" style={{ color: "var(--history-text, #FFFFFF)" }}>
                           {entry.name}, {entry.job}
                         </p>
@@ -154,30 +163,47 @@ export function RoastHistory({ open, onClose }: RoastHistoryProps) {
                           {entry.city} · {entry.date}
                         </p>
                       </div>
-                      <div className="flex gap-1.5 shrink-0">
+
+                      {/* Action buttons — bigger */}
+                      <div className="flex gap-2 shrink-0">
                         <button
                           onClick={() => copyEntry(entry)}
-                          className="flex items-center justify-center w-7 h-7 rounded-lg hover:opacity-70 transition-opacity"
-                          style={{ background: "rgba(100,100,100,0.15)", color: "var(--history-muted, #888)" }}
+                          className="flex items-center justify-center rounded-xl hover:opacity-75 active:scale-95 transition-all"
+                          style={{
+                            width: 38, height: 38,
+                            background: "rgba(100,100,100,0.15)",
+                            color: "var(--history-muted, #888)",
+                            border: "1px solid rgba(120,120,120,0.2)",
+                          }}
                           title="Copy roast text"
                         >
-                          <Copy size={12} />
+                          <Copy size={16} />
                         </button>
                         <button
                           onClick={() => shareEntry(entry)}
-                          className="flex items-center justify-center w-7 h-7 rounded-lg hover:opacity-70 transition-opacity"
-                          style={{ background: "rgba(255,107,0,0.15)", color: "#FF6B00" }}
+                          className="flex items-center justify-center rounded-xl hover:opacity-75 active:scale-95 transition-all"
+                          style={{
+                            width: 38, height: 38,
+                            background: "rgba(255,107,0,0.15)",
+                            color: "#FF6B00",
+                            border: "1px solid rgba(255,107,0,0.25)",
+                          }}
                           title="Share"
                         >
-                          <Share2 size={12} />
+                          <Share2 size={16} />
                         </button>
                         <button
                           onClick={() => deleteEntry(entry.id)}
-                          className="flex items-center justify-center w-7 h-7 rounded-lg hover:opacity-70 transition-opacity"
-                          style={{ background: "rgba(255,0,85,0.15)", color: "#FF0055" }}
+                          className="flex items-center justify-center rounded-xl hover:opacity-75 active:scale-95 transition-all"
+                          style={{
+                            width: 38, height: 38,
+                            background: "rgba(255,0,85,0.12)",
+                            color: "#FF0055",
+                            border: "1px solid rgba(255,0,85,0.22)",
+                          }}
                           title="Delete"
                         >
-                          <Trash2 size={12} />
+                          <Trash2 size={16} />
                         </button>
                       </div>
                     </div>
@@ -211,12 +237,6 @@ export function RoastHistory({ open, onClose }: RoastHistoryProps) {
                       >
                         {entry.style}
                       </span>
-                      <span
-                        className="text-[10px] font-mono"
-                        style={{ color: "var(--history-muted, #666666)" }}
-                      >
-                        🔥 {entry.intensity}/5
-                      </span>
                     </div>
                   </motion.div>
                 ))
@@ -229,13 +249,55 @@ export function RoastHistory({ open, onClose }: RoastHistoryProps) {
                 className="px-4 py-4 shrink-0"
                 style={{ borderTop: "1px solid var(--history-border, #222222)" }}
               >
-                <button
-                  onClick={clearAll}
-                  className="w-full py-2.5 rounded-xl text-sm font-bold transition-opacity hover:opacity-70"
-                  style={{ border: "1px solid #FF0055", color: "#FF0055", background: "transparent" }}
-                >
-                  🗑️ Clear All History
-                </button>
+                <AnimatePresence mode="wait">
+                  {confirmClear ? (
+                    <motion.div
+                      key="confirm"
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 8 }}
+                      transition={{ duration: 0.18 }}
+                      className="rounded-xl p-4 flex flex-col gap-3"
+                      style={{ background: "rgba(255,0,85,0.08)", border: "1px solid rgba(255,0,85,0.25)" }}
+                    >
+                      <p className="text-sm font-bold text-center" style={{ color: "var(--history-text, #FFFFFF)" }}>
+                        🗑️ Delete all roast history?
+                      </p>
+                      <p className="text-xs text-center" style={{ color: "var(--history-muted, #888)" }}>
+                        This cannot be undone.
+                      </p>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => setConfirmClear(false)}
+                          className="flex-1 py-2.5 rounded-xl text-sm font-bold transition-opacity hover:opacity-80"
+                          style={{ border: "1px solid var(--history-border, #333)", color: "var(--history-muted, #888)", background: "transparent" }}
+                        >
+                          No, keep it
+                        </button>
+                        <button
+                          onClick={clearAll}
+                          className="flex-1 py-2.5 rounded-xl text-sm font-bold transition-opacity hover:opacity-80"
+                          style={{ background: "#FF0055", color: "#FFFFFF", border: "none" }}
+                        >
+                          Yes, delete all
+                        </button>
+                      </div>
+                    </motion.div>
+                  ) : (
+                    <motion.button
+                      key="clear-btn"
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 8 }}
+                      transition={{ duration: 0.18 }}
+                      onClick={() => setConfirmClear(true)}
+                      className="w-full py-3 rounded-xl text-sm font-bold transition-opacity hover:opacity-70 active:scale-[0.98]"
+                      style={{ border: "1px solid #FF0055", color: "#FF0055", background: "transparent" }}
+                    >
+                      🗑️ Clear All History
+                    </motion.button>
+                  )}
+                </AnimatePresence>
               </div>
             )}
           </motion.div>

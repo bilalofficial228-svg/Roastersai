@@ -14,82 +14,35 @@ interface RoastCardProps {
   isShared?: boolean;
 }
 
-export function RoastCard({ roast, onRetry, onRoastHarder, onNewRoast, isShared }: RoastCardProps) {
+export function RoastCard({ roast, onRetry, onNewRoast, isShared }: RoastCardProps) {
   const imageCardRef = useRef<HTMLDivElement>(null);
-  const shareMenuRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const reactMutation = useReactToRoast();
   const [reactions, setReactions] = useState(roast.reactions);
-  const [shareOpen, setShareOpen] = useState(false);
 
   useEffect(() => {
     setReactions(roast.reactions);
   }, [roast.reactions]);
-
-  // Close share menu on outside click
-  useEffect(() => {
-    if (!shareOpen) return;
-    const handler = (e: MouseEvent) => {
-      if (shareMenuRef.current && !shareMenuRef.current.contains(e.target as Node)) {
-        setShareOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
-  }, [shareOpen]);
 
   const shareUrl = `${window.location.origin}${import.meta.env.BASE_URL.replace(/\/$/, "")}/roast/${roast.id}`;
   const shareText = `"${roast.text}" — roasted by RoastersAI.com`;
 
   const handleCopy = () => {
     navigator.clipboard.writeText(roast.text);
-    toast({ title: "Copied!", description: "Roast copied to clipboard." });
-    setShareOpen(false);
+    toast({ title: "Copied! 🔥", description: "Roast copied to clipboard." });
   };
 
-  const handleCopyLink = () => {
-    navigator.clipboard.writeText(shareUrl);
-    toast({ title: "Link copied!", description: "Share it anywhere." });
-    setShareOpen(false);
-  };
-
-  const handleShareImage = async () => {
-    setShareOpen(false);
-    if (!imageCardRef.current) return;
-    try {
-      const dataUrl = await toPng(imageCardRef.current, { cacheBust: true, pixelRatio: 2 });
-      const blob = await (await fetch(dataUrl)).blob();
-      const file = new File([blob], "roast.png", { type: "image/png" });
-      if (navigator.canShare && navigator.canShare({ files: [file] })) {
-        await navigator.share({ files: [file], title: "My Roast", text: shareText });
-      } else {
-        const link = document.createElement("a");
-        link.download = "roast.png";
-        link.href = dataUrl;
-        link.click();
-      }
-    } catch {
-      toast({ title: "Downloaded!", description: "Image saved to your device." });
-    }
-  };
-
-  const handleShareWhatsApp = () => {
-    setShareOpen(false);
-    window.open(`https://wa.me/?text=${encodeURIComponent(shareText + "\n\n" + shareUrl)}`, "_blank");
-  };
-
-  const handleShareTwitter = () => {
-    setShareOpen(false);
-    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`, "_blank");
-  };
-
-  const handleNativeShare = () => {
-    setShareOpen(false);
+  const handleShare = async () => {
     if (navigator.share) {
-      navigator.share({ title: "My Roast", text: shareText, url: shareUrl }).catch(() => {});
+      try {
+        await navigator.share({ title: "My Roast 🔥", text: shareText, url: shareUrl });
+      } catch {
+        // user cancelled — silent
+      }
     } else {
-      handleCopyLink();
+      navigator.clipboard.writeText(shareText + "\n\n" + shareUrl).catch(() => {});
+      toast({ title: "Copied!", description: "Roast link copied — paste it anywhere." });
     }
   };
 
@@ -129,6 +82,26 @@ export function RoastCard({ roast, onRetry, onRoastHarder, onNewRoast, isShared 
 
   return (
     <div className="w-full max-w-xl mx-auto flex flex-col gap-4">
+
+      {/* Back button — top left */}
+      {!isShared && onNewRoast && (
+        <button
+          onClick={onNewRoast}
+          data-testid="button-back"
+          className="self-start flex items-center gap-2 font-semibold text-sm hover:opacity-70 active:scale-95 transition-all"
+          style={{
+            color: "var(--fire-orange, #FF4500)",
+            background: "rgba(255,69,0,0.08)",
+            border: "1px solid rgba(255,69,0,0.18)",
+            borderRadius: 10,
+            padding: "8px 14px",
+          }}
+        >
+          <ArrowLeft size={16} />
+          Back
+        </button>
+      )}
+
       {/* Visible display card — theme-adaptive */}
       <div
         className="rounded-2xl p-8 relative overflow-hidden flex flex-col gap-6 items-center text-center"
@@ -153,9 +126,6 @@ export function RoastCard({ roast, onRetry, onRoastHarder, onNewRoast, isShared 
             {roast.name || "Anonymous"}, {roast.job} • {roast.city}
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-xs uppercase tracking-wider font-bold text-primary px-2 py-1 bg-primary/10 rounded border border-primary/20">
-              Intensity: {roast.intensity}/5
-            </span>
             <span className="text-xs font-mono text-muted-foreground bg-muted px-2 py-1 rounded">
               {roast.style}
             </span>
@@ -192,21 +162,17 @@ export function RoastCard({ roast, onRetry, onRoastHarder, onNewRoast, isShared 
         <div style={{ color: "#FF4500", fontWeight: 800, fontSize: 13, letterSpacing: 4, textTransform: "uppercase" }}>
           ROASTERSAI.COM
         </div>
-
         <div style={{ width: "100%", height: 1, background: "linear-gradient(90deg, transparent, #FF4500, transparent)" }} />
-
         <p style={{ color: "#FFFFFF", fontSize: 26, fontWeight: 700, lineHeight: 1.45, margin: 0 }}>
           "{roast.text}"
         </p>
-
         <div style={{ width: "100%", height: 1, background: "linear-gradient(90deg, transparent, rgba(255,107,0,0.4), transparent)" }} />
-
         <div style={{ color: "#888888", fontSize: 13 }}>
-          {roast.name} · {roast.city} · 🔥 Intensity {roast.intensity}/5
+          {roast.name} · {roast.city}
         </div>
       </div>
 
-      {/* ROW 1 — Reactions */}
+      {/* Reactions */}
       <div className="flex flex-wrap justify-center gap-2 mt-1">
         {(Object.keys(reactions) as ReactionType[]).map((type) => {
           const emojis: Record<ReactionType, string> = { hilarious: "😂", savage: "🔥", dead: "💀", too_real: "😭" };
@@ -231,88 +197,49 @@ export function RoastCard({ roast, onRetry, onRoastHarder, onNewRoast, isShared 
 
       {/* Actions — only shown when not shared */}
       {!isShared && (
-        <div className="flex flex-col gap-3 mt-2">
-          {/* ROW 2 — Copy / Share / Try Again */}
-          <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-3 gap-2 mt-2">
+          {/* Copy */}
+          <button
+            onClick={handleCopy}
+            data-testid="button-copy"
+            style={{
+              ...btnBase,
+              background: "hsl(var(--muted))",
+              border: "1px solid hsl(var(--border))",
+              color: "hsl(var(--foreground))",
+            }}
+          >
+            <Copy size={15} /> Copy
+          </button>
+
+          {/* Share — Web Share API */}
+          <button
+            data-testid="button-share"
+            onClick={handleShare}
+            style={{
+              ...btnBase,
+              background: "linear-gradient(135deg, #FF4500, #FF006E)",
+              color: "#FFFFFF",
+            }}
+          >
+            <Share2 size={15} /> Share
+          </button>
+
+          {/* Try Again */}
+          {onRetry && (
             <button
-              onClick={handleCopy}
-              data-testid="button-copy"
-              style={{ ...btnBase, backgroundColor: "#1C1C1C", border: "1px solid #333333", color: "#FFFFFF" }}
+              onClick={onRetry}
+              data-testid="button-try-again"
+              style={{
+                ...btnBase,
+                background: "transparent",
+                border: "1px solid hsl(var(--border))",
+                color: "hsl(var(--muted-foreground))",
+              }}
             >
-              <Copy size={15} /> Copy
+              <RotateCw size={15} /> Try Again
             </button>
-
-            {/* Share with dropdown */}
-            <div className="relative" ref={shareMenuRef}>
-              <button
-                data-testid="button-share"
-                onClick={() => setShareOpen(v => !v)}
-                style={{
-                  ...btnBase,
-                  width: "100%",
-                  background: "linear-gradient(135deg, #FF4500, #FF006E)",
-                  color: "#FFFFFF",
-                }}
-              >
-                <Share2 size={15} /> Share
-              </button>
-
-              {shareOpen && (
-                <div
-                  className="absolute bottom-full mb-2 left-0 right-0 rounded-xl overflow-hidden z-50"
-                  style={{ border: "1px solid #2A2A2A", background: "hsl(var(--card))", boxShadow: "0 8px 32px rgba(0,0,0,0.5)" }}
-                >
-                  {[
-                    { label: "📱 WhatsApp", fn: handleShareWhatsApp, testid: "button-share-whatsapp" },
-                    { label: "🐦 Twitter / X", fn: handleShareTwitter, testid: "button-share-twitter" },
-                    { label: "📸 Share Image", fn: handleShareImage, testid: "button-share-image" },
-                    { label: "🔗 Copy Link", fn: handleCopyLink, testid: "button-copy-link" },
-                  ].map(item => (
-                    <button
-                      key={item.label}
-                      data-testid={item.testid}
-                      onClick={item.fn}
-                      className="w-full text-left px-4 py-3 text-sm font-medium hover:bg-muted transition-colors text-foreground"
-                    >
-                      {item.label}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {onRetry && (
-              <button
-                onClick={onRetry}
-                data-testid="button-try-again"
-                style={{ ...btnBase, backgroundColor: "transparent", border: "1px solid #555555", color: "#888888" }}
-              >
-                <RotateCw size={15} /> Try Again
-              </button>
-            )}
-          </div>
-
-          {/* ROW 3 — Roast Harder / New Roast */}
-          <div className="grid grid-cols-2 gap-2">
-            {onRoastHarder && (
-              <button
-                onClick={onRoastHarder}
-                data-testid="button-reroast"
-                style={{ ...btnBase, backgroundColor: "#FF006E", color: "#FFFFFF", boxShadow: "0 4px 16px rgba(255,0,110,0.3)" }}
-              >
-                🔥 Roast Me Harder
-              </button>
-            )}
-            {onNewRoast && (
-              <button
-                onClick={onNewRoast}
-                data-testid="button-new-roast"
-                style={{ ...btnBase, backgroundColor: "transparent", border: "1px solid #FF4500", color: "#FF4500" }}
-              >
-                <ArrowLeft size={15} /> New Roast
-              </button>
-            )}
-          </div>
+          )}
         </div>
       )}
 
