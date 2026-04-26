@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Flame, Ghost, Zap, HeartPulse, Sparkles, Target, Copy, Share2, History, Loader2 } from "lucide-react";
+import { Flame, Ghost, Zap, HeartPulse, Sparkles, Target, Copy, Share2, History, Loader2, Bot } from "lucide-react";
 import { CustomSelect } from "@/components/CustomSelect";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -456,7 +456,7 @@ export default function Home() {
                     <span>AI is cooking…</span>
                   </>
                 ) : (
-                  "Get Roasted 🔥"
+                  <><Bot size={20} color="white" /> Get Roasted 🔥</>  
                 )}
               </motion.button>
             </motion.form>
