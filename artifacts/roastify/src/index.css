@@ -337,7 +337,7 @@ html:not(.dark) label {
   color: #1A1A2E;
 }
 .dark label {
-  color: rgba(224, 224, 255, 0.70);
+  color: #E0E0FF;
 }
 
 /* Light mode section headings */

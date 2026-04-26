@@ -47,8 +47,8 @@ export function Leaderboard() {
                   #{entry.rank}
                 </span>
                 <div className="flex flex-col">
-                  <span className="font-bold text-white truncate max-w-[120px]">{entry.name}</span>
-                  <span className="text-xs uppercase tracking-wider" style={{ color: "#777777" }}>{entry.job}</span>
+                  <span className="font-bold text-foreground truncate max-w-[120px]">{entry.name}</span>
+                  <span className="text-xs uppercase tracking-wider text-muted-foreground">{entry.job}</span>
                 </div>
               </div>
               
