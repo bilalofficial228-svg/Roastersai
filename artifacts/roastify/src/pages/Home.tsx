@@ -362,7 +362,7 @@ export default function Home() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.1 }}
             className="max-w-lg mb-4"
-            style={{ fontSize: 15, color: "var(--subtitle-color, #666666)" }}
+            style={{ fontSize: 16, fontFamily: "'Poppins', sans-serif", fontWeight: 400, color: "var(--subtitle-color, #666666)" }}
           >
             Tell us about yourself and get a savage, funny roast instantly. Don't take it personally. 😂
           </motion.p>
