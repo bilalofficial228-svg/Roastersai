@@ -318,9 +318,16 @@ html:not(.dark) .leaderboard-card:hover {
 .dark .fire-text {
   filter: drop-shadow(0 0 24px rgba(255, 46, 136, 0.55)) drop-shadow(0 0 60px rgba(180, 79, 255, 0.20));
 }
-/* Heading glow — light: magenta lift */
+/* Heading glow — light: bold orange */
 html:not(.dark) .fire-text {
-  filter: drop-shadow(0 2px 14px rgba(200, 16, 126, 0.28));
+  background: linear-gradient(135deg, #FF4500 0%, #FF6B00 45%, #E63000 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  font-weight: 900;
+  filter: drop-shadow(0 2px 18px rgba(255, 80, 0, 0.38));
 }
 
 /* Input focus glow */
