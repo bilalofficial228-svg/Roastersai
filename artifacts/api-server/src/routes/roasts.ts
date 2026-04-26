@@ -5,7 +5,7 @@ import {
   GenerateRoastBody,
   ReactToRoastBody,
 } from "@workspace/api-zod";
-import { openai } from "../lib/openai";
+import { gemini } from "../lib/gemini";
 
 const router: IRouter = Router();
 
@@ -172,16 +172,15 @@ async function generateRoastText(input: RoastInput): Promise<string> {
     `- ${weaknessLine}`,
   ].join("\n");
 
-  const completion = await openai.chat.completions.create({
-    model: "gpt-5-mini",
-    max_completion_tokens: 8192,
-    messages: [
-      { role: "system", content: SYSTEM_PROMPT },
-      { role: "user", content: userPrompt },
+  const response = await gemini.models.generateContent({
+    model: "gemini-2.5-flash",
+    contents: [
+      { role: "user", parts: [{ text: `${SYSTEM_PROMPT}\n\n${userPrompt}` }] },
     ],
+    config: { maxOutputTokens: 8192 },
   });
 
-  const text = completion.choices[0]?.message?.content?.trim() ?? "";
+  const text = response.text?.trim() ?? "";
   if (!text) {
     throw new Error("Empty AI response");
   }
