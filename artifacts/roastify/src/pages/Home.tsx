@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Flame, Ghost, Zap, HeartPulse, Sparkles, Target, Copy, Share2, History } from "lucide-react";
+import { Flame, Ghost, Zap, HeartPulse, Sparkles, Target, Copy, Share2, History, Loader2 } from "lucide-react";
 import { CustomSelect } from "@/components/CustomSelect";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -79,6 +79,7 @@ export default function Home() {
   const { toast } = useToast();
 
   const generateRoast = useGenerateRoast();
+  const isLoadingRef = useRef(false);
   const { data: trendingRoasts } = useListTrendingRoasts({ query: { refetchInterval: 15000, queryKey: getListTrendingRoastsQueryKey() } });
   const { data: stats } = useGetRoastStats({ query: { refetchInterval: 5000, queryKey: getGetRoastStatsQueryKey() } });
 
@@ -104,9 +105,12 @@ export default function Home() {
   });
 
   const onSubmit = (values: FormValues) => {
+    if (isLoadingRef.current || generateRoast.isPending) return;
+    isLoadingRef.current = true;
     setCurrentRoast(null);
     generateRoast.mutate({ data: { ...values } }, {
       onSuccess: (roast) => {
+        isLoadingRef.current = false;
         setCurrentRoast(roast);
         triggerHaptic();
         setRoastCount(prev => {
@@ -127,21 +131,26 @@ export default function Home() {
         queryClient.invalidateQueries({ queryKey: getGetRoastStatsQueryKey() });
       },
       onError: () => {
+        isLoadingRef.current = false;
         toast({ title: "Error", description: "The AI refused to roast this. Try again.", variant: "destructive" });
       }
     });
   };
 
   const onFriendSubmit = (values: FormValues) => {
+    if (isLoadingRef.current || generateRoast.isPending) return;
+    isLoadingRef.current = true;
     setFriendRoast(null);
     generateRoast.mutate({ data: { ...values } }, {
       onSuccess: (roast) => {
+        isLoadingRef.current = false;
         setFriendRoast(roast);
         triggerHaptic();
         queryClient.invalidateQueries({ queryKey: getListTrendingRoastsQueryKey() });
         queryClient.invalidateQueries({ queryKey: getGetRoastStatsQueryKey() });
       },
       onError: () => {
+        isLoadingRef.current = false;
         toast({ title: "Error", description: "Generation failed.", variant: "destructive" });
       }
     });
@@ -424,7 +433,7 @@ export default function Home() {
                     disabled={generateRoast.isPending}
                     className="w-full fire-bg text-white font-bold text-xl py-4 rounded-xl hover:opacity-90 active:scale-[0.98] transition-all disabled:opacity-50 fire-glow flex justify-center items-center gap-2"
                   >
-                    {generateRoast.isPending ? <><Flame className="animate-bounce" /> Cooking...</> : "Generate Share Link"}
+                    {generateRoast.isPending ? <><Loader2 className="animate-spin" size={20} /><span>Cooking…</span></> : "Generate Share Link"}
                   </button>
                 </form>
               ) : (
@@ -483,8 +492,8 @@ export default function Home() {
               >
                 {generateRoast.isPending ? (
                   <>
-                    <Flame className="animate-bounce" size={28} /> 
-                    <span className="animate-pulse">AI is cooking...</span>
+                    <Loader2 className="animate-spin" size={22} />
+                    <span>AI is cooking…</span>
                   </>
                 ) : (
                   "Roast Me 🔥"
