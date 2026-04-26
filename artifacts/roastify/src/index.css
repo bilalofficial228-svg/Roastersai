@@ -63,45 +63,53 @@
   --elevate-2: rgba(0,0,0, .07);
 
   /* Surfaces */
-  --background: 33 100% 97%;    /* #FFF8F0 warm cream */
-  --foreground: 20 100% 8%;     /* #1A0500 very dark warm */
-  --border: 30 35% 85%;         /* #E5D4C0 */
+  --background: 15 100% 97%;    /* #FFF5F0 */
+  --foreground: 0 0% 10%;       /* #1A1A1A */
+  --border: 15 100% 91%;        /* #FFE0D0 */
   --card: 0 0% 100%;            /* #FFFFFF */
-  --card-foreground: 20 100% 8%;
-  --card-border: 30 35% 85%;
+  --card-foreground: 0 0% 10%;
+  --card-border: 15 100% 91%;
   --popover: 0 0% 100%;
-  --popover-foreground: 20 100% 8%;
-  --popover-border: 30 35% 85%;
-  --input: 33 50% 94%;          /* #F5EAD9 warm input bg */
-  --input-foreground: 20 100% 8%;
-  --input-placeholder: 30 20% 55%; /* warm gray */
+  --popover-foreground: 0 0% 10%;
+  --popover-border: 15 100% 91%;
+  --input: 15 100% 98%;         /* #FFF8F5 */
+  --input-foreground: 0 0% 10%; /* #1A1A1A */
+  --input-placeholder: 0 0% 67%; /* #AAAAAA */
 
   /* Accents — same fire palette */
-  --primary: 25 100% 50%;          /* #FF6B00 fire orange */
+  --primary: 16 100% 50%;           /* #FF4500 */
   --primary-foreground: 0 0% 100%;
-  --secondary: 340 100% 50%;       /* #FF0055 hot pink */
+  --secondary: 328 100% 50%;        /* #FF006E */
   --secondary-foreground: 0 0% 100%;
-  --accent: 25 100% 50%;
+  --accent: 16 100% 50%;
   --accent-foreground: 0 0% 100%;
 
-  --muted: 33 40% 92%;          /* #F5E8D5 */
-  --muted-foreground: 25 20% 42%; /* #8A7060 warm muted text */
+  --muted: 0 0% 96%;           /* #F5F5F5 */
+  --muted-foreground: 0 0% 40%; /* #666666 */
 
-  --destructive: 340 100% 50%;
+  --destructive: 328 100% 50%;
   --destructive-foreground: 0 0% 100%;
-  --ring: 25 100% 50%;
+  --ring: 16 100% 50%;
 
   --app-font-sans: 'Inter', sans-serif;
   --app-font-display: 'Space Grotesk', sans-serif;
   --radius: 0.75rem;
 
   /* Fire effect tokens */
-  --fire-orange: #FF6B00;
-  --fire-pink: #FF0055;
+  --fire-orange: #FF4500;
+  --fire-pink: #FF006E;
   --gold: #FFD700;
-  --fire-gradient: linear-gradient(135deg, #FF6B00 0%, #FF0055 100%);
-  --fire-glow: 0 8px 30px rgba(255, 107, 0, 0.35);
-  --fire-glow-soft: 0 4px 20px rgba(255, 107, 0, 0.2);
+  --fire-gradient: linear-gradient(135deg, #FF4500 0%, #FF006E 100%);
+  --fire-glow: 0 8px 30px rgba(255, 69, 0, 0.35);
+  --fire-glow-soft: 0 4px 20px rgba(255, 69, 0, 0.2);
+
+  /* History panel — light */
+  --history-bg: #FFFFFF;
+  --history-card: #F5F5F5;
+  --history-card-border: #E8E8E8;
+  --history-text: #1A1A1A;
+  --history-muted: #888888;
+  --history-border: #E8E8E8;
 }
 
 /* --- DARK MODE --- */
@@ -140,8 +148,19 @@
   --destructive-foreground: 0 0% 100%;
   --ring: 25 100% 50%;
 
+  --fire-orange: #FF6B00;
+  --fire-pink: #FF0055;
+  --fire-gradient: linear-gradient(135deg, #FF6B00 0%, #FF0055 100%);
   --fire-glow: 0 8px 30px rgba(255, 107, 0, 0.4);
   --fire-glow-soft: 0 4px 20px rgba(255, 107, 0, 0.25);
+
+  /* History panel — dark */
+  --history-bg: #111111;
+  --history-card: #1A1A1A;
+  --history-card-border: #2A2A2A;
+  --history-text: #FFFFFF;
+  --history-muted: #666666;
+  --history-border: #222222;
 }
 
 @layer base {
@@ -162,8 +181,8 @@
     @apply font-sans antialiased;
     min-height: 100dvh;
     background:
-      radial-gradient(ellipse at top, rgba(255, 107, 0, 0.07) 0%, transparent 60%),
-      hsl(var(--background));
+      radial-gradient(ellipse at top, rgba(255, 69, 0, 0.06) 0%, transparent 55%),
+      #FFF5F0;
     background-attachment: fixed;
   }
   .dark body {

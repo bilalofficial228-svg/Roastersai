@@ -26,7 +26,7 @@ export function Leaderboard() {
               data-testid={`card-leaderboard-${entry.rank}`}
               className="flex flex-col sm:flex-row items-start sm:items-center gap-4 p-4 rounded-xl border border-border transition-all"
               style={{
-                backgroundColor: "#141414",
+                backgroundColor: isFirst ? "hsl(var(--card))" : "hsl(var(--card))",
                 borderLeft: isFirst ? "3px solid #FFD700" : undefined,
                 boxShadow: isFirst ? "0 0 24px rgba(255, 215, 0, 0.12)" : undefined,
               }}

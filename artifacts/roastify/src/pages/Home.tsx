@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Flame, Ghost, Zap, HeartPulse, Sparkles, Volume2, VolumeX, Target, Copy, Share2 } from "lucide-react";
+import { Flame, Ghost, Zap, HeartPulse, Sparkles, Volume2, VolumeX, Target, Copy, Share2, History } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -15,6 +15,7 @@ import { Slider } from "@/components/ui/slider";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import ThemeToggle from "@/components/ThemeToggle";
 import { InfoModal } from "@/components/InfoModal";
+import { RoastHistory, saveToHistory } from "@/components/RoastHistory";
 
 // --- Audio / Haptics ---
 const playWhoosh = () => {
@@ -69,6 +70,7 @@ export default function Home() {
   const [soundEnabled, setSoundEnabled] = useState(() => localStorage.getItem("roastify:muted") !== "true");
   const [friendDialogOpen, setFriendDialogOpen] = useState(false);
   const [friendRoast, setFriendRoast] = useState<Roast | null>(null);
+  const [historyOpen, setHistoryOpen] = useState(false);
 
   const queryClient = useQueryClient();
   const { toast } = useToast();
@@ -109,6 +111,15 @@ export default function Home() {
         setCurrentRoast(roast);
         if (soundEnabled) playWhoosh();
         triggerHaptic();
+        saveToHistory({
+          name: roast.name,
+          job: roast.job,
+          city: roast.city,
+          style: roast.style,
+          language: roast.language,
+          intensity: roast.intensity,
+          roastText: roast.text,
+        });
         queryClient.invalidateQueries({ queryKey: getListTrendingRoastsQueryKey() });
         queryClient.invalidateQueries({ queryKey: getGetRoastStatsQueryKey() });
       },
@@ -141,8 +152,12 @@ export default function Home() {
   const handleRoastHarder = () => {
     const current = form.getValues();
     const newIntensity = Math.min(5, current.intensity + 1);
-    // Submit with new intensity without updating form state
     onSubmit({ ...current, intensity: newIntensity });
+  };
+
+  const handleNewRoast = () => {
+    setCurrentRoast(null);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const renderFormFields = (f: ReturnType<typeof useForm<FormValues>>, isFriend: boolean = false) => {
@@ -234,8 +249,8 @@ export default function Home() {
                   onClick={() => f.setValue("style", style.id as RoastStyle)}
                   className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-200 border ${
                     isSelected 
-                      ? "bg-[#FF6B00]/15 text-[#FF6B00] border-[#FF6B00]" 
-                      : "bg-[#1C1C1C] text-[#777777] border-[#2A2A2A] hover:bg-[#252525] hover:text-foreground"
+                      ? "bg-[#FF4500]/15 text-[#FF4500] border-[#FF4500]" 
+                      : "bg-muted text-muted-foreground border-border hover:text-foreground"
                   }`}
                 >
                   <Icon size={16} className={isSelected ? "animate-pulse" : ""} />
@@ -311,8 +326,17 @@ export default function Home() {
           >
             {soundEnabled ? <Volume2 size={20} /> : <VolumeX size={20} />}
           </button>
+          <button
+            data-testid="button-history"
+            onClick={() => setHistoryOpen(true)}
+            className="p-3 rounded-full bg-muted/50 hover:bg-muted text-muted-foreground hover:text-primary transition-colors border border-border"
+            title="Roast History"
+          >
+            <History size={20} />
+          </button>
           <ThemeToggle />
         </div>
+        <RoastHistory open={historyOpen} onClose={() => setHistoryOpen(false)} />
 
         {/* Hero Section */}
         <section className="flex flex-col items-center text-center gap-6 w-full">
@@ -445,7 +469,8 @@ export default function Home() {
               <RoastCard 
                 roast={currentRoast} 
                 onRetry={handleRetry} 
-                onRoastHarder={form.getValues("intensity") < 5 ? handleRoastHarder : undefined} 
+                onRoastHarder={form.getValues("intensity") < 5 ? handleRoastHarder : undefined}
+                onNewRoast={handleNewRoast}
               />
             </motion.section>
           )}
