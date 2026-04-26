@@ -109,17 +109,26 @@ export function RoastHistory({ open, onClose }: RoastHistoryProps) {
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "tween", duration: 0.3, ease: "easeInOut" }}
-            className="fixed top-0 right-0 h-full z-50 flex flex-col overflow-hidden"
+            className="fixed top-0 right-0 z-[9999]"
             style={{
               width: "min(400px, 85vw)",
+              height: "100vh",
+              overflowY: "auto",
               background: "var(--history-bg, #111111)",
               borderLeft: "1px solid var(--history-border, #222222)",
             }}
           >
             {/* Header */}
             <div
-              className="flex items-center justify-between px-5 py-4 shrink-0"
-              style={{ borderBottom: "1px solid var(--history-border, #222222)" }}
+              className="flex items-center justify-between"
+              style={{
+                position: "sticky",
+                top: 0,
+                zIndex: 10,
+                background: "var(--history-bg, #111111)",
+                padding: "16px 20px",
+                borderBottom: "1px solid var(--history-border, #222222)",
+              }}
             >
               <h2 className="text-lg font-bold font-display" style={{ color: "var(--history-text, #FFFFFF)" }}>
                 🔥 Your Roast History
@@ -134,7 +143,7 @@ export function RoastHistory({ open, onClose }: RoastHistoryProps) {
             </div>
 
             {/* Content */}
-            <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-3">
+            <div className="p-4 flex flex-col gap-3" style={{ paddingBottom: 80 }}>
               {entries.length === 0 ? (
                 <div className="flex flex-col items-center justify-center h-full gap-3 text-center py-16">
                   <span className="text-5xl">🔥</span>
