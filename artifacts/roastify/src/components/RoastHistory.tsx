@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Trash2, Share2, ChevronDown, ChevronUp } from "lucide-react";
+import { X, Trash2, Share2, Copy, ChevronDown, ChevronUp } from "lucide-react";
 
 export interface HistoryEntry {
   id: number;
@@ -64,6 +64,10 @@ export function RoastHistory({ open, onClose }: RoastHistoryProps) {
   const clearAll = () => {
     setEntries([]);
     localStorage.removeItem(STORAGE_KEY);
+  };
+
+  const copyEntry = (entry: HistoryEntry) => {
+    navigator.clipboard.writeText(entry.roastText).catch(() => {});
   };
 
   const shareEntry = (entry: HistoryEntry) => {
@@ -151,6 +155,14 @@ export function RoastHistory({ open, onClose }: RoastHistoryProps) {
                         </p>
                       </div>
                       <div className="flex gap-1.5 shrink-0">
+                        <button
+                          onClick={() => copyEntry(entry)}
+                          className="flex items-center justify-center w-7 h-7 rounded-lg hover:opacity-70 transition-opacity"
+                          style={{ background: "rgba(100,100,100,0.15)", color: "var(--history-muted, #888)" }}
+                          title="Copy roast text"
+                        >
+                          <Copy size={12} />
+                        </button>
                         <button
                           onClick={() => shareEntry(entry)}
                           className="flex items-center justify-center w-7 h-7 rounded-lg hover:opacity-70 transition-opacity"

@@ -242,9 +242,14 @@
 
 /* Premium card shadow */
 .premium-card {
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+}
+.dark .premium-card {
   background: #141414;
   border: 1px solid #2A2A2A;
-  border-radius: 20px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
 }
 
