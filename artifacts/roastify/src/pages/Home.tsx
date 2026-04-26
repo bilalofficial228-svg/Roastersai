@@ -12,7 +12,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { WorldwideCounter } from "@/components/WorldwideCounter";
 import { Leaderboard } from "@/components/Leaderboard";
 import { RoastCard } from "@/components/RoastCard";
-import { Slider } from "@/components/ui/slider";
+
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import ThemeToggle from "@/components/ThemeToggle";
 import { InfoModal } from "@/components/InfoModal";
@@ -53,18 +53,10 @@ const formSchema = z.object({
   status: z.enum(["single", "in_relationship", "married", "complicated", "recently_broke_up", "forever_alone"] as const),
   style: z.enum(["friendly", "savage", "dark", "desi"] as const),
   language: z.enum(["english", "hinglish", "hindi", "spanish", "arabic", "french", "portuguese", "german", "chinese", "urdu"] as const),
-  intensity: z.number().min(1).max(5),
 });
 
 type FormValues = z.infer<typeof formSchema>;
 
-const intensityLabels: Record<number, { label: string, color: string }> = {
-  1: { label: "😊 BABY ROAST",    color: "text-[#FFB380]" },
-  2: { label: "🌶️ MILD BURNS",   color: "text-[#FF9040]" },
-  3: { label: "🔥 MEDIUM SAVAGE", color: "text-[#FF6B00]" },
-  4: { label: "💀 FULL SAVAGE",   color: "text-primary" },
-  5: { label: "☢️ NUCLEAR",       color: "text-primary font-black" },
-};
 
 export default function Home() {
   const [currentRoast, setCurrentRoast] = useState<Roast | null>(null);
@@ -91,7 +83,6 @@ export default function Home() {
     status: "single",
     style: "savage",
     language: "english",
-    intensity: 3,
   };
 
   const form = useForm<FormValues>({
@@ -108,7 +99,7 @@ export default function Home() {
     if (isLoadingRef.current || generateRoast.isPending) return;
     isLoadingRef.current = true;
     setCurrentRoast(null);
-    generateRoast.mutate({ data: { ...values } }, {
+    generateRoast.mutate({ data: { ...values, intensity: 3 } }, {
       onSuccess: (roast) => {
         isLoadingRef.current = false;
         setCurrentRoast(roast);
@@ -141,7 +132,7 @@ export default function Home() {
     if (isLoadingRef.current || generateRoast.isPending) return;
     isLoadingRef.current = true;
     setFriendRoast(null);
-    generateRoast.mutate({ data: { ...values } }, {
+    generateRoast.mutate({ data: { ...values, intensity: 3 } }, {
       onSuccess: (roast) => {
         isLoadingRef.current = false;
         setFriendRoast(roast);
@@ -160,19 +151,12 @@ export default function Home() {
     onSubmit(form.getValues());
   };
 
-  const handleRoastHarder = () => {
-    const current = form.getValues();
-    const newIntensity = Math.min(5, current.intensity + 1);
-    onSubmit({ ...current, intensity: newIntensity });
-  };
-
   const handleNewRoast = () => {
     setCurrentRoast(null);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const renderFormFields = (f: ReturnType<typeof useForm<FormValues>>, isFriend: boolean = false) => {
-    const intensity = f.watch("intensity");
     return (
       <div className="flex flex-col gap-6 w-full text-left">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -303,26 +287,6 @@ export default function Home() {
               { value: "chinese",    label: "🇨🇳 Chinese" },
               { value: "urdu",       label: "🇵🇰 Urdu" },
             ]}
-          />
-        </div>
-
-        {/* Intensity */}
-        <div className="flex flex-col gap-4 mt-2">
-          <div className="flex flex-col gap-1 items-center">
-            <label className="text-sm font-bold text-foreground/80 self-start">Burn Intensity</label>
-            <span className={`text-xs font-bold uppercase tracking-wider text-center ${intensityLabels[intensity].color}`}
-              style={{ fontSize: 12, color: "#FF4500" }}>
-              {intensityLabels[intensity].label}
-            </span>
-          </div>
-          <Slider
-            data-testid="slider-intensity"
-            min={1}
-            max={5}
-            step={1}
-            value={[intensity]}
-            onValueChange={(vals) => f.setValue("intensity", vals[0])}
-            className="w-full"
           />
         </div>
 
@@ -515,7 +479,6 @@ export default function Home() {
               <RoastCard 
                 roast={currentRoast} 
                 onRetry={handleRetry} 
-                onRoastHarder={form.getValues("intensity") < 5 ? handleRoastHarder : undefined}
                 onNewRoast={handleNewRoast}
               />
             </motion.section>
@@ -562,14 +525,8 @@ export default function Home() {
                     "{roast.text}"
                   </p>
                 </div>
-                <div className="flex items-center justify-between mt-2">
-                  <div className="text-[10px] text-muted-foreground/50 font-mono">
-                    {new Date(roast.createdAt).toLocaleTimeString()}
-                  </div>
-                  <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                    <span>🔥</span>
-                    <span>{roast.intensity}/5</span>
-                  </div>
+                <div className="text-[10px] text-muted-foreground/50 font-mono mt-2">
+                  {new Date(roast.createdAt).toLocaleTimeString()}
                 </div>
               </motion.div>
             ))}

@@ -53,13 +53,6 @@ const LANGUAGE_DIRECTIONS: Record<Language, string> = {
     "Generate roast in URDU language ONLY, written in Urdu Nastaliq script (اردو). 100% Urdu. Do NOT include any English words, Roman script, or any other language. Pure Urdu vocabulary and grammar.",
 };
 
-const INTENSITY_DIRECTIONS: Record<number, string> = {
-  1: "Intensity 1/5 — Baby Roast: super gentle, more compliment than insult, the kind grandma would chuckle at.",
-  2: "Intensity 2/5 — Mild Burns: light teasing, friendly jab energy.",
-  3: "Intensity 3/5 — Medium Savage: punchy and clever, the comfortable middle.",
-  4: "Intensity 4/5 — Full Savage: ruthless, cutting, professional roast comedian level.",
-  5: "Intensity 5/5 — NUCLEAR: maximum heat, leaves a mark, but still funny. No slurs, no protected-class jabs, no actual harm.",
-};
 
 const JOB_LABEL: Record<Job, string> = {
   student: "student",
@@ -89,57 +82,25 @@ const STATUS_LABEL: Record<Status, string> = {
   forever_alone: "forever alone",
 };
 
-const SYSTEM_PROMPT = `You are the world's most savage, funny AI comedian. Your roasts are brutally personal, shockingly specific, and so accurate they MUST be shared.
+const SYSTEM_PROMPT = `You are a savage AI comedian.
 
-CRITICAL: Respond ONLY in the specified language. No mixing. No English if another language is selected. Hindi = Devanagari script. Urdu = Urdu script. Arabic = Arabic RTL script.
+STRICT RULES - FOLLOW EXACTLY:
+- Write ONLY 3 or 4 lines maximum
+- Each line maximum 15 words
+- Total roast: 40-50 words only
+- Use ONLY 1-2 emojis total
+- Place emojis naturally INSIDE the sentences
+- Never put all emojis at end
+- Never write long paragraphs
+- Never write essays
 
-OUTPUT RULES:
-- Output ONLY the roast text. Zero preface. Zero "Here's your roast:".
-- 3-4 sentences ONLY. Start with their NAME. End with a savage emoji combo: 🔥💀😂👀😭⚰️🫵✨
-- Use NAME 2-3 times naturally throughout
-- Make it SO personal they MUST screenshot and share it
-- SCREENSHOT WORTHY. MUST SHARE WORTHY.
-- Never use slurs, sexual content, or attacks on protected classes (race, religion, gender, sexuality, disability, nationality)
+EMOJI EXAMPLES:
+GOOD: 'Bilal 💀 tu engineer hai'
+GOOD: 'teri life ka bug tu hai 🔥'
+BAD: 'long roast text... 🔥💀😂👀😭'
 
-TARGETING RULES:
-- Start with their NAME, use it 2-3 times
-- Make JOB-specific brutal, accurate jokes
-- Reference their CITY for hyper-local color
-- Weaponize their WEAKNESS as the killer punchline
-- Include their relationship STATUS naturally
-
-INTENSITY:
-- 1/5: Light teasing, grandma-safe, warm
-- 2/5: Mild burns, friendly jab energy
-- 3/5: Savage and funny — the sweet spot
-- 4/5: Brutal, no mercy, professional roast comedian level
-- 5/5: NUCLEAR — maximum heat, absolute destruction, no mercy
-
-JOB TARGETING (be hyper-specific):
-- Engineer: imposter syndrome, bugs, git disasters, chai addiction, "it works on my machine"
-- Student: broke, parental expectations, uncertain future, attendance issues
-- Doctor: God complex, 72-hour shifts, "it's not serious", 10 years studying for this
-- Lawyer: billable hours, morals for sale, "technically not illegal"
-- Teacher: underpaid, underappreciated, marking papers at midnight, parent emails
-- Chef: burns, Michelin dreams, Gordon Ramsay trauma, kitchen chaos
-- Unemployed: Netflix binging, LinkedIn humble brags, "finding myself"
-- Influencer: follower count anxiety, authenticity crisis, #ad on everything
-- Business Owner: "my own boss" = works 80hrs/week for themselves
-- Content Creator: algorithm anxiety, views obsession, "just one more take"
-- Nurse: thankless heroes, doctors taking all credit, 12-hour shifts
-- Accountant: boring spreadsheets, tax season breakdowns, "exciting" numbers
-- Marketing: KPI obsession, buzzword addiction, pivot to synergy
-- Sales: quota anxiety, "circle back", cold call cringe
-
-RELATIONSHIP JOKES:
-- Single: "your type is red flags and disappointment"
-- In relationship: "congratulations on your life sentence"
-- Married: lovingly trapped, "you chose this, every day"
-- Complicated: commitment issues, indecision IS the personality
-- Recently broke up: digital detox nobody asked for, stalking their Instagram
-- Forever alone: "at least WiFi never leaves you"
-
-NO disclaimers! NO apologies! NO generic lines! Every roast must feel custom-made!`;
+Never use slurs, sexual content, or attacks on protected classes (race, religion, gender, sexuality, disability, nationality).
+NO disclaimers! NO apologies! NO preface! Output ONLY the roast text.`;
 
 interface RoastInput {
   name: string;
@@ -153,23 +114,19 @@ interface RoastInput {
 }
 
 async function generateRoastText(input: RoastInput): Promise<string> {
-  const weaknessLine = input.weakness?.trim()
-    ? `Self-declared weakness: ${input.weakness.trim()}`
-    : "Self-declared weakness: (none given — feel free to invent one based on the rest)";
-
   const userPrompt = [
-    `Roast this person in the "${input.style}" style.`,
+    `LANGUAGE RULE: ${LANGUAGE_DIRECTIONS[input.language]}`,
     ``,
-    `Style direction: ${STYLE_PROMPTS[input.style]}`,
-    `Language: ${LANGUAGE_DIRECTIONS[input.language]}`,
-    `Intensity: ${INTENSITY_DIRECTIONS[input.intensity] ?? INTENSITY_DIRECTIONS[3]}`,
+    `STYLE RULE: ${STYLE_PROMPTS[input.style]}`,
     ``,
-    `Target details:`,
-    `- Name: ${input.name}`,
-    `- Job: ${JOB_LABEL[input.job]}`,
-    `- City: ${input.city}`,
-    `- Relationship status: ${STATUS_LABEL[input.status]}`,
-    `- ${weaknessLine}`,
+    `Person:`,
+    `Name: ${input.name}`,
+    `Job: ${JOB_LABEL[input.job]}`,
+    `City: ${input.city}`,
+    `Weakness: ${input.weakness?.trim() || "not given"}`,
+    `Status: ${STATUS_LABEL[input.status]}`,
+    ``,
+    `START with their NAME! 3-4 lines only! Screenshot worthy! No disclaimers! No apologies!`,
   ].join("\n");
 
   const response = await gemini.models.generateContent({
