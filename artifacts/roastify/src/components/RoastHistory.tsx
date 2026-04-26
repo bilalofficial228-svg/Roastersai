@@ -180,40 +180,43 @@ export function RoastHistory({ open, onClose }: RoastHistoryProps) {
 
                       {/* Action buttons — bigger */}
                       <div className="flex gap-2 shrink-0">
+                        {/* Copy — dark grey */}
                         <button
                           onClick={() => copyEntry(entry)}
                           className="flex items-center justify-center rounded-xl hover:opacity-75 active:scale-95 transition-all"
                           style={{
                             width: 38, height: 38,
-                            background: "rgba(100,100,100,0.15)",
-                            color: "var(--history-muted, #888)",
-                            border: "1px solid rgba(120,120,120,0.2)",
+                            background: "rgba(80,80,80,0.25)",
+                            color: "#999999",
+                            border: "1px solid rgba(120,120,120,0.30)",
                           }}
                           title="Copy roast text"
                         >
                           <Copy size={16} />
                         </button>
+                        {/* Share — orange */}
                         <button
                           onClick={() => shareEntry(entry)}
                           className="flex items-center justify-center rounded-xl hover:opacity-75 active:scale-95 transition-all"
                           style={{
                             width: 38, height: 38,
-                            background: "rgba(255,46,136,0.12)",
-                            color: "#FF2E88",
-                            border: "1px solid rgba(255,46,136,0.25)",
+                            background: "rgba(255,107,0,0.14)",
+                            color: "#FF6B00",
+                            border: "1px solid rgba(255,107,0,0.30)",
                           }}
                           title="Share"
                         >
                           <Share2 size={16} />
                         </button>
+                        {/* Delete — red */}
                         <button
                           onClick={() => deleteEntry(entry.id)}
                           className="flex items-center justify-center rounded-xl hover:opacity-75 active:scale-95 transition-all"
                           style={{
                             width: 38, height: 38,
-                            background: "rgba(255,0,85,0.12)",
-                            color: "#FF2E88",
-                            border: "1px solid rgba(255,46,136,0.22)",
+                            background: "rgba(220,38,38,0.12)",
+                            color: "#EF4444",
+                            border: "1px solid rgba(220,38,38,0.28)",
                           }}
                           title="Delete"
                         >
