@@ -267,9 +267,9 @@ export function RoastCard({ roast, onRetry, onNewRoast, isShared }: RoastCardPro
               data-testid="button-try-again"
               style={{
                 ...btnBase,
-                background: "transparent",
+                background: "hsl(var(--muted))",
                 border: "1px solid hsl(var(--border))",
-                color: "hsl(var(--muted-foreground))",
+                color: "hsl(var(--foreground))",
               }}
             >
               <RotateCw size={15} /> Try Again
