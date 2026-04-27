@@ -50,7 +50,7 @@ const LANGUAGE_DIRECTIONS: Record<Language, string> = {
   chinese:
     "Generate roast in SIMPLIFIED CHINESE (普通话) language ONLY, written in Chinese characters. 100% Chinese. Do NOT include any English words, Pinyin, or any other language. Pure Simplified Chinese.",
   urdu:
-    "Generate roast in URDU language ONLY, written in proper Urdu Nastaliq script (اردو). 100% Urdu. CRITICAL: You MUST write in Urdu Arabic script characters only — like this: 'ہونا، تم امریکا میں'. Do NOT use Roman/Latin letters at all. Do NOT write Roman Urdu like 'tum doctor ho' or 'Honam'. Every single word must be in Urdu script (اردو رسم الخط). Pure Urdu vocabulary and grammar only.",
+    "Generate roast in URDU language ONLY, written in proper Urdu Nastaliq script (اردو). Every word must be in Urdu script — ZERO Roman/Latin letters. Use simple everyday Urdu words that anyone understands. Be funny through clever observations and desi cultural references — family pressure, job struggles, marriage, neighbors, city life. Use wordplay and punchlines natural to Urdu humor. MAX 3 lines, one killer punchline at end. Example style: 'ہونا، امریکا میں ڈاکٹر بن گئی / لیکن اپنی زندگی کا نسخہ ابھی تک غلط ہے 💀 / مریض تو ٹھیک ہو جاتے ہیں، تیری قسمت کا علاج نہیں 😂'",
 };
 
 
