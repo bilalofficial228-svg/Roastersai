@@ -25,7 +25,7 @@ const STYLE_PROMPTS: Record<RoastStyle, string> = {
   savage:
     "SAVAGE style: Like a comedian on a roast show — brutal, no mercy, but still FUNNY not just mean. STRICT 3-line formula — Line 1: call out their job or life with an unexpected funny comparison, Line 2: directly target their weakness, city, or status — make it sting!, Line 3: one killer punchline ending with 💀 or 🔥. 'Too real!' feeling — funny AND stings. NEVER vulgar, sexual, or offensive. Use LOCAL city references: Karachi→load shedding/traffic, Lahore→smog/food, Delhi→pollution/jugaad, Mumbai→local train/rent, New York→expensive/hustle, London→weather/queue, Dubai→money/luxury. Job references: Engineer→bugs/deadlines/chai, Doctor→God complex/no sleep, Student→marks/Netflix/future, Content Creator→views/followers, Unemployed→Netflix/excuses, Designer→Behance/fonts, Teacher→salary/students. Status: Single→forever alone/WiFi, Married→no freedom, Complicated→commitment issues. Write ONLY in the selected language using local culture. MAX 3 lines. So savage they MUST share it!",
   dark:
-    "DARK style: Take an existential angle on their life choices, use philosophical dry humor about their situation, end with a dark funny burn that makes them think AND laugh. Dark but not depressing — deadpan nihilist energy, edgy about life around them not attacking them personally. MAX 3 lines.",
+    "DARK style: Existential angle on their life choices — philosophical dry humor, deadpan nihilist energy. Makes them think AND laugh. Dark but not depressing — edgy about life around them, not a personal attack. STRICT emoji rule: use MINIMUM 2 emojis from this set: 💀 (too real moment), 😂 (dark funny), 🌑 (dark vibe), ⚰️ (completely destroyed), 😭 (painful truth). Place emojis INSIDE sentences naturally, not all at the end. End with a killer dark punchline. MAX 3 lines.",
   desi:
     "DESI style: Use family/society pressure angle, 'what will people think' (log kya kahenge) shame humor, nosy neighbor aunty/uncle references, marriage and career pressure jokes — relatable South Asian experience. CRITICAL: The LANGUAGE RULE is absolute — use ONLY the selected language. If English is selected, translate ALL desi concepts: 'mohalla'→'neighborhood', 'aunty'→'nosy neighbor lady', 'rishta'→'marriage proposal', 'log kya kahenge'→'what will people think', 'shaadi'→'marriage'. ZERO Hindi/Urdu words when English is selected. MAX 3 lines.",
 };
@@ -88,16 +88,16 @@ STRICT RULES - FOLLOW EXACTLY:
 - Write ONLY 3 or 4 lines maximum
 - Each line maximum 15 words
 - Total roast: 40-50 words only
-- Use ONLY 1-2 emojis total
-- Place emojis naturally INSIDE the sentences
-- Never put all emojis at end
+- Use MINIMUM 2 emojis — never give a roast without emojis
+- Place emojis naturally INSIDE sentences, not all at the end
 - Never write long paragraphs
 - Never write essays
 
 EMOJI EXAMPLES:
 GOOD: 'Bilal 💀 tu engineer hai'
 GOOD: 'teri life ka bug tu hai 🔥'
-BAD: 'long roast text... 🔥💀😂👀😭'
+BAD: 'long roast text... 🔥💀😂👀😭' (all at end)
+BAD: roast with zero emojis (NEVER allowed)
 
 CONTENT RULES — ABSOLUTE:
 - ZERO vulgar, offensive, or sexual words — ever
