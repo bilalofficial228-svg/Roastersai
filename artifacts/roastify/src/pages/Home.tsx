@@ -119,8 +119,15 @@ export default function Home() {
       });
       queryClient.invalidateQueries({ queryKey: getListTrendingRoastsQueryKey() });
       queryClient.invalidateQueries({ queryKey: getGetRoastStatsQueryKey() });
-    } catch {
-      toast({ title: "Error", description: "The AI refused to roast this. Try again.", variant: "destructive" });
+    } catch (err: any) {
+      const isQuota = err?.status === 429 || (err?.data?.error ?? "").toLowerCase().includes("quota");
+      toast({
+        title: isQuota ? "Rate limit reached" : "Error",
+        description: isQuota
+          ? "API quota exceeded. Please try again in a few minutes."
+          : "Something went wrong. Please try again.",
+        variant: "destructive",
+      });
     } finally {
       isLoadingRef.current = false;
     }
@@ -136,8 +143,15 @@ export default function Home() {
       triggerHaptic();
       queryClient.invalidateQueries({ queryKey: getListTrendingRoastsQueryKey() });
       queryClient.invalidateQueries({ queryKey: getGetRoastStatsQueryKey() });
-    } catch {
-      toast({ title: "Error", description: "Generation failed.", variant: "destructive" });
+    } catch (err: any) {
+      const isQuota = err?.status === 429 || (err?.data?.error ?? "").toLowerCase().includes("quota");
+      toast({
+        title: isQuota ? "Rate limit reached" : "Error",
+        description: isQuota
+          ? "API quota exceeded. Please try again in a few minutes."
+          : "Something went wrong. Please try again.",
+        variant: "destructive",
+      });
     } finally {
       isLoadingRef.current = false;
     }

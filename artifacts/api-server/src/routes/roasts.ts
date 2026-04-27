@@ -130,7 +130,7 @@ async function generateRoastText(input: RoastInput): Promise<string> {
   ].join("\n");
 
   const response = await gemini.models.generateContent({
-    model: "gemini-2.5-flash",
+    model: "gemini-2.0-flash",
     contents: [
       { role: "user", parts: [{ text: `${SYSTEM_PROMPT}\n\n${userPrompt}` }] },
     ],
@@ -219,8 +219,12 @@ router.post("/roasts/generate", async (req, res) => {
     }
 
     return res.json(serializeRoast(row));
-  } catch (err) {
+  } catch (err: any) {
     req.log.error({ err }, "Failed to generate roast");
+    const msg = err?.message ?? "";
+    if (msg.includes("429") || msg.includes("RESOURCE_EXHAUSTED") || msg.includes("quota")) {
+      return res.status(429).json({ error: "API quota exceeded. Please try again in a few minutes." });
+    }
     return res
       .status(500)
       .json({ error: "Roast machine broke. Try again in a sec." });
