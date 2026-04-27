@@ -27,12 +27,12 @@ const STYLE_PROMPTS: Record<RoastStyle, string> = {
   dark:
     "Dark humor — dry, deadpan, existential. Think nihilist comic on a 2 a.m. open mic. Edgy but not nihilistic about the person, just life-around-them.",
   desi:
-    "Desi (South Asian) roast culture — uncle/auntie energy, mix in light Hinglish/Urdu phrases like 'beta', 'haww', 'sharam karo', 'kya kar raha hai'. Street-smart, theatrical, hilarious.",
+    "Desi (South Asian) roast culture — uncle/auntie energy, nosy neighbor gossip, marriage pressure, 'what will people think' shame, mohalla drama, rishta jokes. Street-smart, theatrical, hilarious. CRITICAL: The LANGUAGE RULE above is absolute — use ONLY the selected language. If English is selected, translate ALL desi concepts into English equivalents: 'mohalla'→'neighborhood', 'aunty'→'nosy neighbor lady', 'rishta'→'marriage proposal', 'log kya kahenge'→'what will people think', 'shaadi'→'marriage'. ZERO Hindi/Urdu words when English is selected.",
 };
 
 const LANGUAGE_DIRECTIONS: Record<Language, string> = {
   english:
-    "Generate roast in ENGLISH language ONLY. 100% English. Do NOT mix in any Hindi, Hinglish, Spanish, French or any other language words or phrases. Pure English vocabulary and grammar.",
+    "Generate roast in ENGLISH language ONLY. 100% English. Do NOT mix in ANY Hindi, Urdu, Hinglish, or other language words — this applies even when the style is Desi. Translate all desi concepts into English. Pure English vocabulary and grammar ONLY.",
   hinglish:
     "Generate roast in HINGLISH ONLY — a natural Hindi-English code-switch written in ROMAN SCRIPT (no Devanagari). Mix Hindi words like 'bhai', 'yaar', 'matlab', 'arre', 'kya', 'haww', 'sharam karo', 'beta' naturally with English. Do NOT use pure English-only sentences and do NOT use Devanagari script.",
   hindi:
