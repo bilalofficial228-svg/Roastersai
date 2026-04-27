@@ -21,13 +21,13 @@ type ReactionType = "hilarious" | "savage" | "dead" | "too_real";
 
 const STYLE_PROMPTS: Record<RoastStyle, string> = {
   friendly:
-    "Playful and lighthearted teasing — warm, witty, the kind of roast a close friend would deliver with a grin. Tease, don't wound.",
+    "FRIENDLY style: Start with a small genuine compliment, then add one light funny observation about their life/job/city, end with a warm encouraging closer. Person should laugh not feel hurt. Never offensive. MAX 3 lines. So warm and funny they MUST share it.",
   savage:
-    "Brutal but clever — modern internet/Gen-Z roast energy. Sharp, cutting, devastating but still funny. No slurs, no protected-class jabs.",
+    "SAVAGE style: Open with a shocking unexpected truth about them, use a surprising funny comparison targeting their specific weakness/job/status, end with a killer punchline that stings but still makes them laugh. 'Too real' feeling — funny but hits different. MAX 3 lines.",
   dark:
-    "Dark humor — dry, deadpan, existential. Think nihilist comic on a 2 a.m. open mic. Edgy but not nihilistic about the person, just life-around-them.",
+    "DARK style: Take an existential angle on their life choices, use philosophical dry humor about their situation, end with a dark funny burn that makes them think AND laugh. Dark but not depressing — deadpan nihilist energy, edgy about life around them not attacking them personally. MAX 3 lines.",
   desi:
-    "Desi (South Asian) roast culture — uncle/auntie energy, nosy neighbor gossip, marriage pressure, 'what will people think' shame, mohalla drama, rishta jokes. Street-smart, theatrical, hilarious. CRITICAL: The LANGUAGE RULE above is absolute — use ONLY the selected language. If English is selected, translate ALL desi concepts into English equivalents: 'mohalla'→'neighborhood', 'aunty'→'nosy neighbor lady', 'rishta'→'marriage proposal', 'log kya kahenge'→'what will people think', 'shaadi'→'marriage'. ZERO Hindi/Urdu words when English is selected.",
+    "DESI style: Use family/society pressure angle, 'what will people think' (log kya kahenge) shame humor, nosy neighbor aunty/uncle references, marriage and career pressure jokes — relatable South Asian experience. CRITICAL: The LANGUAGE RULE is absolute — use ONLY the selected language. If English is selected, translate ALL desi concepts: 'mohalla'→'neighborhood', 'aunty'→'nosy neighbor lady', 'rishta'→'marriage proposal', 'log kya kahenge'→'what will people think', 'shaadi'→'marriage'. ZERO Hindi/Urdu words when English is selected. MAX 3 lines.",
 };
 
 const LANGUAGE_DIRECTIONS: Record<Language, string> = {
