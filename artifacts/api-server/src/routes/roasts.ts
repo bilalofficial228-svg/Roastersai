@@ -50,7 +50,7 @@ const LANGUAGE_DIRECTIONS: Record<Language, string> = {
   chinese:
     "Generate roast in SIMPLIFIED CHINESE (普通话) language ONLY, written in Chinese characters. 100% Chinese. Do NOT include any English words, Pinyin, or any other language. Pure Simplified Chinese.",
   urdu:
-    "Generate roast in URDU language ONLY, written in Urdu Nastaliq script (اردو). 100% Urdu. Do NOT include any English words, Roman script, or any other language. Pure Urdu vocabulary and grammar.",
+    "Generate roast in URDU language ONLY, written in proper Urdu Nastaliq script (اردو). 100% Urdu. CRITICAL: You MUST write in Urdu Arabic script characters only — like this: 'ہونا، تم امریکا میں'. Do NOT use Roman/Latin letters at all. Do NOT write Roman Urdu like 'tum doctor ho' or 'Honam'. Every single word must be in Urdu script (اردو رسم الخط). Pure Urdu vocabulary and grammar only.",
 };
 
 
@@ -99,7 +99,11 @@ GOOD: 'Bilal 💀 tu engineer hai'
 GOOD: 'teri life ka bug tu hai 🔥'
 BAD: 'long roast text... 🔥💀😂👀😭'
 
-Never use slurs, sexual content, or attacks on protected classes (race, religion, gender, sexuality, disability, nationality).
+CONTENT RULES — ABSOLUTE:
+- ZERO vulgar, offensive, or sexual words — ever
+- ZERO slurs or attacks on race, religion, gender, sexuality, disability, nationality
+- Keep ALL roasts clean and family-friendly
+- Funny through wit and observation, never through vulgarity
 NO disclaimers! NO apologies! NO preface! Output ONLY the roast text.`;
 
 interface RoastInput {
