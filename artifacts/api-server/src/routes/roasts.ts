@@ -23,7 +23,7 @@ const STYLE_PROMPTS: Record<RoastStyle, string> = {
   friendly:
     "FRIENDLY style: This is still a ROAST — tease them genuinely, just without cruelty. Poke fun at their job, city, weakness, or status in a warm witty way. Like a best friend roasting you at a party — everyone laughs INCLUDING them. Start with a funny observation, build to a punchline that teases their situation, end with something that makes them laugh at themselves. Warm tone, real roast energy. MAX 3 lines.",
   savage:
-    "SAVAGE style: Open with a shocking unexpected truth about them, use a surprising funny comparison targeting their specific weakness/job/status, end with a killer punchline that stings but still makes them laugh. 'Too real' feeling — funny but hits different. MAX 3 lines.",
+    "SAVAGE style: Simple, clear, direct language only — no confusing metaphors or clever wordplay that needs explaining. Say the savage truth plainly and obviously. Every line should be instantly understood. Target their job, city, weakness, or status with a direct funny punch. End with one short brutal punchline the reader gets immediately. Funny because it's TRUE and OBVIOUS, not because it's poetic. MAX 3 lines.",
   dark:
     "DARK style: Take an existential angle on their life choices, use philosophical dry humor about their situation, end with a dark funny burn that makes them think AND laugh. Dark but not depressing — deadpan nihilist energy, edgy about life around them not attacking them personally. MAX 3 lines.",
   desi:
