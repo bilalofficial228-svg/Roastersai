@@ -21,7 +21,7 @@ type ReactionType = "hilarious" | "savage" | "dead" | "too_real";
 
 const STYLE_PROMPTS: Record<RoastStyle, string> = {
   friendly:
-    "FRIENDLY style: Start with a small genuine compliment, then add one light funny observation about their life/job/city, end with a warm encouraging closer. Person should laugh not feel hurt. Never offensive. MAX 3 lines. So warm and funny they MUST share it.",
+    "FRIENDLY style: This is still a ROAST — tease them genuinely, just without cruelty. Poke fun at their job, city, weakness, or status in a warm witty way. Like a best friend roasting you at a party — everyone laughs INCLUDING them. Start with a funny observation, build to a punchline that teases their situation, end with something that makes them laugh at themselves. Warm tone, real roast energy. MAX 3 lines.",
   savage:
     "SAVAGE style: Open with a shocking unexpected truth about them, use a surprising funny comparison targeting their specific weakness/job/status, end with a killer punchline that stings but still makes them laugh. 'Too real' feeling — funny but hits different. MAX 3 lines.",
   dark:
