@@ -609,7 +609,7 @@ export default function Home() {
                   </p>
                   <div>
                     <h3 className="font-bold text-primary mb-1">📧 Email</h3>
-                    <p className="text-sm leading-relaxed opacity-85">hello@roastersai.com</p>
+                    <p className="text-sm leading-relaxed opacity-85">roastersai@gmail.com</p>
                     <p className="text-sm opacity-70 mt-1">We read every message — and we may roast you back 🔥</p>
                   </div>
                   <div>
@@ -671,7 +671,7 @@ export default function Home() {
                     </p>
                   </div>
                   <p className="text-sm opacity-70 italic">
-                    By using RoastersAI, you agree to this policy. If you have questions, contact us at hello@roastersai.com.
+                    By using RoastersAI, you agree to this policy. If you have questions, contact us at roastersai@gmail.com.
                   </p>
                 </div>
               }
