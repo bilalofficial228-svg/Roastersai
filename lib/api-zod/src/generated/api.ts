@@ -85,6 +85,7 @@ export const GenerateRoastBody = zod.object({
 
 export const GenerateRoastResponse = zod.object({
   id: zod.string(),
+  shortId: zod.string().nullish(),
   text: zod.string(),
   style: zod
     .enum(["friendly", "savage", "dark", "desi"])
@@ -146,6 +147,7 @@ export const GenerateRoastResponse = zod.object({
  */
 export const ListTrendingRoastsResponseItem = zod.object({
   id: zod.string(),
+  shortId: zod.string().nullish(),
   text: zod.string(),
   style: zod
     .enum(["friendly", "savage", "dark", "desi"])
@@ -254,6 +256,7 @@ export const GetRoastParams = zod.object({
 
 export const GetRoastResponse = zod.object({
   id: zod.string(),
+  shortId: zod.string().nullish(),
   text: zod.string(),
   style: zod
     .enum(["friendly", "savage", "dark", "desi"])

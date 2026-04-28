@@ -1,14 +1,40 @@
-import { useState, useEffect } from "react";
-import { useParams } from "wouter";
+import { useEffect } from "react";
+import { useParams, useLocation } from "wouter";
+import { useQuery } from "@tanstack/react-query";
 import { useGetRoast, getGetRoastQueryKey } from "@workspace/api-client-react";
 import { WorldwideCounter } from "@/components/WorldwideCounter";
 import { RoastCard } from "@/components/RoastCard";
 import { InfoModal } from "@/components/InfoModal";
 import { Flame, Loader2 } from "lucide-react";
+import type { Roast } from "@workspace/api-client-react";
+
+const BASE = import.meta.env.BASE_URL.replace(/\/$/, "");
+
+function useShortRoast(shortId: string) {
+  return useQuery<Roast>({
+    queryKey: ["r", shortId],
+    queryFn: async () => {
+      const res = await fetch(`${BASE}/api/r/${shortId}`);
+      if (!res.ok) throw new Error("Not found");
+      return res.json();
+    },
+    enabled: !!shortId,
+  });
+}
 
 export default function SharedRoastPage() {
   const { id } = useParams<{ id: string }>();
-  const { data: roast, isLoading, error } = useGetRoast(id || "", { query: { enabled: !!id, queryKey: getGetRoastQueryKey(id || "") } });
+  const [location] = useLocation();
+  const isShortUrl = location.startsWith("/r/");
+
+  const shortQuery = useShortRoast(isShortUrl ? (id || "") : "");
+  const uuidQuery = useGetRoast(!isShortUrl ? (id || "") : "", {
+    query: { enabled: !isShortUrl && !!id, queryKey: getGetRoastQueryKey(id || "") },
+  });
+
+  const isLoading = isShortUrl ? shortQuery.isLoading : uuidQuery.isLoading;
+  const error = isShortUrl ? shortQuery.error : uuidQuery.error;
+  const roast = isShortUrl ? shortQuery.data : uuidQuery.data;
 
   useEffect(() => {
     document.documentElement.classList.add("dark");
@@ -18,10 +44,7 @@ export default function SharedRoastPage() {
     <div className="min-h-[100dvh] w-full flex flex-col bg-background text-foreground overflow-x-hidden selection:bg-primary/30">
       <WorldwideCounter />
       
-      {/* Background ambient glow */}
-      <div className="fixed inset-0 pointer-events-none z-0">
-        {/* Background intentionally pure */}
-      </div>
+      <div className="fixed inset-0 pointer-events-none z-0" />
 
       <main className="flex-1 w-full max-w-4xl mx-auto px-4 py-12 md:py-24 z-10 flex flex-col items-center justify-center gap-8">
         {isLoading ? (

@@ -418,7 +418,8 @@ export default function Home() {
                   {/* Private Link button — between roast and action buttons */}
                   <button
                     onClick={() => {
-                      const url = `${window.location.origin}${import.meta.env.BASE_URL.replace(/\/$/, "")}/roast/${friendRoast.id}`;
+                      const base = `${window.location.origin}${import.meta.env.BASE_URL.replace(/\/$/, "")}`;
+                      const url = friendRoast.shortId ? `${base}/r/${friendRoast.shortId}` : `${base}/roast/${friendRoast.id}`;
                       navigator.clipboard.writeText(url);
                       toast({ title: "Private Link Copied!", description: "Share it with your friend." });
                     }}
@@ -466,7 +467,8 @@ export default function Home() {
                     {/* Share */}
                     <button
                       onClick={async () => {
-                        const url = `${window.location.origin}${import.meta.env.BASE_URL.replace(/\/$/, "")}/roast/${friendRoast.id}`;
+                        const base2 = `${window.location.origin}${import.meta.env.BASE_URL.replace(/\/$/, "")}`;
+                        const url = friendRoast.shortId ? `${base2}/r/${friendRoast.shortId}` : `${base2}/roast/${friendRoast.id}`;
                         if (navigator.share) {
                           try { await navigator.share({ text: `"${friendRoast.text}" — roasted by RoastersAI.com`, url }); } catch {}
                         } else {

@@ -221,6 +221,9 @@ components:
       properties:
         id:
           type: string
+        shortId:
+          type: string
+          nullable: true
         text:
           type: string
         style:

@@ -2,6 +2,7 @@ import { integer, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 
 export const roastsTable = pgTable("roasts", {
   id: uuid("id").defaultRandom().primaryKey(),
+  shortId: text("short_id"),
   // Legacy "target" kept for backwards-compatible reads of existing rows.
   target: text("target").notNull(),
   style: text("style").notNull(),

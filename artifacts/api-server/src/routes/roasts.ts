@@ -9,6 +9,15 @@ import { groqChat } from "../lib/groq";
 
 const router: IRouter = Router();
 
+function generateShortId(): string {
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let result = "";
+  for (let i = 0; i < 6; i++) {
+    result += chars[Math.floor(Math.random() * chars.length)];
+  }
+  return result;
+}
+
 type RoastStyle = "friendly" | "savage" | "dark" | "desi";
 type Job =
   | "student" | "engineer" | "doctor" | "designer"
@@ -141,6 +150,7 @@ async function generateRoastText(input: RoastInput): Promise<string> {
 function serializeRoast(row: RoastRow) {
   return {
     id: row.id,
+    shortId: row.shortId ?? null,
     text: row.text,
     style: row.style,
     name: row.name || row.target,
@@ -196,6 +206,7 @@ router.post("/roasts/generate", async (req, res) => {
         status: input.status,
         language: input.language,
         intensity: input.intensity,
+        shortId: generateShortId(),
       })
       .returning();
 
@@ -283,6 +294,22 @@ router.get("/roasts/stats", async (_req, res) => {
     1_500 + Math.floor(secondsToday * 0.012) + realTotal * 3;
 
   res.json({ totalRoasts, usersToday, roastsPerMinute, worldwideToday });
+});
+
+router.get("/r/:shortId", async (req, res) => {
+  const { shortId } = req.params;
+  if (!/^[A-Za-z0-9]{6}$/.test(shortId)) {
+    return res.status(404).json({ error: "Not found" });
+  }
+  const [row] = await db
+    .select()
+    .from(roastsTable)
+    .where(eq(roastsTable.shortId, shortId))
+    .limit(1);
+  if (!row) {
+    return res.status(404).json({ error: "Not found" });
+  }
+  return res.json(serializeRoast(row));
 });
 
 router.get("/roasts/:id", async (req, res) => {

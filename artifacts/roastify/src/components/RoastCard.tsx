@@ -30,7 +30,8 @@ export function RoastCard({ roast, onRetry, onNewRoast, isShared }: RoastCardPro
     setReactions(roast.reactions);
   }, [roast.reactions]);
 
-  const shareUrl = `${window.location.origin}${import.meta.env.BASE_URL.replace(/\/$/, "")}/roast/${roast.id}`;
+  const base = `${window.location.origin}${import.meta.env.BASE_URL.replace(/\/$/, "")}`;
+  const shareUrl = roast.shortId ? `${base}/r/${roast.shortId}` : `${base}/roast/${roast.id}`;
   const shareText = `"${roast.text}" — roasted by RoastersAI.com`;
 
   const handleCopy = () => {

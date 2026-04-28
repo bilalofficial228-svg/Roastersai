@@ -13,6 +13,7 @@ function Router() {
     <Switch>
       <Route path="/" component={Home} />
       <Route path="/roast/:id" component={SharedRoastPage} />
+      <Route path="/r/:id" component={SharedRoastPage} />
       <Route component={NotFound} />
     </Switch>
   );

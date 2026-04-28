@@ -87,6 +87,7 @@ export interface ReactionCounts {
 
 export interface Roast {
   id: string;
+  shortId?: string | null;
   text: string;
   style: RoastStyle;
   name: string;
