@@ -18,6 +18,7 @@ export function RoastCard({ roast, onRetry, onNewRoast, isShared }: RoastCardPro
   const imageCardRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const [copied, setCopied] = useState(false);
   const reactMutation = useReactToRoast();
   const [reactions, setReactions] = useState(roast.reactions);
   const selectedKey = `reacted:${roast.id}`;
@@ -34,7 +35,8 @@ export function RoastCard({ roast, onRetry, onNewRoast, isShared }: RoastCardPro
 
   const handleCopy = () => {
     navigator.clipboard.writeText(roast.text);
-    toast({ title: "Copied! 🔥", description: "Roast copied to clipboard." });
+    setCopied(true);
+    setTimeout(() => setCopied(false), 3500);
   };
 
   const handleShare = async () => {
@@ -232,6 +234,29 @@ export function RoastCard({ roast, onRetry, onNewRoast, isShared }: RoastCardPro
 
       {/* Actions — only shown when not shared */}
       {!isShared && (
+        <div className="relative">
+        {copied && (
+          <div
+            style={{
+              position: "absolute",
+              top: -40,
+              left: "50%",
+              transform: "translateX(-50%)",
+              background: "rgba(30,30,30,0.92)",
+              color: "#fff",
+              padding: "6px 18px",
+              borderRadius: 20,
+              fontSize: 13,
+              fontWeight: 600,
+              pointerEvents: "none",
+              whiteSpace: "nowrap",
+              animation: "copied-fade 3.5s ease forwards",
+              zIndex: 50,
+            }}
+          >
+            Copied! 🔥
+          </div>
+        )}
         <div className="grid grid-cols-3 gap-2 mt-2">
           {/* Copy */}
           <button
@@ -275,6 +300,7 @@ export function RoastCard({ roast, onRetry, onNewRoast, isShared }: RoastCardPro
               <RotateCw size={15} /> Try Again
             </button>
           )}
+        </div>
         </div>
       )}
 

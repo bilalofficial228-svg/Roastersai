@@ -11,7 +11,7 @@ export function Leaderboard() {
     <section className="mt-16 w-full max-w-4xl mx-auto flex flex-col gap-6">
       <div className="flex items-center gap-3 border-b border-border pb-4">
         <Trophy className="w-8 h-8" style={{ color: "#FFD700" }} />
-        <h2 className="text-2xl md:text-3xl font-bold font-display text-foreground">🏆 Hall of Shame — Most Savage Roasts Today</h2>
+        <h2 className="text-2xl md:text-3xl font-bold font-display text-foreground">Hall of Shame — Most Savage Roasts Today</h2>
       </div>
 
       <div className="flex flex-col gap-3">
