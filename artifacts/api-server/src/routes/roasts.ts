@@ -49,7 +49,7 @@ const LANGUAGE_DIRECTIONS: Record<Language, string> = {
   spanish:
     "Generate roast in SPANISH language ONLY. 100% Spanish. Do NOT mix in any English, Hindi or other language words or phrases. Pure Spanish vocabulary and grammar.",
   arabic:
-    "Generate roast in ARABIC language ONLY, written in Arabic script (RTL). 100% Arabic. Do NOT include any English words, Roman script, or any other language. Use Modern Standard Arabic (فصحى). Pure Arabic vocabulary and grammar.",
+    "Generate roast in ARABIC language ONLY, written in Arabic script (RTL). 100% Arabic — ZERO English words or Roman letters. Use simple colloquial Arabic that everyone understands. STRICT STRUCTURE — 3 lines MAX: Line 1 = NAME + CITY reference + JOB mention. Line 2 = weakness or status joke with CITY flavor. Line 3 = killer punchline ending with emoji. MANDATORY: NAME must appear in Line 1. CITY must appear in Line 1 or 2. JOB must appear always. STATUS punchline in Line 3. 2-3 emojis placed INSIDE sentences. Simple clear words — no confusing metaphors. FRIENDLY example: 'أوسامة، مؤثر في أمريكا / لكن محتوى فيديوهاتك خفيف مثل ريح الصحراء 😄 / لا بأس، يوماً ما ستجد شخصاً يشاهدك 😂'. SAVAGE example: 'أوسامة، تدّعي أنك مؤثر / لكن في أمريكا ما أحد يعرفك حتى 💀 / محفظتك فارغة مثل قناتك على يوتيوب 🔥'. DARK example: 'أوسامة، تعيش في أمريكا / لكن حياتك أظلم من ليل الصحراء 🌑 / المشاهير يتركون أثراً، أنت تترك فقط ديوناً 💀'. DESI example: 'أوسامة، كل الحارة تعرف / إنك لسا عازب في أمريكا 😭 / أهلك يسألون متى تتزوج وأنت تسأل متى يجي الأكل 🔥'. Always funny, always clear, always screenshot worthy!",
   french:
     "Generate roast in FRENCH language ONLY. 100% French. Do NOT mix in any English, Hindi or other language words or phrases. Pure French vocabulary and grammar.",
   portuguese:
