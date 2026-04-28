@@ -408,7 +408,7 @@ export default function Home() {
                     disabled={generateRoast.isPending}
                     className="w-full fire-bg text-white font-bold text-xl py-4 rounded-xl hover:opacity-90 active:scale-[0.98] transition-all disabled:opacity-50 fire-glow flex justify-center items-center gap-2"
                   >
-                    {generateRoast.isPending ? <><Loader2 className="animate-spin" size={20} /><span>Cooking…</span></> : "Generate Share Link"}
+                    {generateRoast.isPending ? <><Loader2 className="animate-spin" size={20} /><span>Cooking…</span></> : "Generate Private Link"}
                   </button>
                 </form>
               ) : (
@@ -475,6 +475,13 @@ export default function Home() {
                       Try Again
                     </button>
                   </div>
+
+                  <button
+                    onClick={() => setFriendRoast(null)}
+                    className="text-muted-foreground hover:text-foreground text-sm underline mt-1"
+                  >
+                    Roast another friend
+                  </button>
                 </div>
               )}
             </DialogContent>
