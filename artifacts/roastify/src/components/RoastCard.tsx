@@ -233,31 +233,6 @@ export function RoastCard({ roast, onRetry, onNewRoast, isShared }: RoastCardPro
       </div>
 
       {/* Actions — only shown when not shared */}
-      {copied && (
-        <div
-          style={{
-            position: "fixed",
-            bottom: 32,
-            left: "50%",
-            transform: "translateX(-50%)",
-            background: "rgba(20,20,20,0.95)",
-            color: "#fff",
-            padding: "10px 24px",
-            borderRadius: 24,
-            fontSize: 14,
-            fontWeight: 600,
-            pointerEvents: "none",
-            whiteSpace: "nowrap",
-            animation: "copied-fade 3.5s ease forwards",
-            zIndex: 9999,
-            boxShadow: "0 4px 24px rgba(0,0,0,0.4)",
-            border: "1px solid rgba(255,46,136,0.3)",
-          }}
-        >
-          Copied! 🔥
-        </div>
-      )}
-
       {!isShared && (
         <div className="relative">
         <div className="grid grid-cols-3 gap-2 mt-2">
@@ -267,12 +242,13 @@ export function RoastCard({ roast, onRetry, onNewRoast, isShared }: RoastCardPro
             data-testid="button-copy"
             style={{
               ...btnBase,
-              background: "hsl(var(--muted))",
-              border: "1px solid hsl(var(--border))",
-              color: "hsl(var(--foreground))",
+              background: copied ? "rgba(34,197,94,0.15)" : "hsl(var(--muted))",
+              border: copied ? "1px solid rgba(34,197,94,0.5)" : "1px solid hsl(var(--border))",
+              color: copied ? "rgb(34,197,94)" : "hsl(var(--foreground))",
+              transition: "all 0.2s ease",
             }}
           >
-            <Copy size={15} /> Copy
+            {copied ? <>✓ Copied!</> : <><Copy size={15} /> Copy</>}
           </button>
 
           {/* Share — Web Share API */}
