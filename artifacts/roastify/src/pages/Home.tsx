@@ -62,6 +62,7 @@ export default function Home() {
   const [currentRoast, setCurrentRoast] = useState<Roast | null>(null);
   const [friendDialogOpen, setFriendDialogOpen] = useState(false);
   const [friendRoast, setFriendRoast] = useState<Roast | null>(null);
+  const [friendCopied, setFriendCopied] = useState(false);
   const [historyOpen, setHistoryOpen] = useState(false);
   const [roastCount, setRoastCount] = useState<number>(() => {
     try { return parseInt(localStorage.getItem("roastersai:count") || "0", 10) || 0; } catch { return 0; }
@@ -416,28 +417,62 @@ export default function Home() {
                     <p className="text-lg font-bold text-foreground mb-2">"{friendRoast.text}"</p>
                   </div>
                   
-                  <div className="w-full flex flex-col gap-3">
-                    <button 
+                  <div className="w-full grid grid-cols-3 gap-2">
+                    {/* Copy */}
+                    <button
                       data-testid="button-copy-friend-link"
                       onClick={() => {
-                        navigator.clipboard.writeText(`${window.location.origin}${import.meta.env.BASE_URL.replace(/\/$/, "")}/roast/${friendRoast.id}`);
-                        toast({ title: "Link Copied!", description: "Share it with your friend." });
+                        navigator.clipboard.writeText(friendRoast.text);
+                        setFriendCopied(true);
+                        setTimeout(() => setFriendCopied(false), 3500);
                       }}
-                      className="w-full flex items-center justify-center gap-2 py-3 bg-primary/20 text-primary border border-primary/30 rounded-lg font-bold transition-colors"
+                      style={{
+                        display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
+                        padding: "10px 0", borderRadius: 10, fontSize: 13, fontWeight: 700,
+                        cursor: "pointer", border: friendCopied ? "1px solid rgba(34,197,94,0.5)" : "1px solid hsl(var(--border))",
+                        background: friendCopied ? "rgba(34,197,94,0.15)" : "hsl(var(--muted))",
+                        color: friendCopied ? "rgb(34,197,94)" : "hsl(var(--foreground))",
+                        transition: "all 0.2s ease",
+                      }}
                     >
-                      <Copy size={18} /> Copy Private Link
+                      {friendCopied ? <>✓ Copied!</> : <><Copy size={14} /> Copy</>}
                     </button>
-                    <button 
-                      onClick={() => {
+
+                    {/* Share */}
+                    <button
+                      onClick={async () => {
                         const url = `${window.location.origin}${import.meta.env.BASE_URL.replace(/\/$/, "")}/roast/${friendRoast.id}`;
-                        window.open(`https://wa.me/?text=${encodeURIComponent("I made an AI roast you. Check this out: " + url)}`, "_blank");
+                        if (navigator.share) {
+                          try { await navigator.share({ text: `"${friendRoast.text}" — roasted by RoastersAI.com`, url }); } catch {}
+                        } else {
+                          navigator.clipboard.writeText(url);
+                          toast({ title: "Link Copied!", description: "Share it with your friend." });
+                        }
                       }}
-                      className="w-full flex items-center justify-center gap-2 py-3 bg-[#25D366]/10 text-[#25D366] border border-[#25D366]/30 rounded-lg font-bold transition-colors"
+                      style={{
+                        display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
+                        padding: "10px 0", borderRadius: 10, fontSize: 13, fontWeight: 700,
+                        cursor: "pointer", border: "none",
+                        background: "linear-gradient(135deg, #FF2E88, #FF4500)",
+                        color: "#fff",
+                      }}
                     >
-                      <Share2 size={18} /> Share to WhatsApp
+                      <Share2 size={14} /> Share
                     </button>
-                    <button onClick={() => setFriendRoast(null)} className="text-muted-foreground hover:text-foreground mt-2 text-sm underline">
-                      Roast another friend
+
+                    {/* Try Again */}
+                    <button
+                      onClick={() => setFriendRoast(null)}
+                      style={{
+                        display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
+                        padding: "10px 0", borderRadius: 10, fontSize: 13, fontWeight: 700,
+                        cursor: "pointer",
+                        background: "hsl(var(--muted))",
+                        border: "1px solid hsl(var(--border))",
+                        color: "hsl(var(--foreground))",
+                      }}
+                    >
+                      Try Again
                     </button>
                   </div>
                 </div>
