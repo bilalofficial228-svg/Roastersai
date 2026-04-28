@@ -233,30 +233,33 @@ export function RoastCard({ roast, onRetry, onNewRoast, isShared }: RoastCardPro
       </div>
 
       {/* Actions — only shown when not shared */}
+      {copied && (
+        <div
+          style={{
+            position: "fixed",
+            bottom: 32,
+            left: "50%",
+            transform: "translateX(-50%)",
+            background: "rgba(20,20,20,0.95)",
+            color: "#fff",
+            padding: "10px 24px",
+            borderRadius: 24,
+            fontSize: 14,
+            fontWeight: 600,
+            pointerEvents: "none",
+            whiteSpace: "nowrap",
+            animation: "copied-fade 3.5s ease forwards",
+            zIndex: 9999,
+            boxShadow: "0 4px 24px rgba(0,0,0,0.4)",
+            border: "1px solid rgba(255,46,136,0.3)",
+          }}
+        >
+          Copied! 🔥
+        </div>
+      )}
+
       {!isShared && (
         <div className="relative">
-        {copied && (
-          <div
-            style={{
-              position: "absolute",
-              top: -40,
-              left: "50%",
-              transform: "translateX(-50%)",
-              background: "rgba(30,30,30,0.92)",
-              color: "#fff",
-              padding: "6px 18px",
-              borderRadius: 20,
-              fontSize: 13,
-              fontWeight: 600,
-              pointerEvents: "none",
-              whiteSpace: "nowrap",
-              animation: "copied-fade 3.5s ease forwards",
-              zIndex: 50,
-            }}
-          >
-            Copied! 🔥
-          </div>
-        )}
         <div className="grid grid-cols-3 gap-2 mt-2">
           {/* Copy */}
           <button
