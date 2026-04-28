@@ -430,18 +430,18 @@ export default function Home() {
                       alignItems: "center",
                       justifyContent: "center",
                       gap: 8,
-                      padding: "11px 0",
+                      padding: "12px 0",
                       borderRadius: 12,
                       fontSize: 14,
                       fontWeight: 700,
                       cursor: "pointer",
-                      background: "transparent",
-                      border: "2px solid hsl(var(--border))",
-                      color: "hsl(var(--foreground))",
-                      transition: "border-color 0.2s",
+                      background: "rgba(255,46,136,0.08)",
+                      border: "2px solid #FF2E88",
+                      color: "#FF2E88",
+                      transition: "opacity 0.2s",
                     }}
                   >
-                    <Copy size={15} /> Generate Private Link
+                    <Copy size={15} /> Copy Private Link
                   </button>
 
                   <div className="w-full grid grid-cols-3 gap-2">
