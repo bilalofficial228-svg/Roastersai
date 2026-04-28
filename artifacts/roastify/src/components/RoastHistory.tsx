@@ -99,7 +99,7 @@ export function RoastHistory({ open, onClose }: RoastHistoryProps) {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
             onClick={onClose}
-            className="fixed inset-0 z-40"
+            className="fixed inset-0 z-[9998]"
             style={{ background: "rgba(0,0,0,0.7)" }}
           />
 
