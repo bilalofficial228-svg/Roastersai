@@ -412,23 +412,38 @@ export default function Home() {
                   </button>
                 </form>
               ) : (
-                <div className="flex flex-col gap-6 mt-4 items-center text-center">
-                  {/* Private Link button at top */}
+                <div className="flex flex-col gap-4 mt-4 items-center text-center">
+                  <div className="p-4 bg-muted border border-border rounded-xl w-full">
+                    <p className="text-lg font-bold text-foreground mb-2">"{friendRoast.text}"</p>
+                  </div>
+
+                  {/* Private Link button — between roast and action buttons */}
                   <button
                     onClick={() => {
                       const url = `${window.location.origin}${import.meta.env.BASE_URL.replace(/\/$/, "")}/roast/${friendRoast.id}`;
                       navigator.clipboard.writeText(url);
                       toast({ title: "Private Link Copied!", description: "Share it with your friend." });
                     }}
-                    className="w-full fire-bg text-white font-bold text-base py-3 rounded-xl hover:opacity-90 active:scale-[0.98] transition-all fire-glow flex justify-center items-center gap-2"
+                    style={{
+                      width: "100%",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: 8,
+                      padding: "11px 0",
+                      borderRadius: 12,
+                      fontSize: 14,
+                      fontWeight: 700,
+                      cursor: "pointer",
+                      background: "transparent",
+                      border: "2px solid hsl(var(--border))",
+                      color: "hsl(var(--foreground))",
+                      transition: "border-color 0.2s",
+                    }}
                   >
-                    <Copy size={16} /> Generate Private Link
+                    <Copy size={15} /> Generate Private Link
                   </button>
 
-                  <div className="p-4 bg-muted border border-border rounded-xl w-full">
-                    <p className="text-lg font-bold text-foreground mb-2">"{friendRoast.text}"</p>
-                  </div>
-                  
                   <div className="w-full grid grid-cols-3 gap-2">
                     {/* Copy */}
                     <button
