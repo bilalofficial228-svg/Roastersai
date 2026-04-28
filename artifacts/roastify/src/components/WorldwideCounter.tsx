@@ -22,7 +22,7 @@ export function WorldwideCounter() {
   }, []);
 
   return (
-    <div className="sticky top-0 z-50 w-full text-white py-2 px-4 text-center font-bold text-sm tracking-widest uppercase backdrop-blur-md flex items-center justify-center gap-2" style={{ background: "linear-gradient(90deg, #C8107E, #FF2E88, #C8107E)", boxShadow: "0 2px 20px rgba(255, 46, 136, 0.5)" }}>
+    <div className="sticky top-0 z-[10] w-full text-white py-2 px-4 text-center font-bold text-sm tracking-widest uppercase backdrop-blur-md flex items-center justify-center gap-2" style={{ background: "linear-gradient(90deg, #C8107E, #FF2E88, #C8107E)", boxShadow: "0 2px 20px rgba(255, 46, 136, 0.5)" }}>
       <span>🔥</span>
       <AnimatePresence mode="popLayout">
         <motion.span
