@@ -14,7 +14,6 @@ import { Leaderboard } from "@/components/Leaderboard";
 import { RoastCard } from "@/components/RoastCard";
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import ThemeToggle from "@/components/ThemeToggle";
 import { InfoModal } from "@/components/InfoModal";
 import { RoastHistory, saveToHistory } from "@/components/RoastHistory";
 
@@ -341,7 +340,6 @@ export default function Home() {
           >
             <History size={22} />
           </button>
-          <ThemeToggle />
         </div>
         <RoastHistory open={historyOpen} onClose={() => setHistoryOpen(false)} />
 
