@@ -25,7 +25,7 @@ type Job =
   | "business_owner" | "content_creator" | "chef" | "nurse"
   | "accountant" | "marketing" | "sales" | "other";
 type Status = "single" | "in_relationship" | "married" | "complicated" | "recently_broke_up" | "forever_alone";
-type Language = "english" | "hinglish" | "hindi" | "spanish" | "french" | "portuguese" | "german" | "roman_urdu";
+type Language = "english" | "hindi" | "roman_urdu" | "spanish" | "french" | "german" | "portuguese";
 type ReactionType = "hilarious" | "savage" | "dead" | "too_real";
 
 const STYLE_PROMPTS: Record<RoastStyle, string> = {

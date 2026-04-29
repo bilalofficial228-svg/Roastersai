@@ -10,11 +10,10 @@ export type Language = (typeof Language)[keyof typeof Language];
 
 export const Language = {
   english: "english",
-  hinglish: "hinglish",
   hindi: "hindi",
+  roman_urdu: "roman_urdu",
   spanish: "spanish",
   french: "french",
-  portuguese: "portuguese",
   german: "german",
-  roman_urdu: "roman_urdu",
+  portuguese: "portuguese",
 } as const;

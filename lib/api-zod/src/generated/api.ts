@@ -63,13 +63,12 @@ export const GenerateRoastBody = zod.object({
   ]),
   language: zod.enum([
     "english",
-    "hinglish",
     "hindi",
+    "roman_urdu",
     "spanish",
     "french",
-    "portuguese",
     "german",
-    "roman_urdu",
+    "portuguese",
   ]),
   intensity: zod
     .number()
@@ -119,13 +118,12 @@ export const GenerateRoastResponse = zod.object({
   ]),
   language: zod.enum([
     "english",
-    "hinglish",
     "hindi",
+    "roman_urdu",
     "spanish",
     "french",
-    "portuguese",
     "german",
-    "roman_urdu",
+    "portuguese",
   ]),
   intensity: zod.number(),
   reactions: zod.object({
@@ -179,13 +177,12 @@ export const ListTrendingRoastsResponseItem = zod.object({
   ]),
   language: zod.enum([
     "english",
-    "hinglish",
     "hindi",
+    "roman_urdu",
     "spanish",
     "french",
-    "portuguese",
     "german",
-    "roman_urdu",
+    "portuguese",
   ]),
   intensity: zod.number(),
   reactions: zod.object({
@@ -286,13 +283,12 @@ export const GetRoastResponse = zod.object({
   ]),
   language: zod.enum([
     "english",
-    "hinglish",
     "hindi",
+    "roman_urdu",
     "spanish",
     "french",
-    "portuguese",
     "german",
-    "roman_urdu",
+    "portuguese",
   ]),
   intensity: zod.number(),
   reactions: zod.object({
