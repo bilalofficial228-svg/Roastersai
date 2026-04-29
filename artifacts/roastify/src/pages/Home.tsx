@@ -66,6 +66,13 @@ export default function Home() {
   const [roastCount, setRoastCount] = useState<number>(() => {
     try { return parseInt(localStorage.getItem("roastersai:count") || "0", 10) || 0; } catch { return 0; }
   });
+  const [fireVotes, setFireVotes] = useState<Record<string, number>>(() => {
+    try { return JSON.parse(localStorage.getItem("roastersai:fire_votes") || "{}"); } catch { return {}; }
+  });
+  const [myVotes, setMyVotes] = useState<Set<string>>(() => {
+    try { return new Set(JSON.parse(localStorage.getItem("roastersai:my_votes") || "[]")); } catch { return new Set(); }
+  });
+  const [expandedCards, setExpandedCards] = useState<Set<string>>(new Set());
 
   const queryClient = useQueryClient();
   const { toast } = useToast();
@@ -94,6 +101,29 @@ export default function Home() {
     resolver: zodResolver(formSchema),
     defaultValues: defaultFormValues
   });
+
+  const toggleFire = (id: string) => {
+    setFireVotes(prev => {
+      const current = prev[id] ?? 0;
+      const next = { ...prev, [id]: myVotes.has(id) ? Math.max(0, current - 1) : current + 1 };
+      try { localStorage.setItem("roastersai:fire_votes", JSON.stringify(next)); } catch {}
+      return next;
+    });
+    setMyVotes(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) { next.delete(id); } else { next.add(id); }
+      try { localStorage.setItem("roastersai:my_votes", JSON.stringify([...next])); } catch {}
+      return next;
+    });
+  };
+
+  const toggleExpand = (id: string) => {
+    setExpandedCards(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) { next.delete(id); } else { next.add(id); }
+      return next;
+    });
+  };
 
   const onSubmit = async (values: FormValues) => {
     if (isLoadingRef.current) return;
@@ -580,33 +610,72 @@ export default function Home() {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {trendingRoasts?.slice(0, 6).map((roast, i) => (
-              <motion.div 
-                key={roast.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.1 }}
-                data-testid={`card-trending-${roast.id}`}
-                className="bg-card border border-border rounded-xl p-5 hover:border-primary/50 transition-colors flex flex-col justify-between gap-4"
-              >
-                <div>
-                  <div className="flex justify-between items-start mb-3">
-                    <span className="text-sm font-bold text-foreground/90 truncate pr-2">
-                      {roast.name ? `${roast.name}, ${roast.job}` : `@${(roast as any).target || 'Anonymous'}`}
-                    </span>
-                    <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-muted text-muted-foreground">
-                      {roast.style}
-                    </span>
-                  </div>
-                  <p className="text-sm font-medium leading-relaxed text-foreground">
-                    "{roast.text}"
-                  </p>
-                </div>
-                <div className="text-[10px] text-muted-foreground/50 font-mono mt-2">
-                  {new Date(roast.createdAt).toLocaleTimeString()}
-                </div>
-              </motion.div>
-            ))}
+            {trendingRoasts?.slice(0, 6)
+              .slice()
+              .sort((a, b) => (fireVotes[b.id] ?? 0) - (fireVotes[a.id] ?? 0))
+              .map((roast, i) => {
+                const voted = myVotes.has(roast.id);
+                const count = fireVotes[roast.id] ?? 0;
+                const expanded = expandedCards.has(roast.id);
+                return (
+                  <motion.div
+                    key={roast.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: i * 0.1 }}
+                    data-testid={`card-trending-${roast.id}`}
+                    className="bg-card border border-border rounded-xl p-5 hover:border-primary/50 transition-colors flex flex-col justify-between gap-4"
+                  >
+                    <div>
+                      <div className="flex justify-between items-start mb-3">
+                        <span className="text-sm font-bold text-foreground/90 truncate pr-2">
+                          {roast.name ? `${roast.name}, ${roast.job}` : `@${(roast as any).target || 'Anonymous'}`}
+                        </span>
+                        <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-muted text-muted-foreground">
+                          {roast.style}
+                        </span>
+                      </div>
+                      <div>
+                        <p
+                          className="text-sm font-medium leading-relaxed text-foreground transition-all duration-300"
+                          style={expanded ? {} : {
+                            display: "-webkit-box",
+                            WebkitLineClamp: 2,
+                            WebkitBoxOrient: "vertical",
+                            overflow: "hidden",
+                          }}
+                        >
+                          "{roast.text}"
+                        </p>
+                        <button
+                          onClick={() => toggleExpand(roast.id)}
+                          className="mt-1 text-[12px] font-medium border-none bg-transparent cursor-pointer p-0"
+                          style={{ color: "#FF4500" }}
+                        >
+                          {expanded ? "Show less" : "Read more"}
+                        </button>
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between mt-1">
+                      <span className="text-[10px] text-muted-foreground/50 font-mono">
+                        {new Date(roast.createdAt).toLocaleTimeString()}
+                      </span>
+                      <button
+                        onClick={() => toggleFire(roast.id)}
+                        className="flex items-center gap-1 text-xs font-bold px-2 py-1 rounded-md transition-all duration-200 border-none cursor-pointer"
+                        style={{
+                          background: voted ? "rgba(255,69,0,0.12)" : "transparent",
+                          color: voted ? "#FF4500" : "#6b7280",
+                        }}
+                        title={voted ? "Remove fire" : "Fire this roast"}
+                      >
+                        <span style={{ filter: voted ? "none" : "grayscale(1)", fontSize: "14px" }}>🔥</span>
+                        <span>{count}</span>
+                      </button>
+                    </div>
+                  </motion.div>
+                );
+              })}
           </div>
         </section>
 
