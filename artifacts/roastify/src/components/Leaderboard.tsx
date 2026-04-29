@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Trophy } from "lucide-react";
 import { motion } from "framer-motion";
 import type { Roast } from "@workspace/api-client-react";
@@ -99,6 +100,12 @@ const RANK_STYLES: Record<number, { borderLeft: string; boxShadow?: string; bg: 
 };
 
 export function Leaderboard({ roasts, fireVotes }: Props) {
+  const [expanded, setExpanded] = useState<Set<string>>(new Set());
+  const toggle = (id: string) => setExpanded(prev => {
+    const next = new Set(prev);
+    next.has(id) ? next.delete(id) : next.add(id);
+    return next;
+  });
   const realEntries: DisplayEntry[] = roasts
     .filter(r => (fireVotes[r.id] ?? 0) >= MIN_FIRE)
     .sort((a, b) => (fireVotes[b.id] ?? 0) - (fireVotes[a.id] ?? 0))
@@ -162,7 +169,7 @@ export function Leaderboard({ roasts, fireVotes }: Props) {
               <div className="flex-1 flex flex-col gap-1.5">
                 <p
                   className="text-sm sm:text-base italic leading-snug"
-                  style={{
+                  style={expanded.has(entry.id) ? { color: "#999999" } : {
                     color: "#999999",
                     display: "-webkit-box",
                     WebkitLineClamp: 2,
@@ -172,6 +179,13 @@ export function Leaderboard({ roasts, fireVotes }: Props) {
                 >
                   "{entry.text}"
                 </p>
+                <button
+                  onClick={() => toggle(entry.id)}
+                  className="border-none bg-transparent cursor-pointer p-0 text-left"
+                  style={{ color: "#FF4500", fontSize: "12px", fontWeight: 500 }}
+                >
+                  {expanded.has(entry.id) ? "Show less" : "Read more"}
+                </button>
                 <div className="flex items-center gap-1.5">
                   <span className="text-[9px] font-medium px-1.5 py-0.5 rounded bg-muted/60 text-muted-foreground/70">
                     {LANG_LABELS[entry.language] ?? entry.language}
