@@ -51,7 +51,7 @@ const formSchema = z.object({
   weakness: z.string().max(120, "Keep it short!").optional().nullable(),
   status: z.enum(["single", "in_relationship", "married", "complicated", "recently_broke_up", "forever_alone"] as const),
   style: z.enum(["friendly", "savage", "dark", "desi"] as const),
-  language: z.enum(["english", "hinglish", "hindi", "spanish", "arabic", "french", "portuguese", "german", "chinese", "urdu"] as const),
+  language: z.enum(["english", "hinglish", "hindi", "spanish", "french", "portuguese", "german", "roman_urdu"] as const),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -289,13 +289,12 @@ export default function Home() {
             options={[
               { value: "english",    label: "🇺🇸 English" },
               { value: "hindi",      label: "🇮🇳 Hindi" },
+              { value: "hinglish",   label: "🇮🇳 Hinglish" },
+              { value: "roman_urdu", label: "🇵🇰 Roman Urdu" },
               { value: "spanish",    label: "🇪🇸 Spanish" },
-              { value: "arabic",     label: "🇸🇦 Arabic" },
               { value: "french",     label: "🇫🇷 French" },
               { value: "portuguese", label: "🇧🇷 Brazil" },
               { value: "german",     label: "🇩🇪 German" },
-              { value: "chinese",    label: "🇨🇳 Chinese" },
-              { value: "urdu",       label: "🇵🇰 Urdu" },
             ]}
           />
         </div>
