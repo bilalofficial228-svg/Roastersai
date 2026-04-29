@@ -73,6 +73,7 @@ export default function Home() {
     try { return new Set(JSON.parse(localStorage.getItem("roastersai:my_votes") || "[]")); } catch { return new Set(); }
   });
   const [expandedCards, setExpandedCards] = useState<Set<string>>(new Set());
+  const [feedLangFilter, setFeedLangFilter] = useState<string>("all");
 
   const queryClient = useQueryClient();
   const { toast } = useToast();
@@ -608,15 +609,47 @@ export default function Home() {
               Auto-updating
             </div>
           </div>
-          
+
+          {/* Language filters */}
+          <div className="flex flex-wrap gap-2">
+            {[
+              { value: "all", label: "All" },
+              { value: "english",    label: "🇺🇸 English" },
+              { value: "hindi",      label: "🇮🇳 Hindi" },
+              { value: "roman_urdu", label: "🇵🇰 Roman Urdu" },
+              { value: "spanish",    label: "🇪🇸 Spanish" },
+              { value: "french",     label: "🇫🇷 French" },
+              { value: "german",     label: "🇩🇪 German" },
+              { value: "portuguese", label: "🇧🇷 Portuguese" },
+            ].map(opt => (
+              <button
+                key={opt.value}
+                onClick={() => setFeedLangFilter(opt.value)}
+                className="text-xs font-semibold px-3 py-1.5 rounded-full border-none cursor-pointer transition-all duration-200"
+                style={{
+                  background: feedLangFilter === opt.value ? "#FF4500" : "#1f1f1f",
+                  color: feedLangFilter === opt.value ? "#ffffff" : "#9ca3af",
+                }}
+              >
+                {opt.label}
+              </button>
+            ))}
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {trendingRoasts?.slice(0, 6)
-              .slice()
+            {(trendingRoasts ?? [])
+              .filter(r => feedLangFilter === "all" || r.language === feedLangFilter)
+              .slice(0, 6)
               .sort((a, b) => (fireVotes[b.id] ?? 0) - (fireVotes[a.id] ?? 0))
               .map((roast, i) => {
                 const voted = myVotes.has(roast.id);
                 const count = fireVotes[roast.id] ?? 0;
                 const expanded = expandedCards.has(roast.id);
+                const LANG_LABELS: Record<string, string> = {
+                  english: "🇺🇸 English", hindi: "🇮🇳 Hindi", roman_urdu: "🇵🇰 Roman Urdu",
+                  spanish: "🇪🇸 Spanish", french: "🇫🇷 French", german: "🇩🇪 German", portuguese: "🇧🇷 Portuguese",
+                };
+                const langLabel = LANG_LABELS[roast.language] ?? roast.language;
                 return (
                   <motion.div
                     key={roast.id}
@@ -631,9 +664,14 @@ export default function Home() {
                         <span className="text-sm font-bold text-foreground/90 truncate pr-2">
                           {roast.name ? `${roast.name}, ${roast.job}` : `@${(roast as any).target || 'Anonymous'}`}
                         </span>
-                        <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-muted text-muted-foreground">
-                          {roast.style}
-                        </span>
+                        <div className="flex items-center gap-1.5 flex-shrink-0">
+                          <span className="text-[9px] font-medium px-1.5 py-0.5 rounded bg-muted/60 text-muted-foreground/70">
+                            {langLabel}
+                          </span>
+                          <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-muted text-muted-foreground">
+                            {roast.style}
+                          </span>
+                        </div>
                       </div>
                       <div>
                         <p
