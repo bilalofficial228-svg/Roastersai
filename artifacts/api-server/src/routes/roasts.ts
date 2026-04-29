@@ -228,7 +228,7 @@ router.get("/roasts/trending", async (_req, res) => {
     .select()
     .from(roastsTable)
     .orderBy(desc(roastsTable.createdAt))
-    .limit(12);
+    .limit(50);
 
   res.json(rows.map(serializeRoast));
 });

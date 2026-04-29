@@ -593,7 +593,7 @@ export default function Home() {
           )}
         </AnimatePresence>
 
-        <Leaderboard />
+        <Leaderboard roasts={trendingRoasts ?? []} fireVotes={fireVotes} />
 
         {/* Trending Grid */}
         <section className="mt-12 flex flex-col gap-8 w-full max-w-5xl mx-auto">
